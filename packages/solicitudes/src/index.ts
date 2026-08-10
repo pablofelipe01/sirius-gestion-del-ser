@@ -9,6 +9,7 @@ export { CalendarioPermiso }   from "./components/CalendarioPermiso";
 export { SelectorFecha }       from "./components/SelectorFecha";
 export { PlanCompensacion, DATOS_PLAN_VACIOS } from "./components/PlanCompensacion";
 export type { DatosPlan }      from "./components/PlanCompensacion";
+export { TarjetaTilt }         from "./components/TarjetaTilt";
 export { AvisoCompensacion }   from "./components/AvisoCompensacion";
 export type { PermisoSinPlan } from "./components/AvisoCompensacion";
 // Sistema de diseño del módulo — reutilizable por nuevos formularios

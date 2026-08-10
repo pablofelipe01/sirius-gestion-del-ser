@@ -152,6 +152,23 @@ Cuatro reglas que se rompen sin darse cuenta:
    es negro; ese PNG es el que va a S3 y al PDF. Oscurecerlo dejaría la firma
    invisible en el documento oficial.
 
+### Tarjetas 3D — `TarjetaTilt`
+
+`packages/solicitudes/src/components/TarjetaTilt.tsx` inclina la tarjeta siguiendo
+el mouse. **Solo en tarjetas clicables**: los 6 módulos de `/dashboard` y las 3
+acciones de `/dashboard/solicitudes`. En formularios, tablas y modales estorba —
+mover el lienzo bajo un campo que se está llenando o una fila que se está leyendo
+cuesta precisión. Los módulos marcados `ready: false` tampoco se inclinan: el
+efecto invita a hacer clic y ahí no hay nada que abrir.
+
+Se limita a ±5° (el snippet original llegaba a ~13°, que en un panel de trabajo
+marea), solo con puntero fino —en táctil el `mousemove` sintético del tap dejaría
+la tarjeta torcida— y nunca con `prefers-reduced-motion`.
+
+⚠️ **`translateZ` dentro de una tarjeta de vidrio es CSS muerto.** `backdrop-filter`
+y `overflow: hidden` son propiedades de agrupación y fuerzan `transform-style: flat`.
+La inclinación de la tarjeta se ve; el relieve de su contenido, no.
+
 El fondo va `absolute` dentro del `<main>`, nunca `fixed`: el sidebar es su
 hermano en el layout y un fondo fijo al viewport se le monta encima. Su
 envoltorio `relative min-h-full` es el que le da altura — un `absolute inset-0`

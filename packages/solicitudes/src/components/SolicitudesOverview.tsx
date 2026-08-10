@@ -9,6 +9,7 @@ import {
   formatFecha,
 } from "./ui";
 import { AvisoCompensacion, type PermisoSinPlan } from "./AvisoCompensacion";
+import { TarjetaTilt } from "./TarjetaTilt";
 import { diasEntre, horasAReponer } from "@/lib/compensacion";
 
 interface Props {
@@ -315,40 +316,42 @@ export async function SolicitudesOverview({
           return (
             <div
               key={a.href}
-              className="anim-entrada"
+              className="anim-entrada h-full"
               style={{ animationDelay: `${480 + i * 90}ms` }}
             >
-            <Link
-              href={a.href}
-              className="glass group relative flex h-full flex-col gap-3 overflow-hidden rounded-2xl p-5 transition-all duration-300 hover:-translate-y-1"
-            >
-              {/* Resplandor del color del módulo — aparece al pasar el cursor */}
-              <span
-                className="pointer-events-none absolute -bottom-16 left-1/2 h-32 w-40 -translate-x-1/2 rounded-full opacity-0 blur-3xl transition-opacity duration-500 group-hover:opacity-60"
-                style={{ background: m.color }}
-              />
-              <span
-                className="absolute inset-x-0 top-0 h-px origin-left scale-x-0 transition-transform duration-500 group-hover:scale-x-100"
-                style={{ background: `linear-gradient(90deg, transparent, ${m.color}, transparent)` }}
-              />
-              <div className="relative flex items-start justify-between">
-                <div
-                  className="flex h-11 w-11 items-center justify-center rounded-xl ring-1 ring-inset ring-white/10 transition-transform duration-300 group-hover:scale-110"
-                  style={{ background: `${m.color}26` }}
+              <TarjetaTilt glow={m.color}>
+                <Link
+                  href={a.href}
+                  className="glass group relative flex h-full flex-col gap-3 overflow-hidden rounded-2xl p-5"
                 >
-                  <Icon path={m.icon} className="h-5 w-5" stroke={m.color} strokeWidth={1.7} />
-                </div>
-                <Icon
-                  path={ICON_CHEVRON_RIGHT}
-                  className="h-4 w-4 text-white/25 transition-all duration-300 group-hover:translate-x-1 group-hover:text-white/70"
-                  strokeWidth={2}
-                />
-              </div>
-              <div className="relative">
-                <p className="text-sm font-semibold text-white">{a.label}</p>
-                <p className="mt-1 text-xs leading-relaxed text-white/45">{m.desc}</p>
-              </div>
-            </Link>
+                  {/* Resplandor del color del módulo — aparece al pasar el cursor */}
+                  <span
+                    className="pointer-events-none absolute -bottom-16 left-1/2 h-32 w-40 -translate-x-1/2 rounded-full opacity-0 blur-3xl transition-opacity duration-500 group-hover:opacity-60"
+                    style={{ background: m.color }}
+                  />
+                  <span
+                    className="absolute inset-x-0 top-0 h-px origin-left scale-x-0 transition-transform duration-500 group-hover:scale-x-100"
+                    style={{ background: `linear-gradient(90deg, transparent, ${m.color}, transparent)` }}
+                  />
+                  <div className="relative flex items-start justify-between">
+                    <div
+                      className="flex h-11 w-11 items-center justify-center rounded-xl ring-1 ring-inset ring-white/10 transition-transform duration-300 group-hover:scale-110"
+                      style={{ background: `${m.color}26` }}
+                    >
+                      <Icon path={m.icon} className="h-5 w-5" stroke={m.color} strokeWidth={1.7} />
+                    </div>
+                    <Icon
+                      path={ICON_CHEVRON_RIGHT}
+                      className="h-4 w-4 text-white/25 transition-all duration-300 group-hover:translate-x-1 group-hover:text-white/70"
+                      strokeWidth={2}
+                    />
+                  </div>
+                  <div className="relative">
+                    <p className="text-sm font-semibold text-white">{a.label}</p>
+                    <p className="mt-1 text-xs leading-relaxed text-white/45">{m.desc}</p>
+                  </div>
+                </Link>
+              </TarjetaTilt>
             </div>
           );
         })}

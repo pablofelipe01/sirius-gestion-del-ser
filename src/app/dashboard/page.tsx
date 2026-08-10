@@ -1,6 +1,7 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import Link from "next/link";
+import { TarjetaTilt } from "@sirius/solicitudes";
 import { verifyJWT } from "@/lib/auth";
 
 const MODULES = [
@@ -85,13 +86,15 @@ function greeting() {
 }
 
 /*
- * El envoltorio anima la entrada y la tarjeta hace el hover: `anim-entrada` usa
- * `forwards`, así que deja fijado `transform: none` y en el mismo elemento
- * anularía cualquier `hover:-translate-y`.
+ * Tres capas, y cada una por un motivo:
+ *   envoltorio  → `anim-entrada` (usa `forwards`, deja fijado `transform: none`
+ *                 y en el mismo elemento anularía el hover)
+ *   TarjetaTilt → la inclinación 3D siguiendo el mouse (solo si es clicable)
+ *   tarjeta     → el vidrio y los estados de hover del contenido
  */
 function ModuleCard({ mod, orden }: { mod: (typeof MODULES)[0]; orden: number }) {
   const card = (
-    <div className="glass relative flex h-full flex-col gap-4 overflow-hidden rounded-2xl p-5 transition-all duration-300 group-hover:-translate-y-1">
+    <div className="glass relative flex h-full flex-col gap-4 overflow-hidden rounded-2xl p-5 transition-all duration-300">
       {/* Resplandor del color del módulo — solo en los que ya se pueden abrir */}
       {mod.ready && (
         <span
@@ -127,9 +130,13 @@ function ModuleCard({ mod, orden }: { mod: (typeof MODULES)[0]; orden: number })
   return (
     <div className="anim-entrada h-full" style={delay}>
       {mod.ready ? (
-        <Link href={mod.href} className="group block h-full">
-          {card}
-        </Link>
+        // Los módulos pendientes no se inclinan: el efecto invita a hacer clic y
+        // ahí no hay nada que abrir.
+        <TarjetaTilt glow={mod.color}>
+          <Link href={mod.href} className="group block h-full">
+            {card}
+          </Link>
+        </TarjetaTilt>
       ) : (
         <div className="h-full opacity-60">{card}</div>
       )}
