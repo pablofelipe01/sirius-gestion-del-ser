@@ -189,10 +189,13 @@ function Resumen({ rows }: { rows: Row[] }) {
   return (
     <div className="grid grid-cols-3 gap-3 sm:gap-4">
       {stats.map((s, i) => (
+        /*
+          Dos elementos y no uno: `anim-entrada` corre con `forwards`, deja fijado
+          `transform: none` y en el mismo nodo se comería el hover.
+        */
+        <div key={s.label} className="anim-entrada" style={{ animationDelay: `${180 + i * 90}ms` }}>
         <div
-          key={s.label}
-          className="glass anim-entrada group relative overflow-hidden rounded-2xl px-4 py-4 transition-transform duration-300 hover:-translate-y-0.5"
-          style={{ animationDelay: `${180 + i * 90}ms` }}
+          className="glass group relative h-full overflow-hidden rounded-2xl px-4 py-4 transition-transform duration-300 hover:-translate-y-0.5"
         >
           {/* Halo del color del indicador — sube al pasar el cursor */}
           <span
@@ -212,6 +215,7 @@ function Resumen({ rows }: { rows: Row[] }) {
             {s.valor}
           </p>
           <p className="relative mt-1 text-[11px] text-white/40">{s.pista}</p>
+        </div>
         </div>
       ))}
     </div>
@@ -309,11 +313,14 @@ export async function SolicitudesOverview({
         {acciones.map((a, i) => {
           const m = MODULOS[a.key];
           return (
-            <Link
+            <div
               key={a.href}
-              href={a.href}
-              className="glass anim-entrada group relative flex flex-col gap-3 overflow-hidden rounded-2xl p-5 transition-all duration-300 hover:-translate-y-1"
+              className="anim-entrada"
               style={{ animationDelay: `${480 + i * 90}ms` }}
+            >
+            <Link
+              href={a.href}
+              className="glass group relative flex h-full flex-col gap-3 overflow-hidden rounded-2xl p-5 transition-all duration-300 hover:-translate-y-1"
             >
               {/* Resplandor del color del módulo — aparece al pasar el cursor */}
               <span
@@ -342,6 +349,7 @@ export async function SolicitudesOverview({
                 <p className="mt-1 text-xs leading-relaxed text-white/45">{m.desc}</p>
               </div>
             </Link>
+            </div>
           );
         })}
       </div>

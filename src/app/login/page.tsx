@@ -3,6 +3,7 @@
 import { useState, FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import { FondoNocturno } from "@/components/FondoNocturno";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -38,54 +39,32 @@ export default function LoginPage() {
     }
   }
 
-  return (
-    <main className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      <Image
-        src="/DSC_2854.jpg"
-        alt=""
-        fill
-        className="object-cover object-center"
-        priority
-        quality={90}
-      />
-      <div className="absolute inset-0 bg-gradient-to-br from-black/65 via-[#0a1628]/60 to-black/70" />
+  // Mismo campo que el resto de la aplicación: `campo-oscuro` deja en oscuro los
+  // controles que pinta el sistema (autocompletado, gestor de contraseñas).
+  const campoCls =
+    "campo-oscuro rounded-xl border border-white/20 bg-white/10 px-4 py-3 text-sm text-white transition-all duration-200 placeholder:text-white/40 focus:border-[#29b6e8] focus:bg-white/15 focus:outline-none focus:ring-2 focus:ring-[#29b6e8]/25";
 
-      <div className="relative z-10 w-full max-w-sm mx-4">
-        <div
-          className="rounded-2xl p-8 shadow-2xl"
-          style={{
-            background: "rgba(255,255,255,0.10)",
-            backdropFilter: "blur(20px)",
-            WebkitBackdropFilter: "blur(20px)",
-            border: "1px solid rgba(255,255,255,0.18)",
-          }}
-        >
-          <div className="flex justify-center mb-8">
-            <div className="bg-white rounded-xl px-5 py-3 shadow-lg">
-              <Image
-                src="/Logo-Sirius.png"
-                alt="Sirius"
-                width={148}
-                height={51}
-                priority
-              />
+  return (
+    <main className="relative flex min-h-screen items-center justify-center overflow-hidden">
+      {/* El mismo cielo nocturno que el resto de la aplicación */}
+      <FondoNocturno completo />
+
+      <div className="relative z-10 mx-4 w-full max-w-sm">
+        <div className="glass anim-entrada rounded-2xl p-8">
+          <div className="mb-8 flex justify-center">
+            <div className="rounded-xl bg-white px-5 py-3 shadow-[0_18px_40px_-20px_rgba(0,0,0,0.9)]">
+              <Image src="/Logo-Sirius.png" alt="Sirius" width={148} height={51} priority />
             </div>
           </div>
 
-          <h2 className="text-white text-xl font-semibold text-center mb-1">
-            Bienvenido
-          </h2>
-          <p className="text-center text-sm mb-7" style={{ color: "rgba(255,255,255,0.55)" }}>
+          <h2 className="mb-1 text-center text-xl font-semibold text-white">Bienvenido</h2>
+          <p className="mb-7 text-center text-sm text-white/50">
             Ingresa tus credenciales para continuar
           </p>
 
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
             <div className="flex flex-col gap-1.5">
-              <label
-                htmlFor="cedula"
-                className="text-sm font-medium"
-                style={{ color: "rgba(255,255,255,0.80)" }}
-              >
+              <label htmlFor="cedula" className="text-sm font-medium text-white/80">
                 Número de cédula
               </label>
               <input
@@ -97,28 +76,12 @@ export default function LoginPage() {
                 placeholder="Ingresa tu cédula"
                 required
                 autoComplete="username"
-                className="rounded-xl px-4 py-3 text-sm text-white placeholder-white/40 focus:outline-none transition-all duration-200"
-                style={{
-                  background: "rgba(255,255,255,0.10)",
-                  border: "1px solid rgba(255,255,255,0.20)",
-                }}
-                onFocus={(e) => {
-                  e.currentTarget.style.border = "1px solid #29b6e8";
-                  e.currentTarget.style.background = "rgba(255,255,255,0.15)";
-                }}
-                onBlur={(e) => {
-                  e.currentTarget.style.border = "1px solid rgba(255,255,255,0.20)";
-                  e.currentTarget.style.background = "rgba(255,255,255,0.10)";
-                }}
+                className={campoCls}
               />
             </div>
 
             <div className="flex flex-col gap-1.5">
-              <label
-                htmlFor="password"
-                className="text-sm font-medium"
-                style={{ color: "rgba(255,255,255,0.80)" }}
-              >
+              <label htmlFor="password" className="text-sm font-medium text-white/80">
                 Contraseña
               </label>
               <input
@@ -129,30 +92,14 @@ export default function LoginPage() {
                 placeholder="••••••••"
                 required
                 autoComplete="current-password"
-                className="rounded-xl px-4 py-3 text-sm text-white placeholder-white/40 focus:outline-none transition-all duration-200"
-                style={{
-                  background: "rgba(255,255,255,0.10)",
-                  border: "1px solid rgba(255,255,255,0.20)",
-                }}
-                onFocus={(e) => {
-                  e.currentTarget.style.border = "1px solid #29b6e8";
-                  e.currentTarget.style.background = "rgba(255,255,255,0.15)";
-                }}
-                onBlur={(e) => {
-                  e.currentTarget.style.border = "1px solid rgba(255,255,255,0.20)";
-                  e.currentTarget.style.background = "rgba(255,255,255,0.10)";
-                }}
+                className={campoCls}
               />
             </div>
 
             {error && (
               <div
-                className="text-sm rounded-xl px-4 py-3"
-                style={{
-                  background: "rgba(239,68,68,0.18)",
-                  border: "1px solid rgba(239,68,68,0.30)",
-                  color: "#fca5a5",
-                }}
+                role="alert"
+                className="rounded-xl border border-rose-400/35 bg-rose-500/15 px-4 py-3 text-sm text-rose-200"
               >
                 {error}
               </div>
@@ -161,14 +108,8 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="mt-2 text-white font-semibold py-3.5 rounded-xl transition-all duration-200 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
-              style={{ background: "#1a51a8" }}
-              onMouseEnter={(e) => {
-                if (!loading) e.currentTarget.style.background = "#1a4494";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.background = "#1a51a8";
-              }}
+              className="mt-2 cursor-pointer rounded-xl py-3.5 font-semibold text-white transition-all duration-200 hover:-translate-y-0.5 hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:translate-y-0"
+              style={{ background: "#1a51a8", boxShadow: "0 18px 40px -18px #1a51a8" }}
             >
               {loading ? "Ingresando..." : "Ingresar"}
             </button>

@@ -207,13 +207,13 @@ export function AvisoCompensacion({ permisos, apiBasePath = "" }: Props) {
       )}
 
       {abierto && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 p-4 backdrop-blur-sm">
-          <div className="flex max-h-[92vh] w-full max-w-lg flex-col overflow-hidden rounded-2xl bg-white shadow-2xl">
-            <div className="border-b border-gray-100 px-6 py-5">
-              <h2 className="text-lg font-semibold tracking-tight text-gray-800">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#040711]/80 p-4 backdrop-blur-md">
+          <div className="anim-entrada flex max-h-[92vh] w-full max-w-lg flex-col overflow-hidden rounded-2xl border border-white/12 bg-[#0b1120] shadow-[0_40px_90px_-30px_rgba(0,0,0,0.95)]">
+            <div className="border-b border-white/10 px-6 py-5">
+              <h2 className="text-lg font-semibold tracking-tight text-white">
                 ¿Cómo vas a reponer el tiempo?
               </h2>
-              <p className="mt-1 text-sm text-gray-500">
+              <p className="mt-1 text-sm text-white/45">
                 {abierto.tipo} del {formatFecha(abierto.fecha)} · {abierto.horasTotal} h por
                 reponer
               </p>
@@ -231,18 +231,18 @@ export function AvisoCompensacion({ permisos, apiBasePath = "" }: Props) {
               />
 
               {error && (
-                <p className="mt-4 rounded-xl border border-rose-200 bg-rose-50 p-3 text-sm text-rose-800">
+                <p className="mt-4 rounded-xl border border-rose-400/35 bg-rose-500/12 p-3 text-sm text-rose-200">
                   {error}
                 </p>
               )}
             </div>
 
-            <div className="flex items-center justify-end gap-3 border-t border-gray-100 bg-gray-50 px-6 py-4">
+            <div className="flex items-center justify-end gap-3 border-t border-white/10 bg-black/30 px-6 py-4">
               <button
                 type="button"
                 onClick={() => setAbierto(null)}
                 disabled={guardando}
-                className="rounded-xl px-4 py-2.5 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-200/70 disabled:opacity-50"
+                className="rounded-xl px-4 py-2.5 text-sm font-medium text-white/60 transition-colors hover:bg-white/10 hover:text-white disabled:opacity-40"
               >
                 Cancelar
               </button>
@@ -250,8 +250,8 @@ export function AvisoCompensacion({ permisos, apiBasePath = "" }: Props) {
                 type="button"
                 onClick={guardar}
                 disabled={guardando || !plan}
-                className="rounded-xl px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition-all hover:brightness-110 disabled:cursor-not-allowed disabled:bg-gray-300"
-                style={plan && !guardando ? { background: COLOR } : undefined}
+                className="rounded-xl px-5 py-2.5 text-sm font-semibold text-white transition-all hover:brightness-110 disabled:cursor-not-allowed disabled:bg-white/10 disabled:text-white/35"
+                style={plan && !guardando ? { background: COLOR, boxShadow: `0 14px 30px -16px ${COLOR}` } : undefined}
               >
                 {guardando ? "Guardando..." : "Confirmar plan"}
               </button>

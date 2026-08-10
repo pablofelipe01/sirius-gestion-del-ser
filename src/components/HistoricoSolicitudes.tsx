@@ -63,17 +63,17 @@ interface Fila {
 const ESTILO_CATEGORIA: Record<Categoria, { etiqueta: string; chip: string; activo: string }> = {
   permisos: {
     etiqueta: "Permiso",
-    chip: "bg-blue-50 text-blue-700 border-blue-200",
-    activo: "border-blue-500 text-blue-600",
+    chip: "bg-[#1a51a8]/25 text-[#9cc4ff] border-[#1a51a8]/50",
+    activo: "border-[#4d8ee8] text-[#9cc4ff]",
   },
   vacaciones: {
     etiqueta: "Vacaciones",
-    chip: "bg-green-50 text-green-700 border-green-200",
-    activo: "border-green-500 text-green-600",
+    chip: "bg-[#6bb543]/20 text-[#b3e694] border-[#6bb543]/45",
+    activo: "border-[#8fd363] text-[#b3e694]",
   },
   novedades: {
     etiqueta: "Novedad",
-    chip: "bg-orange-50 text-orange-700 border-orange-200",
+    chip: "bg-[#e07b39]/20 text-[#f3b98d] border-[#e07b39]/45",
     activo: "border-orange-500 text-orange-600",
   },
 };
@@ -82,7 +82,7 @@ const ESTILO_CATEGORIA: Record<Categoria, { etiqueta: string; chip: string; acti
 const CLASES: Record<string, { etiqueta: string; chip: string; icono: string }> = {
   autorizacion: {
     etiqueta: "Autorización",
-    chip: "bg-emerald-50 text-emerald-700 border-emerald-200",
+    chip: "bg-emerald-500/18 text-emerald-200 border-emerald-400/40",
     icono:
       "M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z",
   },
@@ -100,7 +100,7 @@ const CLASES: Record<string, { etiqueta: string; chip: string; icono: string }> 
   },
   heredado: {
     etiqueta: "Sistema anterior",
-    chip: "bg-slate-100 text-slate-600 border-slate-200",
+    chip: "bg-white/[0.08] text-white/60 border-white/15",
     icono:
       "M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z",
   },
@@ -139,13 +139,13 @@ function iso(valor: unknown): string {
 /** Estilo del badge de estado — mismos colores que el resto del dashboard. */
 function estiloEstado(estado: string): string {
   const e = estado.toLowerCase();
-  if (!e) return "bg-gray-100 text-gray-600";
+  if (!e) return "bg-white/[0.08] text-white/60";
   if (e === "pendiente") return "bg-yellow-100 text-yellow-800";
   if (["concedido", "aprobado", "autorizado", "resuelto"].includes(e))
-    return "bg-green-100 text-green-700";
-  if (["rechazado", "no autorizado"].includes(e)) return "bg-red-100 text-red-700";
-  if (e === "revisado") return "bg-blue-100 text-blue-700";
-  return "bg-gray-100 text-gray-600";
+    return "bg-green-500/18 text-green-300";
+  if (["rechazado", "no autorizado"].includes(e)) return "bg-rose-500/18 text-rose-300";
+  if (e === "revisado") return "bg-[#1a51a8]/30 text-[#9cc4ff]";
+  return "bg-white/[0.08] text-white/60";
 }
 
 function normalizar(categoria: Categoria, r: Registro): Fila {
@@ -424,13 +424,13 @@ export default function HistoricoSolicitudes() {
 
   if (cargando) {
     return (
-      <div className="rounded-2xl border border-gray-100 bg-white p-8 shadow-sm">
+      <div className="glass-solid rounded-2xl p-8">
         <div className="animate-pulse space-y-4">
-          <div className="h-6 w-1/4 rounded bg-gray-200" />
-          <div className="h-4 w-1/2 rounded bg-gray-200" />
+          <div className="h-6 w-1/4 rounded bg-white/10" />
+          <div className="h-4 w-1/2 rounded bg-white/10" />
           <div className="mt-6 space-y-2">
             {[0, 1, 2, 3, 4].map((i) => (
-              <div key={i} className="h-12 rounded-lg bg-gray-200" />
+              <div key={i} className="h-12 rounded-lg bg-white/[0.07]" />
             ))}
           </div>
         </div>
@@ -440,11 +440,11 @@ export default function HistoricoSolicitudes() {
 
   if (error) {
     return (
-      <div className="flex items-center justify-between gap-4 rounded-2xl border border-red-200 bg-red-50 p-6">
-        <p className="font-medium text-red-800">Error: {error}</p>
+      <div className="glass flex items-center justify-between gap-4 rounded-2xl p-6" style={{ borderColor: "rgba(239,68,68,0.35)" }}>
+        <p className="font-medium text-rose-200">Error: {error}</p>
         <button
           onClick={cargar}
-          className="rounded-lg border border-red-200 bg-white px-4 py-2 text-sm font-medium text-red-700 hover:bg-red-100"
+          className="rounded-lg border border-white/15 bg-white/10 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-white/20"
         >
           Reintentar
         </button>
@@ -461,15 +461,15 @@ export default function HistoricoSolicitudes() {
   };
 
   return (
-    <div className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm">
+    <div className="glass-solid anim-entrada overflow-hidden rounded-2xl">
       {/* Encabezado + resumen */}
-      <div className="border-b border-gray-100 px-6 py-6 sm:px-8">
+      <div className="border-b border-white/10 px-6 py-6 sm:px-8">
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div>
-            <h2 className="text-xl font-semibold tracking-tight text-gray-900 sm:text-2xl">
+            <h2 className="text-xl font-semibold tracking-tight text-white sm:text-2xl">
               Histórico de solicitudes
             </h2>
-            <p className="mt-1 text-sm text-gray-600">
+            <p className="mt-1 text-sm text-white/50">
               {datos?.alcance === "propio"
                 ? "Todas sus solicitudes de permiso, vacaciones y novedades de nómina"
                 : datos?.alcance === "areas"
@@ -477,7 +477,7 @@ export default function HistoricoSolicitudes() {
                   : "Solicitudes de todos los colaboradores"}
             </p>
             {tab === "documentos" && (
-              <p className="mt-1 text-xs text-gray-500">
+              <p className="mt-1 text-xs text-white/40">
                 Todos los archivos asociados: documentos de autorización, firmas, adjuntos
                 y documentos del sistema anterior
               </p>
@@ -490,7 +490,7 @@ export default function HistoricoSolicitudes() {
               disabled={
                 tab === "documentos" ? documentosFiltrados.length === 0 : filtradas.length === 0
               }
-              className="inline-flex items-center gap-2 rounded-lg border border-gray-200 px-3 py-2 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-50 disabled:opacity-40"
+              className="inline-flex items-center gap-2 rounded-lg border border-white/12 bg-white/[0.06] px-3 py-2 text-sm font-medium text-white/70 transition-colors hover:bg-white/12 hover:text-white disabled:opacity-30"
             >
               <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
@@ -504,7 +504,7 @@ export default function HistoricoSolicitudes() {
             </button>
             <button
               onClick={cargar}
-              className="inline-flex items-center gap-2 rounded-lg border border-gray-200 px-3 py-2 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-50"
+              className="inline-flex items-center gap-2 rounded-lg border border-white/12 bg-white/[0.06] px-3 py-2 text-sm font-medium text-white/70 transition-colors hover:bg-white/12 hover:text-white"
             >
               <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
@@ -551,12 +551,12 @@ export default function HistoricoSolicitudes() {
       </div>
 
       {/* Pestañas */}
-      <div className="flex gap-5 overflow-x-auto border-b border-gray-100 px-6 sm:px-8">
+      <div className="flex gap-5 overflow-x-auto border-b border-white/10 px-6 sm:px-8">
         {(["todas", "permisos", "vacaciones", "novedades", "documentos"] as Tab[]).map((t) => {
           const activo = tab === t;
           const estiloActivo =
             t === "todas" || t === "documentos"
-              ? "border-gray-900 text-gray-900"
+              ? "border-white text-white"
               : ESTILO_CATEGORIA[t].activo;
           const etiqueta =
             t === "todas"
@@ -569,7 +569,7 @@ export default function HistoricoSolicitudes() {
               key={t}
               onClick={() => setTab(t)}
               className={`whitespace-nowrap border-b-2 px-1 py-4 text-sm font-medium transition-colors ${
-                activo ? estiloActivo : "border-transparent text-gray-500 hover:text-gray-700"
+                activo ? estiloActivo : "border-transparent text-white/45 hover:text-white/80"
               }`}
             >
               {etiqueta} ({conteos[t]})
@@ -583,24 +583,24 @@ export default function HistoricoSolicitudes() {
       {tab === "novedades" && datos?.alcance === "todos" && <CargarListaAsistencia />}
 
       {/* Filtros */}
-      <div className="flex flex-wrap items-end gap-3 border-b border-gray-100 bg-gray-50/60 px-6 py-4 sm:px-8">
+      <div className="flex flex-wrap items-end gap-3 border-b border-white/10 bg-black/25 px-6 py-4 sm:px-8">
         <div className="min-w-[200px] flex-1">
-          <label className="mb-1 block text-xs text-gray-500">Buscar</label>
+          <label className="mb-1 block text-xs text-white/45">Buscar</label>
           <input
             type="search"
             value={busqueda}
             onChange={(e) => setBusqueda(e.target.value)}
             placeholder="Nombre, cédula, tipo, motivo…"
-            className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/30 focus:outline-none"
+            className="campo-oscuro w-full rounded-lg border border-white/12 bg-white/[0.06] px-3 py-2 text-sm text-white placeholder:text-white/35 focus:border-[#29b6e8]/60 focus:ring-2 focus:ring-[#29b6e8]/25 focus:outline-none"
           />
         </div>
         {tab === "documentos" ? (
           <div>
-            <label className="mb-1 block text-xs text-gray-500">Clase de documento</label>
+            <label className="mb-1 block text-xs text-white/45">Clase de documento</label>
             <select
               value={clase}
               onChange={(e) => setClase(e.target.value)}
-              className="rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/30 focus:outline-none"
+              className="campo-oscuro rounded-lg border border-white/12 bg-white/[0.06] px-3 py-2 text-sm text-white focus:border-[#29b6e8]/60 focus:ring-2 focus:ring-[#29b6e8]/25 focus:outline-none"
             >
               <option value="todas">Todas</option>
               {Object.entries(CLASES).map(([valor, c]) => (
@@ -612,11 +612,11 @@ export default function HistoricoSolicitudes() {
           </div>
         ) : (
           <div>
-            <label className="mb-1 block text-xs text-gray-500">Estado</label>
+            <label className="mb-1 block text-xs text-white/45">Estado</label>
             <select
               value={estado}
               onChange={(e) => setEstado(e.target.value)}
-              className="rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/30 focus:outline-none"
+              className="campo-oscuro rounded-lg border border-white/12 bg-white/[0.06] px-3 py-2 text-sm text-white focus:border-[#29b6e8]/60 focus:ring-2 focus:ring-[#29b6e8]/25 focus:outline-none"
             >
               <option value="todos">Todos</option>
               {estados.map((e) => (
@@ -629,27 +629,27 @@ export default function HistoricoSolicitudes() {
           </div>
         )}
         <div>
-          <label className="mb-1 block text-xs text-gray-500">Desde</label>
+          <label className="mb-1 block text-xs text-white/45">Desde</label>
           <input
             type="date"
             value={desde}
             onChange={(e) => setDesde(e.target.value)}
-            className="rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/30 focus:outline-none"
+            className="campo-oscuro rounded-lg border border-white/12 bg-white/[0.06] px-3 py-2 text-sm text-white focus:border-[#29b6e8]/60 focus:ring-2 focus:ring-[#29b6e8]/25 focus:outline-none"
           />
         </div>
         <div>
-          <label className="mb-1 block text-xs text-gray-500">Hasta</label>
+          <label className="mb-1 block text-xs text-white/45">Hasta</label>
           <input
             type="date"
             value={hasta}
             onChange={(e) => setHasta(e.target.value)}
-            className="rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/30 focus:outline-none"
+            className="campo-oscuro rounded-lg border border-white/12 bg-white/[0.06] px-3 py-2 text-sm text-white focus:border-[#29b6e8]/60 focus:ring-2 focus:ring-[#29b6e8]/25 focus:outline-none"
           />
         </div>
         {hayFiltros && (
           <button
             onClick={limpiarFiltros}
-            className="rounded-lg px-3 py-2 text-sm font-medium text-gray-500 hover:bg-gray-200/70 hover:text-gray-700"
+            className="rounded-lg px-3 py-2 text-sm font-medium text-white/50 transition-colors hover:bg-white/10 hover:text-white"
           >
             Limpiar
           </button>
@@ -660,7 +660,7 @@ export default function HistoricoSolicitudes() {
       {tab === "documentos" ? (
         documentosFiltrados.length === 0 ? (
           <div className="px-8 py-16 text-center">
-            <p className="font-medium text-gray-600">
+            <p className="font-medium text-white/55">
               {documentos.length === 0
                 ? "Todavía no hay documentos registrados"
                 : "Ningún documento coincide con los filtros"}
@@ -671,7 +671,7 @@ export default function HistoricoSolicitudes() {
             <div className="overflow-x-auto">
               <table className="w-full min-w-[760px] text-sm">
                 <thead>
-                  <tr className="border-b border-gray-100 text-left text-xs text-gray-500">
+                  <tr className="border-b border-white/10 text-left text-[10px] uppercase tracking-[0.14em] text-white/40">
                     <th className="px-6 py-3 font-medium sm:px-8">Documento</th>
                     <th className="px-3 py-3 font-medium">Clase</th>
                     <th className="px-3 py-3 font-medium">Solicitud</th>
@@ -690,10 +690,10 @@ export default function HistoricoSolicitudes() {
             </div>
 
             {documentosFiltrados.length > visibles && (
-              <div className="border-t border-gray-100 px-8 py-5 text-center">
+              <div className="border-t border-white/10 px-8 py-5 text-center">
                 <button
                   onClick={() => setVisibles((v) => v + 25)}
-                  className="rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50"
+                  className="rounded-lg border border-white/12 bg-white/[0.06] px-5 py-2.5 text-sm font-medium text-white/80 transition-colors hover:bg-white/12 hover:text-white"
                 >
                   Mostrar más ({documentosFiltrados.length - visibles} restantes)
                 </button>
@@ -704,7 +704,7 @@ export default function HistoricoSolicitudes() {
       ) : /* Tabla de solicitudes */
       filtradas.length === 0 ? (
         <div className="px-8 py-16 text-center">
-          <p className="font-medium text-gray-600">
+          <p className="font-medium text-white/55">
             {filas.length === 0
               ? "Todavía no hay solicitudes registradas"
               : "Ninguna solicitud coincide con los filtros"}
@@ -715,7 +715,7 @@ export default function HistoricoSolicitudes() {
           <div className="overflow-x-auto">
             <table className="w-full min-w-[860px] text-sm">
               <thead>
-                <tr className="border-b border-gray-100 text-left text-xs text-gray-500">
+                <tr className="border-b border-white/10 text-left text-[10px] uppercase tracking-[0.14em] text-white/40">
                   <th className="px-6 py-3 font-medium sm:px-8">Tipo</th>
                   <th className="px-3 py-3 font-medium">Colaborador</th>
                   <th className="px-3 py-3 font-medium">Detalle</th>
@@ -744,10 +744,10 @@ export default function HistoricoSolicitudes() {
           </div>
 
           {filtradas.length > visibles && (
-            <div className="border-t border-gray-100 px-8 py-5 text-center">
+            <div className="border-t border-white/10 px-8 py-5 text-center">
               <button
                 onClick={() => setVisibles((v) => v + 25)}
-                className="rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50"
+                className="rounded-lg border border-white/12 bg-white/[0.06] px-5 py-2.5 text-sm font-medium text-white/80 transition-colors hover:bg-white/12 hover:text-white"
               >
                 Mostrar más ({filtradas.length - visibles} restantes)
               </button>
@@ -760,10 +760,10 @@ export default function HistoricoSolicitudes() {
 }
 
 const TONOS: Record<string, string> = {
-  slate: "border-slate-200 bg-slate-50 text-slate-700",
-  amber: "border-amber-200 bg-amber-50 text-amber-700",
-  emerald: "border-emerald-200 bg-emerald-50 text-emerald-700",
-  rose: "border-rose-200 bg-rose-50 text-rose-700",
+  slate: "border-white/15 bg-white/[0.08] text-white/70",
+  amber: "border-amber-400/40 bg-amber-500/15 text-amber-200",
+  emerald: "border-emerald-400/40 bg-emerald-500/15 text-emerald-200",
+  rose: "border-rose-400/40 bg-rose-500/15 text-rose-200",
   violet: "border-violet-200 bg-violet-50 text-violet-700",
   sky: "border-sky-200 bg-sky-50 text-sky-700",
 };
@@ -773,18 +773,18 @@ function FilaDocumento({ documento: d }: { documento: Documento }) {
   const estiloCategoria = ESTILO_CATEGORIA[d.categoria];
 
   return (
-    <tr className="border-b border-gray-50 transition-colors hover:bg-gray-50/70">
+    <tr className="border-b border-white/[0.07] transition-colors hover:bg-white/[0.05]">
       <td className="max-w-[280px] px-6 py-3 sm:px-8">
         <div className="flex items-center gap-2.5">
           <svg
-            className="h-4 w-4 flex-shrink-0 text-gray-400"
+            className="h-4 w-4 flex-shrink-0 text-white/40"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
           >
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={clase.icono} />
           </svg>
-          <span className="truncate font-medium text-gray-900" title={d.titulo}>
+          <span className="truncate font-medium text-white/90" title={d.titulo}>
             {d.titulo}
           </span>
         </div>
@@ -804,17 +804,17 @@ function FilaDocumento({ documento: d }: { documento: Documento }) {
         </span>
       </td>
       <td className="max-w-[190px] px-3 py-3">
-        <p className="truncate text-gray-700">{d.nombre}</p>
-        {d.cedula && <p className="text-xs text-gray-500">CC {d.cedula}</p>}
+        <p className="truncate text-white/85">{d.nombre}</p>
+        {d.cedula && <p className="text-xs text-white/40">CC {d.cedula}</p>}
       </td>
-      <td className="whitespace-nowrap px-3 py-3 text-gray-600">{fmtFecha(d.fecha)}</td>
-      <td className="whitespace-nowrap px-3 py-3 text-gray-500">{fmtTamano(d.tamano)}</td>
+      <td className="whitespace-nowrap px-3 py-3 text-white/60">{fmtFecha(d.fecha)}</td>
+      <td className="whitespace-nowrap px-3 py-3 text-white/40">{fmtTamano(d.tamano)}</td>
       <td className="px-3 py-3 pr-6 sm:pr-8">
         <a
           href={d.url}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center gap-1 font-medium text-blue-600 hover:text-blue-700"
+          className="inline-flex items-center gap-1 font-medium text-[#7cc4f5] transition-colors hover:text-white"
         >
           Abrir
           <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -855,7 +855,7 @@ function FilaHistorico({
     <>
       <tr
         onClick={onToggle}
-        className="cursor-pointer border-b border-gray-50 transition-colors hover:bg-gray-50/70"
+        className="cursor-pointer border-b border-white/[0.07] transition-colors hover:bg-white/[0.05]"
       >
         <td className="px-6 py-3 sm:px-8">
           <span
@@ -865,15 +865,15 @@ function FilaHistorico({
           </span>
         </td>
         <td className="max-w-[200px] px-3 py-3">
-          <p className="truncate font-medium text-gray-900">{fila.nombre}</p>
-          {fila.cedula && <p className="text-xs text-gray-500">CC {fila.cedula}</p>}
+          <p className="truncate font-medium text-white/90">{fila.nombre}</p>
+          {fila.cedula && <p className="text-xs text-white/40">CC {fila.cedula}</p>}
         </td>
         <td className="max-w-[200px] px-3 py-3">
-          <p className="truncate text-gray-700" title={fila.detalle}>
+          <p className="truncate text-white/85" title={fila.detalle}>
             {fila.detalle || "—"}
           </p>
         </td>
-        <td className="whitespace-nowrap px-3 py-3 text-gray-600">
+        <td className="whitespace-nowrap px-3 py-3 text-white/60">
           {fmtFecha(fila.fechaRadicado)}
         </td>
         <td className="px-3 py-3">
@@ -886,11 +886,11 @@ function FilaHistorico({
         <td className="max-w-[160px] px-3 py-3">
           {fila.autorizadoPor ? (
             <>
-              <p className="truncate text-gray-700">{fila.autorizadoPor}</p>
-              <p className="text-xs text-gray-500">{fmtFecha(fila.fechaAutorizacion)}</p>
+              <p className="truncate text-white/85">{fila.autorizadoPor}</p>
+              <p className="text-xs text-white/40">{fmtFecha(fila.fechaAutorizacion)}</p>
             </>
           ) : (
-            <span className="text-gray-400">—</span>
+            <span className="text-white/25">—</span>
           )}
         </td>
         <td className="px-3 py-3 pr-6 sm:pr-8">
@@ -900,7 +900,7 @@ function FilaHistorico({
               target="_blank"
               rel="noopener noreferrer"
               onClick={(e) => e.stopPropagation()}
-              className="inline-flex items-center gap-1 font-medium text-blue-600 hover:text-blue-700"
+              className="inline-flex items-center gap-1 font-medium text-[#7cc4f5] transition-colors hover:text-white"
             >
               <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
@@ -913,49 +913,49 @@ function FilaHistorico({
               PDF
             </a>
           ) : (
-            <span className="text-gray-400">—</span>
+            <span className="text-white/25">—</span>
           )}
         </td>
       </tr>
 
       {abierta && (
-        <tr className="border-b border-gray-100 bg-gray-50/80">
+        <tr className="border-b border-white/10 bg-black/30">
           <td colSpan={7} className="px-6 py-5 sm:px-8">
             <div className="grid gap-5 lg:grid-cols-3">
               <dl className="grid grid-cols-2 gap-x-6 gap-y-3 lg:col-span-2">
                 {fila.cargo && (
                   <div>
-                    <dt className="text-xs text-gray-500">Cargo</dt>
-                    <dd className="text-sm font-medium text-gray-900">{fila.cargo}</dd>
+                    <dt className="text-xs text-white/40">Cargo</dt>
+                    <dd className="text-sm font-medium text-white/90">{fila.cargo}</dd>
                   </div>
                 )}
                 {fila.idCore && (
                   <div>
-                    <dt className="text-xs text-gray-500">ID empleado</dt>
-                    <dd className="text-sm font-medium text-gray-900">{fila.idCore}</dd>
+                    <dt className="text-xs text-white/40">ID empleado</dt>
+                    <dd className="text-sm font-medium text-white/90">{fila.idCore}</dd>
                   </div>
                 )}
                 {fila.extras.map((e) => (
                   <div key={e.etiqueta}>
-                    <dt className="text-xs text-gray-500">{e.etiqueta}</dt>
-                    <dd className="text-sm font-medium text-gray-900">{e.valor}</dd>
+                    <dt className="text-xs text-white/40">{e.etiqueta}</dt>
+                    <dd className="text-sm font-medium text-white/90">{e.valor}</dd>
                   </div>
                 ))}
               </dl>
 
               <div className="space-y-3">
                 {fila.motivo && (
-                  <div className="rounded-lg border border-gray-200 bg-white p-3">
-                    <p className="text-xs text-gray-500">
+                  <div className="rounded-lg border border-white/10 bg-white/[0.05] p-3">
+                    <p className="text-xs text-white/40">
                       {fila.categoria === "novedades" ? "Descripción" : "Motivo"}
                     </p>
-                    <p className="mt-1 text-sm whitespace-pre-wrap text-gray-800">{fila.motivo}</p>
+                    <p className="mt-1 text-sm whitespace-pre-wrap text-white/80">{fila.motivo}</p>
                   </div>
                 )}
                 {fila.comentario && (
-                  <div className="rounded-lg border border-blue-200 bg-blue-50/70 p-3">
-                    <p className="text-xs text-blue-700">Comentario de quien autorizó</p>
-                    <p className="mt-1 text-sm whitespace-pre-wrap text-gray-800">
+                  <div className="rounded-lg border border-[#1a51a8]/45 bg-[#1a51a8]/15 p-3">
+                    <p className="text-xs text-[#9cc4ff]">Comentario de quien autorizó</p>
+                    <p className="mt-1 text-sm whitespace-pre-wrap text-white/80">
                       {fila.comentario}
                     </p>
                   </div>

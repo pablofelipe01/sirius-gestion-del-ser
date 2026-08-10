@@ -54,7 +54,7 @@ interface Props {
 }
 
 const campoCls =
-  "w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-900/10";
+  "campo-oscuro w-full rounded-lg border border-white/12 bg-white/[0.06] px-3 py-2 text-sm text-white placeholder:text-white/35 focus:border-white/25 focus:outline-none focus:ring-2 focus:ring-white/15";
 
 export function PlanCompensacion({
   plan,
@@ -95,18 +95,18 @@ export function PlanCompensacion({
               aria-pressed={activo}
               className="rounded-xl border px-4 py-3 text-left transition-all disabled:opacity-60"
               style={{
-                borderColor: activo ? color : "#e5e7eb",
-                background: activo ? `${color}0d` : "white",
-                boxShadow: activo ? `0 0 0 1px ${color}` : undefined,
+                borderColor: activo ? color : "rgba(255,255,255,0.12)",
+                background: activo ? `${color}2e` : "rgba(255,255,255,0.05)",
+                boxShadow: activo ? `0 0 0 1px ${color}, 0 14px 30px -20px ${color}` : undefined,
               }}
             >
               <p
                 className="text-sm font-medium"
-                style={{ color: activo ? color : "#374151" }}
+                style={{ color: activo ? "#fff" : "rgba(255,255,255,0.75)" }}
               >
                 {opcion.nombre}
               </p>
-              <p className="mt-0.5 text-xs text-slate-500">{opcion.resumen}</p>
+              <p className="mt-0.5 text-xs text-white/45">{opcion.resumen}</p>
             </button>
           );
         })}
@@ -114,8 +114,8 @@ export function PlanCompensacion({
 
       {/* Plan 1 — sábados de 7:00 a. m. a 12:00 m. */}
       {plan === PLAN_SABADO && (
-        <div className="rounded-xl border border-slate-200 bg-slate-50 p-3.5">
-          <p className="mb-2 text-xs font-medium text-slate-700">
+        <div className="rounded-xl border border-white/10 bg-black/20 p-3.5">
+          <p className="mb-2 text-xs font-medium text-white/70">
             Marca en el calendario los sábados en los que asistirá
           </p>
 
@@ -131,12 +131,12 @@ export function PlanCompensacion({
           </div>
 
           {sabadosElegidos.length > 0 && (
-            <p className="mt-2 text-xs text-slate-600">
+            <p className="mt-2 text-xs text-white/65">
               {sabadosElegidos.map(formatFecha).join(" · ")}
             </p>
           )}
           {faltantes > 0 && (
-            <p className="mt-2 text-xs text-slate-500">
+            <p className="mt-2 text-xs text-white/45">
               Con jornadas de 5 h faltan {faltantes} sábado{faltantes > 1 ? "s" : ""} para
               cubrir las {horasTotal} h.
             </p>
@@ -146,8 +146,8 @@ export function PlanCompensacion({
 
       {/* Plan 2 — una hora diaria hasta completar */}
       {plan === PLAN_HORA_DIARIA && (
-        <div className="rounded-xl border border-slate-200 bg-slate-50 p-3.5">
-          <label className="mb-1.5 block text-xs font-medium text-slate-700">
+        <div className="rounded-xl border border-white/10 bg-black/20 p-3.5">
+          <label className="mb-1.5 block text-xs font-medium text-white/70">
             Desde qué día empieza a reponer
           </label>
           <SelectorFecha
@@ -161,7 +161,7 @@ export function PlanCompensacion({
             color={color}
             disabled={disabled}
           />
-          <p className="mt-2 text-xs text-slate-500">
+          <p className="mt-2 text-xs text-white/45">
             Se agenda una hora por día hábil (lunes a viernes) hasta completar las{" "}
             {horasTotal} h.
           </p>
@@ -170,9 +170,9 @@ export function PlanCompensacion({
 
       {/* Plan 3 — reto */}
       {plan === PLAN_RETO && (
-        <div className="flex flex-col gap-3 rounded-xl border border-slate-200 bg-slate-50 p-3.5">
+        <div className="flex flex-col gap-3 rounded-xl border border-white/10 bg-black/20 p-3.5">
           <div>
-            <label className="mb-1.5 block text-xs font-medium text-slate-700">
+            <label className="mb-1.5 block text-xs font-medium text-white/70">
               ¿En qué consiste el reto?
             </label>
             <textarea
@@ -185,7 +185,7 @@ export function PlanCompensacion({
             />
           </div>
           <div>
-            <label className="mb-1.5 block text-xs font-medium text-slate-700">
+            <label className="mb-1.5 block text-xs font-medium text-white/70">
               Fecha límite para cumplirlo
             </label>
             <SelectorFecha
@@ -201,7 +201,7 @@ export function PlanCompensacion({
       )}
 
       {dias.length > 0 && (
-        <p className="text-xs text-slate-500">
+        <p className="text-xs text-white/45">
           {dias.length} jornada{dias.length > 1 ? "s" : ""} · {horasCubiertas} h de{" "}
           {horasTotal} h por reponer.
         </p>

@@ -11,7 +11,15 @@ import Image from "next/image";
  * la página. Estirarla a toda la altura del scroll obligaría a recortarla tanto
  * que se perdería el árbol, que es lo único reconocible de la imagen.
  */
-export function FondoNocturno() {
+interface Props {
+  /**
+   * `true` cuando el contenedor mide una pantalla y el contenido va centrado
+   * (el login): la foto ocupa todo y no se disuelve a mitad de camino.
+   */
+  completo?: boolean;
+}
+
+export function FondoNocturno({ completo = false }: Props) {
   return (
     <div
       aria-hidden
@@ -19,7 +27,11 @@ export function FondoNocturno() {
       style={{ background: "#070c18" }}
     >
       {/* Foto + deriva lenta */}
-      <div className="absolute inset-x-0 top-0 h-[min(78vh,780px)] overflow-hidden">
+      <div
+        className={`absolute inset-x-0 top-0 overflow-hidden ${
+          completo ? "bottom-0" : "h-[min(78vh,780px)]"
+        }`}
+      >
         <Image
           src="/vlcsnap-2026-08-10-08h28m10s623.png"
           alt=""
@@ -33,8 +45,9 @@ export function FondoNocturno() {
         <div
           className="absolute inset-0"
           style={{
-            background:
-              "linear-gradient(180deg, rgba(7,12,24,0.35) 0%, rgba(7,12,24,0.55) 42%, rgba(7,12,24,0.88) 78%, #070c18 100%)",
+            background: completo
+              ? "linear-gradient(160deg, rgba(7,12,24,0.55) 0%, rgba(10,22,40,0.62) 50%, rgba(4,7,17,0.78) 100%)"
+              : "linear-gradient(180deg, rgba(7,12,24,0.35) 0%, rgba(7,12,24,0.55) 42%, rgba(7,12,24,0.88) 78%, #070c18 100%)",
           }}
         />
       </div>

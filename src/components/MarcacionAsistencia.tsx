@@ -138,20 +138,20 @@ export default function MarcacionAsistencia() {
   return (
     <div className="flex flex-col gap-6">
       <div>
-        <h1 className="text-2xl font-bold text-gray-800">Asistencia</h1>
-        <p className="mt-1 text-sm text-gray-500">
+        <h1 className="text-4xl font-bold leading-[1.05] tracking-tight text-white sm:text-5xl">Asistencia</h1>
+        <p className="mt-3 text-sm text-white/50">
           Marca tu entrada al empezar y tu salida al terminar. Nada más.
         </p>
       </div>
 
       {/* ── Tarjeta de marcación ─────────────────────────────────────────────── */}
-      <div className="rounded-2xl border border-gray-100 bg-white p-8 shadow-sm">
-        <div className="flex flex-col items-center gap-6 text-center">
+      <div className="glass-solid anim-entrada relative overflow-hidden rounded-2xl p-8">
+        <div className="relative flex flex-col items-center gap-6 text-center">
           <div>
-            <p className="text-sm capitalize text-gray-500">
+            <p className="text-sm capitalize text-white/45">
               {formatearFechaLarga(hoy?.fecha ?? new Date().toISOString().slice(0, 10))}
             </p>
-            <p className="mt-1 text-4xl font-bold tabular-nums text-gray-800">
+            <p className="mt-1 text-5xl font-bold tabular-nums tracking-tight text-white">
               {reloj || "--:--:--"}
             </p>
           </div>
@@ -160,8 +160,8 @@ export default function MarcacionAsistencia() {
             type="button"
             onClick={marcar}
             disabled={marcando || cargando || !datos}
-            className="flex h-40 w-40 flex-col items-center justify-center gap-2 rounded-full text-white shadow-lg transition-all hover:brightness-110 active:scale-95 disabled:cursor-not-allowed disabled:opacity-60 sm:h-44 sm:w-44"
-            style={{ background: color, boxShadow: `0 12px 28px ${color}45` }}
+            className="flex h-40 w-40 flex-col items-center justify-center gap-2 rounded-full text-white ring-1 ring-inset ring-white/20 transition-all hover:-translate-y-1 hover:brightness-110 active:translate-y-0 active:scale-95 disabled:cursor-not-allowed disabled:opacity-50 sm:h-44 sm:w-44"
+            style={{ background: color, boxShadow: `0 26px 60px -18px ${color}, 0 0 0 12px ${color}1a` }}
           >
             {marcando ? (
               <svg className="h-8 w-8 animate-spin" fill="none" viewBox="0 0 24 24">
@@ -205,7 +205,7 @@ export default function MarcacionAsistencia() {
               destacado
             />
             {hoy?.jornadaAbierta && (
-              <span className="inline-flex items-center gap-1.5 rounded-full bg-green-50 px-3 py-1.5 text-xs font-medium text-green-700">
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-green-500/15 px-3 py-1.5 text-xs font-medium text-green-300 ring-1 ring-inset ring-green-400/30">
                 <span className="relative flex h-2 w-2">
                   <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400 opacity-75" />
                   <span className="relative inline-flex h-2 w-2 rounded-full bg-green-500" />
@@ -216,23 +216,23 @@ export default function MarcacionAsistencia() {
           </div>
 
           {confirmacion && (
-            <p className="rounded-lg border border-green-100 bg-green-50 px-4 py-2.5 text-sm text-green-700">
+            <p className="rounded-lg border border-green-400/30 bg-green-500/12 px-4 py-2.5 text-sm text-green-200">
               {confirmacion}
             </p>
           )}
           {error && (
-            <p className="rounded-lg border border-red-100 bg-red-50 px-4 py-2.5 text-sm text-red-600">
+            <p className="rounded-lg border border-rose-400/35 bg-rose-500/12 px-4 py-2.5 text-sm text-rose-200">
               {error}
             </p>
           )}
 
           {/* Marcaciones del día, por si marcó varias veces */}
           {hoy && hoy.marcaciones.length > 0 && (
-            <div className="flex flex-wrap items-center justify-center gap-2 border-t border-gray-100 pt-4">
+            <div className="flex flex-wrap items-center justify-center gap-2 border-t border-white/10 pt-4">
               {hoy.marcaciones.map((marcacion) => (
                 <span
                   key={marcacion.id}
-                  className="rounded-lg bg-gray-50 px-2.5 py-1 text-xs text-gray-600"
+                  className="rounded-lg bg-white/[0.07] px-2.5 py-1 text-xs text-white/65 ring-1 ring-inset ring-white/10"
                 >
                   <span
                     className="mr-1.5 inline-block h-1.5 w-1.5 rounded-full align-middle"
@@ -250,11 +250,11 @@ export default function MarcacionAsistencia() {
       </div>
 
       {/* ── Historial del mes ────────────────────────────────────────────────── */}
-      <div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
+      <div className="glass-solid anim-entrada rounded-2xl p-6" style={{ animationDelay: "140ms" }}>
         <div className="mb-4 flex items-center justify-between gap-4">
           <div>
-            <h2 className="font-semibold text-gray-800">Mi mes</h2>
-            <p className="text-sm capitalize text-gray-500">{nombreMes(mes)}</p>
+            <h2 className="font-semibold text-white">Mi mes</h2>
+            <p className="text-sm capitalize text-white/45">{nombreMes(mes)}</p>
           </div>
           <div className="flex items-center gap-2">
             <BotonMes
@@ -273,9 +273,9 @@ export default function MarcacionAsistencia() {
         </div>
 
         {cargando ? (
-          <p className="py-8 text-center text-sm text-gray-400">Cargando…</p>
+          <p className="py-8 text-center text-sm text-white/40">Cargando…</p>
         ) : !datos || datos.dias.length === 0 ? (
-          <p className="py-8 text-center text-sm text-gray-400">
+          <p className="py-8 text-center text-sm text-white/40">
             Sin marcaciones registradas en este mes.
           </p>
         ) : (
@@ -283,7 +283,7 @@ export default function MarcacionAsistencia() {
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="border-b border-gray-100 text-left text-xs uppercase tracking-wider text-gray-400">
+                  <tr className="border-b border-white/10 text-left text-[10px] uppercase tracking-[0.14em] text-white/40">
                     <th className="pb-2 font-medium">Día</th>
                     <th className="pb-2 font-medium">Entrada</th>
                     <th className="pb-2 font-medium">Salida</th>
@@ -292,21 +292,21 @@ export default function MarcacionAsistencia() {
                 </thead>
                 <tbody>
                   {datos.dias.map((dia) => (
-                    <tr key={dia.fecha} className="border-b border-gray-50 last:border-0">
-                      <td className="py-2.5 capitalize text-gray-700">
+                    <tr key={dia.fecha} className="border-b border-white/[0.07] transition-colors last:border-0 hover:bg-white/[0.04]">
+                      <td className="py-2.5 capitalize text-white/85">
                         {formatearFechaLarga(dia.fecha)}
                       </td>
-                      <td className="py-2.5 tabular-nums text-gray-600">
+                      <td className="py-2.5 tabular-nums text-white/60">
                         {dia.primeraEntrada ?? "—"}
                       </td>
-                      <td className="py-2.5 tabular-nums text-gray-600">
+                      <td className="py-2.5 tabular-nums text-white/60">
                         {dia.jornadaAbierta && !dia.ultimaSalida ? (
-                          <span className="text-amber-600">Sin salida</span>
+                          <span className="text-amber-300">Sin salida</span>
                         ) : (
                           dia.ultimaSalida ?? "—"
                         )}
                       </td>
-                      <td className="py-2.5 text-right font-medium tabular-nums text-gray-700">
+                      <td className="py-2.5 text-right font-medium tabular-nums text-white/90">
                         {formatearDuracion(dia.minutosTrabajados)}
                       </td>
                     </tr>
@@ -314,11 +314,11 @@ export default function MarcacionAsistencia() {
                 </tbody>
               </table>
             </div>
-            <div className="mt-4 flex items-center justify-between border-t border-gray-100 pt-4 text-sm">
-              <span className="text-gray-500">
+            <div className="mt-4 flex items-center justify-between border-t border-white/10 pt-4 text-sm">
+              <span className="text-white/45">
                 {datos.dias.length} {datos.dias.length === 1 ? "día" : "días"} con registro
               </span>
-              <span className="font-semibold text-gray-800">
+              <span className="font-semibold text-white">
                 Total: {formatearDuracion(datos.minutosMes)}
               </span>
             </div>
@@ -341,7 +341,9 @@ function Chip({
   return (
     <span
       className={`rounded-full px-3 py-1.5 text-xs ${
-        destacado ? "bg-gray-800 text-white" : "bg-gray-50 text-gray-600"
+        destacado
+          ? "bg-white/90 text-slate-900"
+          : "bg-white/[0.07] text-white/65 ring-1 ring-inset ring-white/10"
       }`}
     >
       {etiqueta}: <strong className="font-semibold tabular-nums">{valor}</strong>
@@ -367,7 +369,7 @@ function BotonMes({
       disabled={deshabilitado}
       aria-label={etiqueta}
       title={etiqueta}
-      className="rounded-lg border border-gray-200 p-1.5 text-gray-500 transition-colors hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-40"
+      className="rounded-lg border border-white/12 bg-white/[0.06] p-1.5 text-white/60 transition-colors hover:bg-white/12 hover:text-white disabled:cursor-not-allowed disabled:opacity-30"
     >
       <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
         <path

@@ -6,7 +6,7 @@
 
 - **Framework**: Next.js 16.1.6 con App Router (monorepo — sin separación backend/frontend)
 - **React**: 19.2.3 / **TypeScript**: 5.x strict
-- **Estilos**: Tailwind CSS 4, glassmorphism UI (fondo `#f1f5f9`, sidebar `#0f172a`)
+- **Estilos**: Tailwind CSS 4, superficie nocturna con vidrio (ver *Sistema visual*)
 - **Bases de datos**: Airtable — 2 bases activas (ver sección Airtable)
 - **AI**: Anthropic Claude API (`claude-sonnet-4-5` agentes, `claude-opus-4-5` transcripción)
 - **Auth**: JWT HMAC-SHA256 Web Crypto API (sin libs externas) + bcryptjs 12 rounds
@@ -120,6 +120,44 @@ por eso la UI se muestra solo con `alcance === "todos"`.
 editor, y una sola vez por cada «Execute workflow»**. El endpoint traduce ese 404
 a un mensaje que lo dice; al activar el flujo hay que cambiar la variable a
 `/webhook/`.
+
+## Sistema visual — superficie nocturna
+
+Toda la aplicación va sobre la misma fotografía nocturna
+(`public/vlcsnap-2026-08-10-08h28m10s623.png`) con tarjetas de vidrio. Las
+primitivas están en `src/app/globals.css` y el fondo en
+`src/components/FondoNocturno.tsx`.
+
+| Pieza | Para qué |
+|-------|----------|
+| `.glass` | Tarjeta translúcida (acciones, avisos, métricas) |
+| `.glass-solid` | Paneles con mucho texto — más opaco para que se lea |
+| `.campo-oscuro` | **Todo** input/select/textarea/checkbox |
+| `.scroll-noche` | Contenedor con scroll (el `<main>` del dashboard) |
+| `.anim-deriva` `.anim-aurora` `.anim-titilar` `.anim-entrada` | Movimiento |
+
+Cuatro reglas que se rompen sin darse cuenta:
+
+1. **`.glass` vive en `globals.css`, no repartido en clases de Tailwind.** Al
+   imprimir hay que devolver todas las tarjetas a blanco sobre negro de un solo
+   golpe: un PDF de permiso con fondo translúcido sale ilegible. El `@media print`
+   ya lo hace para `.glass`, `.glass-solid` y `.campo-oscuro`.
+2. **`.campo-oscuro` no es decoración.** Pone `color-scheme: dark`, y sin eso el
+   calendario de `type="date"` y el desplegable del `<select>` —que los pinta el
+   sistema— salen claros con el texto blanco del campo encima: blanco sobre blanco.
+3. **`.anim-entrada` y `hover:-translate-*` no pueden ir en el mismo elemento.**
+   La animación usa `forwards`, deja fijado `transform: none` y se come el hover.
+   Van en envoltorio (entrada) + hijo (hover).
+4. **El canvas de `FirmaCanvas` se queda blanco.** Se rellena de blanco y el trazo
+   es negro; ese PNG es el que va a S3 y al PDF. Oscurecerlo dejaría la firma
+   invisible en el documento oficial.
+
+El fondo va `absolute` dentro del `<main>`, nunca `fixed`: el sidebar es su
+hermano en el layout y un fondo fijo al viewport se le monta encima. Su
+envoltorio `relative min-h-full` es el que le da altura — un `absolute inset-0`
+colgado directo del contenedor con scroll se queda del tamaño de la ventana y se
+va al desplazar. `<FondoNocturno completo />` es para pantallas de una sola vista
+con contenido centrado (`/` y `/login`).
 
 ## Estructura del Monorepo
 

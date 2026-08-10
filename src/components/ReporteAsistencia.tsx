@@ -26,10 +26,10 @@ interface Respuesta {
 }
 
 const ESTILO_ESTADO: Record<string, { fondo: string; texto: string; etiqueta: string }> = {
-  [EVENTOS.COMPLETA]:    { fondo: "bg-emerald-50", texto: "text-emerald-700", etiqueta: "Completa" },
-  [EVENTOS.SIN_SALIDA]:  { fondo: "bg-amber-50",   texto: "text-amber-700",   etiqueta: "Sin salida" },
-  [EVENTOS.SIN_ENTRADA]: { fondo: "bg-orange-50",  texto: "text-orange-700",  etiqueta: "Sin entrada" },
-  [EVENTOS.INVALIDO]:    { fondo: "bg-rose-50",    texto: "text-rose-700",    etiqueta: "Inválido" },
+  [EVENTOS.COMPLETA]:    { fondo: "bg-emerald-500/15", texto: "text-emerald-300", etiqueta: "Completa" },
+  [EVENTOS.SIN_SALIDA]:  { fondo: "bg-amber-500/15",   texto: "text-amber-300",   etiqueta: "Sin salida" },
+  [EVENTOS.SIN_ENTRADA]: { fondo: "bg-orange-500/15",  texto: "text-orange-300",  etiqueta: "Sin entrada" },
+  [EVENTOS.INVALIDO]:    { fondo: "bg-rose-500/15",    texto: "text-rose-300",    etiqueta: "Inválido" },
 };
 
 const FILTROS_ESTADO = [
@@ -178,15 +178,15 @@ export default function ReporteAsistencia() {
   const resumen = datos?.resumen;
 
   return (
-    <div className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm">
+    <div className="glass-solid anim-entrada overflow-hidden rounded-2xl">
       {/* Encabezado */}
-      <div className="border-b border-gray-100 px-6 py-6 sm:px-8">
+      <div className="border-b border-white/10 px-6 py-6 sm:px-8">
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div>
-            <h2 className="text-xl font-semibold tracking-tight text-gray-900 sm:text-2xl">
+            <h2 className="text-xl font-semibold tracking-tight text-white sm:text-2xl">
               Reporte de asistencia
             </h2>
-            <p className="mt-1 text-sm text-gray-600">
+            <p className="mt-1 text-sm text-white/50">
               Marcaciones del biométrico consolidadas por colaborador y día
             </p>
           </div>
@@ -194,13 +194,13 @@ export default function ReporteAsistencia() {
             <button
               onClick={exportarCsv}
               disabled={filtradas.length === 0}
-              className="inline-flex items-center gap-2 rounded-lg border border-gray-200 px-3 py-2 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-50 disabled:opacity-40"
+              className="inline-flex items-center gap-2 rounded-lg border border-white/12 bg-white/[0.06] px-3 py-2 text-sm font-medium text-white/70 transition-colors hover:bg-white/12 hover:text-white disabled:opacity-30"
             >
               Exportar CSV
             </button>
             <button
               onClick={cargar}
-              className="inline-flex items-center gap-2 rounded-lg border border-gray-200 px-3 py-2 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-50"
+              className="inline-flex items-center gap-2 rounded-lg border border-white/12 bg-white/[0.06] px-3 py-2 text-sm font-medium text-white/70 transition-colors hover:bg-white/12 hover:text-white"
             >
               Actualizar
             </button>
@@ -225,7 +225,7 @@ export default function ReporteAsistencia() {
         </dl>
 
         {resumen && resumen.jornadas > 0 && (
-          <p className="mt-3 text-xs text-gray-500">
+          <p className="mt-3 text-xs text-white/40">
             {resumen.marcaciones} marcaciones · {resumen.dias} días ·{" "}
             {resumen.sinSalida} sin salida · {resumen.sinEntrada} sin entrada ·{" "}
             {resumen.invalidas} inválidas
@@ -234,15 +234,15 @@ export default function ReporteAsistencia() {
       </div>
 
       {/* Filtros */}
-      <div className="flex flex-wrap items-end gap-3 border-b border-gray-100 bg-gray-50/60 px-6 py-4 sm:px-8">
+      <div className="flex flex-wrap items-end gap-3 border-b border-white/10 bg-black/25 px-6 py-4 sm:px-8">
         <div className="min-w-[200px] flex-1">
-          <label className="mb-1 block text-xs text-gray-500">Buscar</label>
+          <label className="mb-1 block text-xs text-white/45">Buscar</label>
           <input
             type="search"
             value={busqueda}
             onChange={(e) => setBusqueda(e.target.value)}
             placeholder="Nombre o cédula…"
-            className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/30 focus:outline-none"
+            className="campo-oscuro w-full rounded-lg border border-white/12 bg-white/[0.06] px-3 py-2 text-sm text-white placeholder:text-white/35 focus:border-[#29b6e8]/60 focus:ring-2 focus:ring-[#29b6e8]/25 focus:outline-none"
           />
         </div>
         <Campo etiqueta="Desde">
@@ -250,7 +250,7 @@ export default function ReporteAsistencia() {
             type="date"
             value={desde}
             onChange={(e) => setDesde(e.target.value)}
-            className="rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/30 focus:outline-none"
+            className="campo-oscuro rounded-lg border border-white/12 bg-white/[0.06] px-3 py-2 text-sm text-white focus:border-[#29b6e8]/60 focus:ring-2 focus:ring-[#29b6e8]/25 focus:outline-none"
           />
         </Campo>
         <Campo etiqueta="Hasta">
@@ -258,14 +258,14 @@ export default function ReporteAsistencia() {
             type="date"
             value={hasta}
             onChange={(e) => setHasta(e.target.value)}
-            className="rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/30 focus:outline-none"
+            className="campo-oscuro rounded-lg border border-white/12 bg-white/[0.06] px-3 py-2 text-sm text-white focus:border-[#29b6e8]/60 focus:ring-2 focus:ring-[#29b6e8]/25 focus:outline-none"
           />
         </Campo>
         <Campo etiqueta="Estado">
           <select
             value={estado}
             onChange={(e) => setEstado(e.target.value)}
-            className="rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/30 focus:outline-none"
+            className="campo-oscuro rounded-lg border border-white/12 bg-white/[0.06] px-3 py-2 text-sm text-white focus:border-[#29b6e8]/60 focus:ring-2 focus:ring-[#29b6e8]/25 focus:outline-none"
           >
             {FILTROS_ESTADO.map((f) => (
               <option key={f.valor} value={f.valor}>
@@ -279,7 +279,7 @@ export default function ReporteAsistencia() {
             <select
               value={punto}
               onChange={(e) => setPunto(e.target.value)}
-              className="rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/30 focus:outline-none"
+              className="campo-oscuro rounded-lg border border-white/12 bg-white/[0.06] px-3 py-2 text-sm text-white focus:border-[#29b6e8]/60 focus:ring-2 focus:ring-[#29b6e8]/25 focus:outline-none"
             >
               <option value="todos">Todos</option>
               {puntos.map((p) => (
@@ -295,7 +295,7 @@ export default function ReporteAsistencia() {
             <select
               value={turno}
               onChange={(e) => setTurno(e.target.value)}
-              className="max-w-[220px] rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/30 focus:outline-none"
+              className="max-w-[220px] campo-oscuro rounded-lg border border-white/12 bg-white/[0.06] px-3 py-2 text-sm text-white focus:border-[#29b6e8]/60 focus:ring-2 focus:ring-[#29b6e8]/25 focus:outline-none"
             >
               <option value="todos">Todos</option>
               {turnos.map((t) => (
@@ -312,19 +312,19 @@ export default function ReporteAsistencia() {
       {cargando ? (
         <div className="space-y-3 p-8">
           {[...Array(4)].map((_, i) => (
-            <div key={i} className="h-16 animate-pulse rounded-xl bg-gray-100" />
+            <div key={i} className="h-16 animate-pulse rounded-xl bg-white/[0.07]" />
           ))}
         </div>
       ) : error ? (
-        <div className="m-6 rounded-xl border border-red-200 bg-red-50 p-6 text-sm text-red-700">
+        <div className="m-6 rounded-xl border border-rose-400/35 bg-rose-500/12 p-6 text-sm text-rose-200">
           {error}
         </div>
       ) : porColaborador.length === 0 ? (
-        <p className="px-8 py-16 text-center text-sm text-gray-400">
+        <p className="px-8 py-16 text-center text-sm text-white/40">
           No hay jornadas que coincidan con los filtros.
         </p>
       ) : (
-        <div className="divide-y divide-gray-100">
+        <div className="divide-y divide-white/[0.07]">
           {porColaborador.map((persona) => {
             const colapsado = colapsadas.has(persona.documento);
             return (
@@ -333,11 +333,11 @@ export default function ReporteAsistencia() {
                 <button
                   type="button"
                   onClick={() => alternar(colapsadas, persona.documento, setColapsadas)}
-                  className="flex w-full flex-wrap items-center justify-between gap-3 px-6 py-4 text-left transition-colors hover:bg-gray-50 sm:px-8"
+                  className="flex w-full flex-wrap items-center justify-between gap-3 px-6 py-4 text-left transition-colors hover:bg-white/[0.05] sm:px-8"
                 >
                   <div className="flex min-w-0 items-center gap-3">
                     <svg
-                      className={`h-4 w-4 flex-shrink-0 text-gray-400 transition-transform ${colapsado ? "" : "rotate-90"}`}
+                      className={`h-4 w-4 flex-shrink-0 text-white/40 transition-transform ${colapsado ? "" : "rotate-90"}`}
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -346,18 +346,18 @@ export default function ReporteAsistencia() {
                       <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
                     </svg>
                     <div className="min-w-0">
-                      <p className="truncate text-sm font-semibold text-gray-900">{persona.nombre}</p>
-                      <p className="truncate text-xs text-gray-500">
+                      <p className="truncate text-sm font-semibold text-white">{persona.nombre}</p>
+                      <p className="truncate text-xs text-white/45">
                         C.C. {persona.documento} · {persona.turno || "Sin turno"}
                       </p>
                     </div>
                   </div>
                   <div className="flex flex-wrap items-center gap-2 text-xs">
-                    <span className="rounded-full bg-gray-100 px-2.5 py-1 text-gray-600">
+                    <span className="rounded-full bg-white/[0.07] px-2.5 py-1 text-white/60 ring-1 ring-inset ring-white/10">
                       {persona.jornadas.length}{" "}
                       {persona.jornadas.length === 1 ? "jornada" : "jornadas"}
                     </span>
-                    <span className="rounded-full bg-gray-800 px-2.5 py-1 font-medium text-white">
+                    <span className="rounded-full bg-white/90 px-2.5 py-1 font-medium text-slate-900">
                       {formatearMinutos(persona.minutos)}
                     </span>
                     {persona.sinJustificar > 0 ? (
@@ -378,7 +378,7 @@ export default function ReporteAsistencia() {
                   <div className="overflow-x-auto pb-2">
                     <table className="w-full min-w-[760px] text-sm">
                       <thead>
-                        <tr className="text-left text-xs uppercase tracking-wider text-gray-400">
+                        <tr className="text-left text-[10px] uppercase tracking-[0.14em] text-white/40">
                           <th className="py-2 pl-14 pr-3 font-medium">Día</th>
                           <th className="px-3 py-2 font-medium">Entrada</th>
                           <th className="px-3 py-2 font-medium">Salida</th>
@@ -396,21 +396,21 @@ export default function ReporteAsistencia() {
                             <Fragment key={jornada.clave}>
                               <tr
                                 onClick={() => alternar(abiertas, jornada.clave, setAbiertas)}
-                                className="cursor-pointer border-t border-gray-50 hover:bg-gray-50/70"
+                                className="cursor-pointer border-t border-white/[0.07] transition-colors hover:bg-white/[0.05]"
                               >
-                                <td className="py-2.5 pl-14 pr-3 whitespace-nowrap text-gray-700 capitalize">
+                                <td className="py-2.5 pl-14 pr-3 whitespace-nowrap text-white/85 capitalize">
                                   {fechaCorta(jornada.fecha)}
                                 </td>
-                                <td className="px-3 py-2.5 tabular-nums text-gray-600">
+                                <td className="px-3 py-2.5 tabular-nums text-white/60">
                                   {horaCorta(jornada.entrada)}
                                 </td>
-                                <td className="px-3 py-2.5 tabular-nums text-gray-600">
+                                <td className="px-3 py-2.5 tabular-nums text-white/60">
                                   {horaCorta(jornada.salida)}
                                 </td>
-                                <td className="px-3 py-2.5 font-medium tabular-nums text-gray-800">
+                                <td className="px-3 py-2.5 font-medium tabular-nums text-white/90">
                                   {formatearMinutos(jornada.minutosTrabajados)}
                                 </td>
-                                <td className="px-3 py-2.5 text-xs text-gray-500">{jornada.punto}</td>
+                                <td className="px-3 py-2.5 text-xs text-white/45">{jornada.punto}</td>
                                 <td className="px-3 py-2.5">
                                   <span
                                     className={`inline-block rounded-full px-2.5 py-1 text-xs font-medium ${estilo.fondo} ${estilo.texto}`}
@@ -420,7 +420,7 @@ export default function ReporteAsistencia() {
                                 </td>
                                 <td className="px-6 py-2.5 text-xs sm:px-8">
                                   {jornada.justificacion ? (
-                                    <span className="rounded-full bg-blue-50 px-2.5 py-1 font-medium text-blue-700">
+                                    <span className="rounded-full bg-[#1a51a8]/25 px-2.5 py-1 font-medium text-[#9cc4ff] ring-1 ring-inset ring-[#1a51a8]/40">
                                       {jornada.justificacion.tipo === "vacaciones"
                                         ? "Vacaciones aprobadas"
                                         : `Permiso: ${jornada.justificacion.detalle}`}
@@ -428,26 +428,26 @@ export default function ReporteAsistencia() {
                                   ) : esIncidencia(jornada) ? (
                                     <span className="text-rose-600">Sin justificar</span>
                                   ) : (
-                                    <span className="text-gray-300">—</span>
+                                    <span className="text-white/25">—</span>
                                   )}
                                 </td>
                               </tr>
 
                               {/* Marcaciones crudas del día */}
                               {abierta && (
-                                <tr className="bg-gray-50/60">
+                                <tr className="bg-black/25">
                                   <td colSpan={7} className="px-6 py-3 sm:px-8">
-                                    <p className="mb-2 pl-8 text-xs font-medium text-gray-500">
+                                    <p className="mb-2 pl-8 text-xs font-medium text-white/45">
                                       Marcaciones registradas ({jornada.marcaciones.length})
                                     </p>
                                     <ul className="space-y-1 pl-8">
                                       {jornada.marcaciones.map((m) => (
-                                        <li key={m.id} className="text-xs text-gray-600">
-                                          <span className="inline-block w-20 tabular-nums font-medium text-gray-800">
+                                        <li key={m.id} className="text-xs text-white/60">
+                                          <span className="inline-block w-20 tabular-nums font-medium text-white/90">
                                             {m.hora}
                                           </span>
                                           <span className="inline-block w-24">{m.evento}</span>
-                                          <span className="text-gray-500">
+                                          <span className="text-white/45">
                                             {m.punto} · {m.turno}
                                           </span>
                                         </li>
@@ -475,7 +475,7 @@ export default function ReporteAsistencia() {
 function Campo({ etiqueta, children }: { etiqueta: string; children: React.ReactNode }) {
   return (
     <div>
-      <label className="mb-1 block text-xs text-gray-500">{etiqueta}</label>
+      <label className="mb-1 block text-xs text-white/45">{etiqueta}</label>
       {children}
     </div>
   );
@@ -493,9 +493,9 @@ function Metrica({
   pista?: string;
 }) {
   const tonos = {
-    slate: "bg-slate-50 text-slate-900",
-    emerald: "bg-emerald-50 text-emerald-800",
-    rose: "bg-rose-50 text-rose-800",
+    slate: "bg-white/[0.07] text-white ring-1 ring-inset ring-white/10",
+    emerald: "bg-emerald-500/15 text-emerald-200 ring-1 ring-inset ring-emerald-400/25",
+    rose: "bg-rose-500/15 text-rose-200 ring-1 ring-inset ring-rose-400/25",
   };
   return (
     <div className={`rounded-xl px-4 py-3 ${tonos[tono]}`} title={pista}>

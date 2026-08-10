@@ -90,18 +90,18 @@ export default function CargarListaAsistencia() {
   const enviando = estado.fase === "enviando";
 
   return (
-    <div className="border-b border-gray-100 bg-orange-50/40 px-6 py-5 sm:px-8">
+    <div className="border-b border-white/10 bg-[#e07b39]/10 px-6 py-5 sm:px-8">
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
-          <h3 className="text-sm font-semibold text-gray-900">Lista de asistencia</h3>
-          <p className="mt-0.5 text-xs leading-relaxed text-gray-600">
+          <h3 className="text-sm font-semibold text-white">Lista de asistencia</h3>
+          <p className="mt-0.5 text-xs leading-relaxed text-white/50">
             Carga el archivo del biométrico ({EXTENSIONES.replaceAll(",", ", ")}) y se envía a
             procesar. Quedará registrado quién lo subió.
           </p>
         </div>
         <Link
           href="/dashboard/asistencia/reporte"
-          className="inline-flex items-center gap-1.5 rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50"
+          className="inline-flex items-center gap-1.5 rounded-lg border border-white/12 bg-white/[0.06] px-3 py-2 text-sm font-medium text-white/75 transition-colors hover:bg-white/12 hover:text-white"
         >
           <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
             <path
@@ -127,7 +127,9 @@ export default function CargarListaAsistencia() {
           if (!enviando) elegir(e.dataTransfer.files?.[0]);
         }}
         className={`mt-4 flex flex-wrap items-center gap-3 rounded-xl border-2 border-dashed px-4 py-4 transition-colors ${
-          arrastrando ? "border-orange-400 bg-orange-100/60" : "border-orange-200 bg-white"
+          arrastrando
+            ? "border-[#e07b39] bg-[#e07b39]/20"
+            : "border-[#e07b39]/40 bg-white/[0.04]"
         }`}
       >
         <input
@@ -142,7 +144,7 @@ export default function CargarListaAsistencia() {
           type="button"
           onClick={() => inputRef.current?.click()}
           disabled={enviando}
-          className="inline-flex items-center gap-2 rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 disabled:opacity-40"
+          className="inline-flex items-center gap-2 rounded-lg border border-white/12 bg-white/[0.06] px-3 py-2 text-sm font-medium text-white/75 transition-colors hover:bg-white/12 hover:text-white disabled:opacity-30"
         >
           <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path
@@ -155,14 +157,14 @@ export default function CargarListaAsistencia() {
           {archivo ? "Cambiar archivo" : "Elegir archivo"}
         </button>
 
-        <p className="min-w-0 flex-1 truncate text-sm text-gray-600">
+        <p className="min-w-0 flex-1 truncate text-sm text-white/60">
           {archivo ? (
             <>
-              <span className="font-medium text-gray-800">{archivo.name}</span>{" "}
-              <span className="text-gray-500">({tamanoLegible(archivo.size)})</span>
+              <span className="font-medium text-white/90">{archivo.name}</span>{" "}
+              <span className="text-white/45">({tamanoLegible(archivo.size)})</span>
             </>
           ) : (
-            <span className="text-gray-400">
+            <span className="text-white/35">
               Ningún archivo elegido — también puedes arrastrarlo aquí
             </span>
           )}
@@ -172,7 +174,7 @@ export default function CargarListaAsistencia() {
           <button
             type="button"
             onClick={limpiar}
-            className="rounded-lg px-2 py-2 text-sm text-gray-500 transition-colors hover:bg-gray-100"
+            className="rounded-lg px-2 py-2 text-sm text-white/50 transition-colors hover:bg-white/10 hover:text-white"
           >
             Quitar
           </button>
@@ -182,8 +184,8 @@ export default function CargarListaAsistencia() {
           type="button"
           onClick={enviar}
           disabled={!archivo || enviando}
-          className="inline-flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold text-white shadow-sm transition-all hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-40"
-          style={{ background: COLOR }}
+          className="inline-flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold text-white transition-all hover:-translate-y-0.5 hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:translate-y-0"
+          style={{ background: COLOR, boxShadow: `0 14px 30px -18px ${COLOR}` }}
         >
           {enviando ? (
             <>
@@ -205,7 +207,7 @@ export default function CargarListaAsistencia() {
       </div>
 
       {enviando && (
-        <p className="mt-3 text-xs italic text-gray-500">
+        <p className="mt-3 text-xs italic text-white/45">
           Puede tardar un par de minutos según el tamaño de la lista. No cierres la página.
         </p>
       )}
@@ -214,13 +216,13 @@ export default function CargarListaAsistencia() {
         <div
           className={`mt-3 rounded-xl border px-4 py-3 text-sm ${
             estado.fase === "listo"
-              ? "border-green-200 bg-green-50 text-green-800"
-              : "border-red-200 bg-red-50 text-red-700"
+              ? "border-green-400/35 bg-green-500/12 text-green-200"
+              : "border-rose-400/35 bg-rose-500/12 text-rose-200"
           }`}
         >
           <p>{estado.mensaje}</p>
           {estado.detalle && (
-            <pre className="mt-2 max-h-40 overflow-auto rounded-lg bg-white/70 p-2 text-xs whitespace-pre-wrap text-gray-600">
+            <pre className="mt-2 max-h-40 overflow-auto rounded-lg bg-black/35 p-2 text-xs whitespace-pre-wrap text-white/60">
               {estado.detalle}
             </pre>
           )}

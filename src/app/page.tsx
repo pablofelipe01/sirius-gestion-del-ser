@@ -1,43 +1,46 @@
 import Image from "next/image";
 import Link from "next/link";
+import { FondoNocturno } from "@/components/FondoNocturno";
 
 export default function HomePage() {
   return (
-    <main className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      <Image
-        src="/21032025-DSCF8676.jpg"
-        alt=""
-        fill
-        className="object-cover object-center"
-        priority
-        quality={90}
-      />
-      <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/50 to-black/70" />
+    <main className="relative flex min-h-screen items-center justify-center overflow-hidden">
+      {/*
+        La landing usa el mismo cielo que el login y el dashboard. Antes traía
+        otra foto (21032025-DSCF8676.jpg) y el salto se notaba al pasar a
+        /login: dos fotografías distintas seguidas leen como dos productos.
+      */}
+      <FondoNocturno completo />
 
-      <div className="relative z-10 flex flex-col items-center text-center px-6 max-w-2xl">
-        <div className="bg-white rounded-2xl px-8 py-5 mb-10 shadow-2xl">
-          <Image
-            src="/Logo-Sirius.png"
-            alt="Sirius"
-            width={240}
-            height={83}
-            priority
-          />
+      <div className="relative z-10 flex max-w-2xl flex-col items-center px-6 text-center">
+        <div
+          className="anim-entrada mb-10 rounded-2xl bg-white px-8 py-5 shadow-[0_30px_60px_-25px_rgba(0,0,0,0.9)]"
+        >
+          <Image src="/Logo-Sirius.png" alt="Sirius" width={240} height={83} priority />
         </div>
 
-        <h1 className="text-white text-2xl md:text-3xl font-light mb-3 tracking-wide">
+        <h1
+          className="anim-entrada mb-3 text-3xl font-light tracking-wide text-white md:text-4xl"
+          style={{ animationDelay: "120ms" }}
+        >
           Gestión del Ser
         </h1>
-        <p className="text-white/70 text-base md:text-lg mb-12 leading-relaxed max-w-md">
+        <p
+          className="anim-entrada mb-12 max-w-md text-base leading-relaxed text-white/60 md:text-lg"
+          style={{ animationDelay: "220ms" }}
+        >
           Plataforma integral de talento humano, contratos y cumplimiento laboral
         </p>
 
-        <Link
-          href="/login"
-          className="inline-flex items-center gap-2 px-14 py-4 bg-[#1a51a8] hover:bg-[#1a4494] text-white text-lg font-semibold rounded-full transition-all duration-300 shadow-xl hover:shadow-2xl hover:scale-[1.03] cursor-pointer select-none"
-        >
-          Acceder
-        </Link>
+        <div className="anim-entrada" style={{ animationDelay: "320ms" }}>
+          <Link
+            href="/login"
+            className="inline-flex cursor-pointer select-none items-center gap-2 rounded-full bg-[#1a51a8] px-14 py-4 text-lg font-semibold text-white transition-all duration-300 hover:-translate-y-1 hover:brightness-110"
+            style={{ boxShadow: "0 24px 55px -20px #1a51a8" }}
+          >
+            Acceder
+          </Link>
+        </div>
       </div>
     </main>
   );

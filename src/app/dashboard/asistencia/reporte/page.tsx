@@ -19,7 +19,7 @@ export default async function ReporteAsistenciaPage() {
     <div className="mx-auto max-w-7xl px-8 py-8">
       <Link
         href="/dashboard/historico"
-        className="mb-4 inline-flex items-center gap-1.5 text-sm text-gray-500 transition-colors hover:text-gray-700"
+        className="mb-4 inline-flex items-center gap-1.5 text-sm text-white/50 transition-all hover:-translate-x-0.5 hover:text-white"
       >
         <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
           <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />

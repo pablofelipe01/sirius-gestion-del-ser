@@ -66,44 +66,74 @@ const MODULES = [
   },
 ];
 
+/**
+ * El saludo se calcula en el servidor, así que la hora local del proceso no
+ * sirve: en despliegue es UTC y después de las 19:00 en Colombia diría
+ * "Buenos días". Toda hora de esta aplicación es hora de Bogotá.
+ */
 function greeting() {
-  const h = new Date().getHours();
+  const h = Number(
+    new Intl.DateTimeFormat("es-CO", {
+      hour: "numeric",
+      hour12: false,
+      timeZone: "America/Bogota",
+    }).format(new Date()),
+  );
   if (h < 12) return "Buenos días";
   if (h < 18) return "Buenas tardes";
   return "Buenas noches";
 }
 
-function ModuleCard({ mod }: { mod: (typeof MODULES)[0] }) {
+/*
+ * El envoltorio anima la entrada y la tarjeta hace el hover: `anim-entrada` usa
+ * `forwards`, así que deja fijado `transform: none` y en el mismo elemento
+ * anularía cualquier `hover:-translate-y`.
+ */
+function ModuleCard({ mod, orden }: { mod: (typeof MODULES)[0]; orden: number }) {
   const card = (
-    <div
-      className="bg-white rounded-2xl p-5 flex flex-col gap-4 shadow-sm border border-gray-100 transition-all duration-200 hover:shadow-md hover:-translate-y-0.5 cursor-pointer h-full"
-    >
-      <div className="flex items-start justify-between">
+    <div className="glass relative flex h-full flex-col gap-4 overflow-hidden rounded-2xl p-5 transition-all duration-300 group-hover:-translate-y-1">
+      {/* Resplandor del color del módulo — solo en los que ya se pueden abrir */}
+      {mod.ready && (
+        <span
+          className="pointer-events-none absolute -bottom-16 left-1/2 h-32 w-44 -translate-x-1/2 rounded-full opacity-0 blur-3xl transition-opacity duration-500 group-hover:opacity-60"
+          style={{ background: mod.color }}
+        />
+      )}
+
+      <div className="relative flex items-start justify-between">
         <div
-          className="w-10 h-10 rounded-xl flex items-center justify-center"
-          style={{ background: `${mod.color}18` }}
+          className="flex h-11 w-11 items-center justify-center rounded-xl ring-1 ring-inset ring-white/10 transition-transform duration-300 group-hover:scale-110"
+          style={{ background: `${mod.color}26` }}
         >
-          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke={mod.color} strokeWidth={1.5}>
+          <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke={mod.color} strokeWidth={1.6}>
             {mod.icon}
           </svg>
         </div>
         {!mod.ready && (
-          <span className="text-xs px-2 py-0.5 rounded-full font-medium" style={{ background: "#f1f5f9", color: "#94a3b8" }}>
+          <span className="rounded-full bg-white/[0.07] px-2 py-0.5 text-xs font-medium text-white/40 ring-1 ring-inset ring-white/10">
             Próximamente
           </span>
         )}
       </div>
-      <div>
-        <h3 className="font-semibold text-gray-800 mb-1">{mod.label}</h3>
-        <p className="text-sm text-gray-500 leading-relaxed">{mod.desc}</p>
+      <div className="relative">
+        <h3 className="mb-1 font-semibold text-white">{mod.label}</h3>
+        <p className="text-sm leading-relaxed text-white/45">{mod.desc}</p>
       </div>
     </div>
   );
 
-  return mod.ready ? (
-    <Link href={mod.href} className="h-full">{card}</Link>
-  ) : (
-    <div className="h-full opacity-75">{card}</div>
+  const delay = { animationDelay: `${260 + orden * 70}ms` } as const;
+
+  return (
+    <div className="anim-entrada h-full" style={delay}>
+      {mod.ready ? (
+        <Link href={mod.href} className="group block h-full">
+          {card}
+        </Link>
+      ) : (
+        <div className="h-full opacity-60">{card}</div>
+      )}
+    </div>
   );
 }
 
@@ -116,52 +146,64 @@ export default async function DashboardPage() {
   const firstName = payload.nombre.split(" ")[0];
 
   return (
-    <div className="p-8 max-w-6xl mx-auto">
-      {/* ── Encabezado ─────────────────────────────────────────────────────── */}
-      <div className="mb-8">
-        <p className="text-gray-400 text-sm mb-1">{greeting()},</p>
-        <h1 className="text-2xl font-bold text-gray-800">{firstName}</h1>
-        <div className="flex items-center gap-2 mt-2">
+    <div className="mx-auto max-w-6xl px-4 pb-14 pt-8 sm:px-8 sm:pt-12">
+      {/* ── Encabezado sobre el cielo ──────────────────────────────────────── */}
+      <div className="anim-entrada mb-10">
+        <p className="mb-2 text-sm text-white/45">{greeting()},</p>
+        <h1 className="text-4xl font-bold leading-[1.05] tracking-tight text-white sm:text-5xl">
+          {firstName}
+        </h1>
+        <div className="mt-4 flex flex-wrap items-center gap-2">
           <span
-            className="text-xs px-2.5 py-1 rounded-full font-medium text-white"
-            style={{ background: "#1a51a8" }}
+            className="rounded-full px-2.5 py-1 text-xs font-medium text-white"
+            style={{ background: "#1a51a8", boxShadow: "0 10px 24px -14px #1a51a8" }}
           >
             {payload.rol}
           </span>
-          <span className="text-xs text-gray-400">{payload.idCore}</span>
+          <span className="glass rounded-full px-2.5 py-1 text-xs font-medium text-white/55">
+            {payload.idCore}
+          </span>
         </div>
       </div>
 
       {/* ── Tarjeta de bienvenida ───────────────────────────────────────────── */}
       <div
-        className="rounded-2xl p-6 mb-8 flex items-center gap-6"
-        style={{ background: "linear-gradient(135deg, #1a51a8 0%, #0f172a 100%)" }}
+        className="glass-solid anim-entrada relative mb-10 flex items-center gap-6 overflow-hidden rounded-2xl p-6"
+        style={{ animationDelay: "120ms" }}
       >
-        <div className="flex-1">
-          <h2 className="text-white font-semibold text-lg mb-1">
+        {/* La estrella de Sirius: el cian de marca encendido detrás del vidrio */}
+        <span
+          className="anim-aurora pointer-events-none absolute -right-10 -top-16 h-52 w-52 rounded-full blur-3xl"
+          style={{ background: "radial-gradient(circle, rgba(41,182,232,0.35), transparent 70%)" }}
+        />
+        <div className="relative flex-1">
+          <h2 className="mb-1 text-lg font-semibold text-white">
             Bienvenido a Sirius Gestión del Ser
           </h2>
-          <p className="text-white/60 text-sm leading-relaxed">
+          <p className="max-w-xl text-sm leading-relaxed text-white/50">
             Plataforma integral de talento humano. Los módulos se irán habilitando progresivamente.
           </p>
         </div>
         <div
-          className="w-14 h-14 rounded-2xl flex items-center justify-center flex-shrink-0"
-          style={{ background: "rgba(255,255,255,0.12)" }}
+          className="relative flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-2xl ring-1 ring-inset ring-white/15"
+          style={{ background: "rgba(41,182,232,0.18)", boxShadow: "0 16px 40px -20px #29b6e8" }}
         >
-          <svg className="w-7 h-7 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+          <svg className="h-7 w-7 text-[#29b6e8]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
           </svg>
         </div>
       </div>
 
       {/* ── Módulos ─────────────────────────────────────────────────────────── */}
-      <div className="mb-4">
-        <h2 className="text-gray-600 text-sm font-medium uppercase tracking-wider">Módulos</h2>
+      <div className="anim-entrada mb-4 flex items-center gap-3" style={{ animationDelay: "200ms" }}>
+        <h2 className="text-[11px] font-semibold uppercase tracking-[0.16em] text-white/45">
+          Módulos
+        </h2>
+        <span className="h-px flex-1 bg-gradient-to-r from-white/20 to-transparent" />
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {MODULES.map((mod) => (
-          <ModuleCard key={mod.href} mod={mod} />
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {MODULES.map((mod, i) => (
+          <ModuleCard key={mod.href} mod={mod} orden={i} />
         ))}
       </div>
     </div>

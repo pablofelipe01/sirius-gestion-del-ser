@@ -76,12 +76,12 @@ export function SelectorFecha({
         aria-haspopup="dialog"
         aria-expanded={abierto}
         aria-label={ariaLabel}
-        className="flex w-full items-center gap-2 rounded-lg border border-slate-300 bg-white px-3 py-2 text-left text-sm transition-colors hover:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-900/10 disabled:cursor-not-allowed disabled:opacity-60"
+        className="flex w-full items-center gap-2 rounded-lg border border-white/12 bg-white/[0.06] px-3 py-2 text-left text-sm transition-colors hover:border-white/25 hover:bg-white/[0.09] focus:outline-none focus:ring-2 focus:ring-white/15 disabled:cursor-not-allowed disabled:opacity-40"
         style={abierto ? { borderColor: color, boxShadow: `0 0 0 1px ${color}` } : undefined}
       >
         <svg
           className="h-4 w-4 flex-shrink-0"
-          style={{ color: valor ? color : "#94a3b8" }}
+          style={{ color: valor ? color : "rgba(255,255,255,0.4)" }}
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -93,13 +93,13 @@ export function SelectorFecha({
             d={ICON_CALENDARIO}
           />
         </svg>
-        <span className={valor ? "text-slate-900" : "text-slate-400"}>
+        <span className={valor ? "text-white" : "text-white/40"}>
           {valor ? formatFecha(valor) : placeholder}
         </span>
       </button>
 
       {abierto && (
-        <div className="absolute left-0 z-30 mt-2 w-[19rem] max-w-[calc(100vw-2rem)] rounded-xl bg-white shadow-xl ring-1 ring-slate-900/10">
+        <div className="glass-solid absolute left-0 z-30 mt-2 w-[19rem] max-w-[calc(100vw-2rem)] rounded-xl">
           <CalendarioPermiso
             fechasSeleccionadas={valor ? [valor] : []}
             // maxDias = 1: el clic en otro día reemplaza la fecha en vez de bloquearse.
