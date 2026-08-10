@@ -33,9 +33,9 @@ export function DiasPactoWidget() {
 
   if (loading) {
     return (
-      <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100 animate-pulse">
-        <div className="h-4 bg-gray-200 rounded w-32 mb-3"></div>
-        <div className="h-8 bg-gray-200 rounded w-full"></div>
+      <div className="glass animate-pulse rounded-2xl p-5">
+        <div className="mb-3 h-4 w-32 rounded bg-white/10"></div>
+        <div className="h-8 w-full rounded bg-white/10"></div>
       </div>
     );
   }
@@ -48,40 +48,38 @@ export function DiasPactoWidget() {
     return null;
   }
 
-  const { saldo_disponible, fecha_ultimo_uso } = data;
+  const { saldo_disponible, saldo_usado, fecha_ultimo_uso, periodo } = data;
 
   let mensaje: string;
-  let colorBg: string;
-  let colorText: string;
-  let colorIcon: string;
+  /** Un solo color por estado: tiñe el halo, el icono y el contador. */
+  let acento: string;
 
   if (saldo_disponible === 2) {
     mensaje = "Tienes 2 días de pacto disponibles";
-    colorBg = "#dcfce7";
-    colorText = "#15803d";
-    colorIcon = "#22c55e";
+    acento = "#22c55e";
   } else if (saldo_disponible === 1) {
     mensaje = "Te queda 1 día de pacto disponible";
-    colorBg = "#fef9c3";
-    colorText = "#a16207";
-    colorIcon = "#eab308";
+    acento = "#eab308";
   } else {
     mensaje = "Ya usaste tus días de pacto. Cualquier permiso adicional debe negociarse con tu jefe.";
-    colorBg = "#fee2e2";
-    colorText = "#b91c1c";
-    colorIcon = "#ef4444";
+    acento = "#ef4444";
   }
 
+  const total = saldo_disponible + saldo_usado;
+
   return (
-    <div
-      className="rounded-2xl p-5 shadow-sm border border-gray-100 flex items-start gap-4"
-      style={{ backgroundColor: colorBg }}
-    >
+    <div className="glass relative flex items-start gap-4 overflow-hidden rounded-2xl p-5">
+      {/* Halo del estado — el saldo se lee de un vistazo antes que el texto */}
+      <span
+        className="pointer-events-none absolute -left-10 -top-10 h-32 w-32 rounded-full opacity-30 blur-3xl"
+        style={{ background: acento }}
+      />
+
       <div
-        className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
-        style={{ backgroundColor: `${colorIcon}18` }}
+        className="relative flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl ring-1 ring-inset ring-white/10"
+        style={{ backgroundColor: `${acento}26` }}
       >
-        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke={colorIcon} strokeWidth={1.5}>
+        <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke={acento} strokeWidth={1.5}>
           <path
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -89,19 +87,33 @@ export function DiasPactoWidget() {
           />
         </svg>
       </div>
-      <div className="flex-1">
-        <h3 className="font-semibold text-sm mb-1" style={{ color: colorText }}>
-          📅 Días de Pacto 2026-S2
-        </h3>
-        <p className="text-xs leading-relaxed" style={{ color: colorText }}>
-          {mensaje}
-        </p>
+
+      <div className="relative flex-1">
+        <h3 className="text-sm font-semibold text-white/90">Días de Pacto {periodo}</h3>
+        <p className="mt-1 text-xs leading-relaxed text-white/55">{mensaje}</p>
         {fecha_ultimo_uso && (
-          <p className="text-xs mt-2 opacity-75" style={{ color: colorText }}>
+          <p className="mt-2 text-xs text-white/35">
             Último usado: {new Date(fecha_ultimo_uso).toLocaleDateString("es-CO")}
           </p>
         )}
       </div>
+
+      {/* Marcador de saldo: un punto por día, los usados apagados */}
+      {total > 0 && (
+        <div className="relative flex flex-shrink-0 items-center gap-1.5 self-center">
+          {Array.from({ length: total }, (_, i) => (
+            <span
+              key={i}
+              className="h-2 w-2 rounded-full"
+              style={
+                i < saldo_disponible
+                  ? { background: acento, boxShadow: `0 0 8px ${acento}` }
+                  : { background: "rgba(255,255,255,0.15)" }
+              }
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 }

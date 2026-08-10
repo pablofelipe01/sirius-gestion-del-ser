@@ -5,6 +5,7 @@ import { verifyJWT } from "@/lib/auth";
 import { SolicitudesOverview } from "@sirius/solicitudes";
 import { DiasPactoWidget } from "@/components/DiasPactoWidget";
 import DashboardAutorizaciones from "@/components/DashboardAutorizaciones";
+import { FondoNocturno } from "@/components/FondoNocturno";
 
 export default async function SolicitudesPage() {
   const token = (await cookies()).get("sirius-auth")?.value;
@@ -12,19 +13,27 @@ export default async function SolicitudesPage() {
   if (!payload) redirect("/login");
 
   return (
-    <div>
-      <div className="px-8 pt-8 pb-4 max-w-5xl mx-auto">
-        <Suspense fallback={<div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100 animate-pulse h-24"></div>}>
-          <DiasPactoWidget />
-        </Suspense>
-      </div>
+    <div className="relative min-h-full">
+      <FondoNocturno />
 
-      {/* Mis solicitudes */}
-      <SolicitudesOverview idCore={payload.idCore} />
+      <div className="relative">
+        {/*
+          El widget de días de pacto entra como slot del overview y no antes: en
+          esta vista el título va primero, sobre el cielo, y meter un aviso
+          encima del encabezado partía la composición en dos.
+        */}
+        <SolicitudesOverview idCore={payload.idCore} nombre={payload.nombre}>
+          <Suspense
+            fallback={<div className="glass h-24 animate-pulse rounded-2xl print:hidden" />}
+          >
+            <DiasPactoWidget />
+          </Suspense>
+        </SolicitudesOverview>
 
-      {/* Dashboard de autorizaciones (si tiene permisos) - ABAJO */}
-      <div className="px-8 pb-8 max-w-7xl mx-auto">
-        <DashboardAutorizaciones />
+        {/* Dashboard de autorizaciones (si tiene permisos) - ABAJO */}
+        <div className="mx-auto max-w-5xl px-4 pb-14 sm:px-8">
+          <DashboardAutorizaciones />
+        </div>
       </div>
     </div>
   );

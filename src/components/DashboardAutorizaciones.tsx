@@ -31,16 +31,17 @@ interface DatosAutorizacion {
 /** Cuántas tarjetas se muestran antes de pedir "Mostrar más". */
 const PAGINA = 15;
 
+/** Chips y pestañas en versión oscura: la vista va sobre la foto nocturna. */
 const ESTILO_CATEGORIA: Record<Categoria, { etiqueta: string; chip: string; activo: string }> = {
   permisos: {
     etiqueta: "Permiso",
-    chip: "bg-blue-50 text-blue-700 border-blue-200",
-    activo: "border-blue-500 text-blue-600",
+    chip: "bg-[#1a51a8]/25 text-[#9cc4ff] border-[#1a51a8]/50",
+    activo: "border-[#4d8ee8] text-[#9cc4ff]",
   },
   vacaciones: {
     etiqueta: "Vacaciones",
-    chip: "bg-green-50 text-green-700 border-green-200",
-    activo: "border-green-500 text-green-600",
+    chip: "bg-[#6bb543]/20 text-[#b3e694] border-[#6bb543]/45",
+    activo: "border-[#8fd363] text-[#b3e694]",
   },
 };
 
@@ -103,14 +104,14 @@ export default function DashboardAutorizaciones() {
 
   if (loading) {
     return (
-      <div className="bg-white rounded-2xl p-8 shadow-sm border border-gray-100">
+      <div className="glass-solid rounded-2xl p-8">
         <div className="animate-pulse space-y-4">
-          <div className="h-6 bg-gray-200 rounded w-1/4"></div>
-          <div className="h-4 bg-gray-200 rounded w-1/2"></div>
-          <div className="space-y-3 mt-6">
-            <div className="h-24 bg-gray-200 rounded-xl"></div>
-            <div className="h-24 bg-gray-200 rounded-xl"></div>
-            <div className="h-24 bg-gray-200 rounded-xl"></div>
+          <div className="h-6 w-1/4 rounded bg-white/10"></div>
+          <div className="h-4 w-1/2 rounded bg-white/10"></div>
+          <div className="mt-6 space-y-3">
+            <div className="h-24 rounded-xl bg-white/[0.07]"></div>
+            <div className="h-24 rounded-xl bg-white/[0.07]"></div>
+            <div className="h-24 rounded-xl bg-white/[0.07]"></div>
           </div>
         </div>
       </div>
@@ -119,11 +120,14 @@ export default function DashboardAutorizaciones() {
 
   if (error) {
     return (
-      <div className="bg-red-50 rounded-2xl p-6 border border-red-200 flex items-center justify-between gap-4">
-        <p className="text-red-800 font-medium">Error: {error}</p>
+      <div
+        className="glass flex items-center justify-between gap-4 rounded-2xl p-6"
+        style={{ borderColor: "rgba(239,68,68,0.35)" }}
+      >
+        <p className="font-medium text-red-200">Error: {error}</p>
         <button
           onClick={fetchDatos}
-          className="px-4 py-2 rounded-lg bg-white border border-red-200 text-red-700 text-sm font-medium hover:bg-red-100"
+          className="rounded-lg border border-white/15 bg-white/10 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-white/20"
         >
           Reintentar
         </button>
@@ -143,15 +147,15 @@ export default function DashboardAutorizaciones() {
 
   return (
     <>
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+      <div className="glass-solid overflow-hidden rounded-2xl">
         {/* Header */}
-        <div className="px-6 sm:px-8 py-6 border-b border-gray-100">
+        <div className="border-b border-white/10 px-6 py-6 sm:px-8">
           <div className="flex flex-wrap items-start justify-between gap-4">
             <div>
               <div className="flex items-center gap-3">
-                <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50">
+                <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#1a51a8]/30 ring-1 ring-inset ring-white/10">
                   <svg
-                    className="w-5 h-5 text-blue-600"
+                    className="h-5 w-5 text-[#7cb2ff]"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -165,10 +169,10 @@ export default function DashboardAutorizaciones() {
                   </svg>
                 </span>
                 <div>
-                  <h2 className="text-xl sm:text-2xl font-semibold text-gray-900">
+                  <h2 className="text-xl font-semibold text-white sm:text-2xl">
                     Panel de Autorizaciones
                   </h2>
-                  <p className="text-sm text-gray-600">
+                  <p className="text-sm text-white/50">
                     {conteos.todas === 0
                       ? "No hay solicitudes pendientes de su aprobación"
                       : `${conteos.todas} solicitud${conteos.todas !== 1 ? "es" : ""} pendiente${
@@ -183,10 +187,13 @@ export default function DashboardAutorizaciones() {
                 {datos.permisos.map((p, idx) => (
                   <span
                     key={idx}
-                    className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-gray-50 text-gray-600 border border-gray-200"
+                    className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.06] px-3 py-1 text-xs font-medium text-white/60"
                     title={p.notas}
                   >
-                    <span className="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
+                    <span
+                      className="h-1.5 w-1.5 rounded-full bg-[#29b6e8]"
+                      style={{ boxShadow: "0 0 8px #29b6e8" }}
+                    ></span>
                     Autoriza: {p.tipo} · {p.ambito}
                   </span>
                 ))}
@@ -195,9 +202,14 @@ export default function DashboardAutorizaciones() {
 
             <button
               onClick={fetchDatos}
-              className="shrink-0 inline-flex items-center gap-2 px-3 py-2 rounded-lg border border-gray-200 text-sm font-medium text-gray-600 hover:bg-gray-50"
+              className="group inline-flex shrink-0 items-center gap-2 rounded-lg border border-white/12 bg-white/[0.06] px-3 py-2 text-sm font-medium text-white/70 transition-colors hover:bg-white/12 hover:text-white"
             >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg
+                className="h-4 w-4 transition-transform duration-500 group-hover:rotate-180"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -211,20 +223,20 @@ export default function DashboardAutorizaciones() {
         </div>
 
         {/* Tabs + búsqueda */}
-        <div className="px-6 sm:px-8 border-b border-gray-100 flex flex-wrap items-center justify-between gap-4">
+        <div className="flex flex-wrap items-center justify-between gap-4 border-b border-white/10 px-6 sm:px-8">
           <div className="flex gap-5 overflow-x-auto">
             {(["todas", "permisos", "vacaciones"] as Tab[]).map((t) => {
               const activo = tab === t;
               const estiloActivo =
-                t === "todas" ? "border-gray-900 text-gray-900" : ESTILO_CATEGORIA[t].activo;
+                t === "todas" ? "border-white text-white" : ESTILO_CATEGORIA[t].activo;
               return (
                 <button
                   key={t}
                   onClick={() => setTab(t)}
-                  className={`py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap transition-colors ${
+                  className={`whitespace-nowrap border-b-2 px-1 py-4 text-sm font-medium transition-colors ${
                     activo
                       ? estiloActivo
-                      : "border-transparent text-gray-500 hover:text-gray-700"
+                      : "border-transparent text-white/45 hover:text-white/80"
                   }`}
                 >
                   {t === "todas" ? "Todas" : ESTILO_CATEGORIA[t].etiqueta + "s"} ({conteos[t]})
@@ -236,7 +248,7 @@ export default function DashboardAutorizaciones() {
           {conteos.todas > 0 && (
             <div className="relative py-3 w-full sm:w-64">
               <svg
-                className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400"
+                className="pointer-events-none absolute left-3 top-1/2 z-10 h-4 w-4 -translate-y-1/2 text-white/40"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -253,17 +265,17 @@ export default function DashboardAutorizaciones() {
                 value={busqueda}
                 onChange={(e) => setBusqueda(e.target.value)}
                 placeholder="Buscar por nombre, cédula o tipo"
-                className="w-full pl-9 pr-3 py-2 text-sm rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500/40 focus:border-blue-400"
+                className="w-full rounded-lg border border-white/12 bg-white/[0.06] py-2 pl-9 pr-3 text-sm text-white placeholder:text-white/35 focus:border-[#29b6e8]/60 focus:outline-none focus:ring-2 focus:ring-[#29b6e8]/25"
               />
             </div>
           )}
         </div>
 
         {/* Lista de solicitudes */}
-        <div className="p-6 sm:p-8 bg-gray-50/50">
+        <div className="bg-black/15 p-6 sm:p-8">
           {filtradas.length === 0 ? (
-            <div className="text-center py-12">
-              <p className="text-gray-600 font-medium">
+            <div className="py-12 text-center">
+              <p className="font-medium text-white/55">
                 {conteos.todas === 0
                   ? "✓ No hay solicitudes pendientes de autorización"
                   : "Ninguna solicitud coincide con el filtro"}
@@ -291,7 +303,7 @@ export default function DashboardAutorizaciones() {
                 <div className="mt-6 text-center">
                   <button
                     onClick={() => setVisibles((v) => v + PAGINA)}
-                    className="px-5 py-2.5 rounded-lg bg-white border border-gray-200 text-sm font-medium text-gray-700 hover:bg-gray-50"
+                    className="rounded-lg border border-white/12 bg-white/[0.06] px-5 py-2.5 text-sm font-medium text-white/80 transition-colors hover:bg-white/12 hover:text-white"
                   >
                     Mostrar más ({filtradas.length - visibles} restantes)
                   </button>
@@ -334,28 +346,28 @@ function TarjetaSolicitud({
   const cargo = f[FIELDS.PERMISO.CARGO] as string | undefined;
 
   return (
-    <div className="bg-white border border-gray-200 rounded-xl p-5 hover:border-gray-300 hover:shadow-sm transition-all">
+    <div className="glass rounded-xl p-5 transition-all duration-300 hover:-translate-y-0.5 hover:bg-white/[0.09]">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div className="min-w-0 flex-1">
           {/* Encabezado: categoría + persona */}
           <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
             <span
-              className={`inline-flex px-2 py-0.5 rounded-md text-[11px] font-semibold uppercase tracking-wide border ${estilo.chip}`}
+              className={`inline-flex rounded-md border px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide ${estilo.chip}`}
             >
               {estilo.etiqueta}
             </span>
-            <h3 className="font-semibold text-gray-900 truncate">{nombre}</h3>
-            {cedula && <span className="text-xs text-gray-500">CC {cedula}</span>}
+            <h3 className="truncate font-semibold text-white">{nombre}</h3>
+            {cedula && <span className="text-xs text-white/40">CC {cedula}</span>}
           </div>
 
-          {cargo && <p className="mt-1 text-xs text-gray-500">{cargo}</p>}
+          {cargo && <p className="mt-1 text-xs text-white/40">{cargo}</p>}
 
           {/* Datos de la solicitud */}
           <dl className="mt-3 grid grid-cols-2 gap-x-6 gap-y-2 text-sm sm:grid-cols-3 lg:grid-cols-4">
             {datosSolicitud(categoria, solicitud).map(({ etiqueta, valor }) => (
               <div key={etiqueta} className="min-w-0">
-                <dt className="text-xs text-gray-500">{etiqueta}</dt>
-                <dd className="font-medium text-gray-900 truncate" title={valor}>
+                <dt className="text-[11px] uppercase tracking-wide text-white/35">{etiqueta}</dt>
+                <dd className="truncate font-medium text-white/90" title={valor}>
                   {valor}
                 </dd>
               </div>
@@ -364,11 +376,11 @@ function TarjetaSolicitud({
 
           {/* Motivo / descripción */}
           {motivo(categoria, solicitud) && (
-            <div className="mt-3 rounded-lg bg-gray-50 border border-gray-100 px-3 py-2">
-              <p className="text-[11px] font-medium uppercase tracking-wide text-gray-500">
+            <div className="mt-3 rounded-lg border border-white/10 bg-black/25 px-3 py-2">
+              <p className="text-[11px] font-medium uppercase tracking-wide text-white/40">
                 Motivo
               </p>
-              <p className="mt-0.5 text-sm text-gray-700 whitespace-pre-line">
+              <p className="mt-0.5 whitespace-pre-line text-sm text-white/75">
                 {motivo(categoria, solicitud)}
               </p>
             </div>
@@ -377,7 +389,8 @@ function TarjetaSolicitud({
 
         <button
           onClick={onAutorizar}
-          className="shrink-0 self-start px-5 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium text-sm shadow-sm"
+          className="shrink-0 self-start rounded-lg bg-[#1a51a8] px-5 py-2.5 text-sm font-medium text-white transition-all hover:-translate-y-0.5 hover:brightness-110"
+          style={{ boxShadow: "0 12px 26px -14px #1a51a8" }}
         >
           Revisar
         </button>

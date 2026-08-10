@@ -3,6 +3,7 @@
 import { useState, useEffect, useMemo, useCallback } from "react";
 import { FIELDS, FK_ID_CORE, FIELDS_AUTORIZACION } from "@/lib/airtable-schema";
 import { parseDiasCompensacion } from "@/lib/compensacion";
+import CargarListaAsistencia from "./CargarListaAsistencia";
 
 type Categoria = "permisos" | "vacaciones" | "novedades";
 type Tab = "todas" | Categoria | "documentos";
@@ -576,6 +577,10 @@ export default function HistoricoSolicitudes() {
           );
         })}
       </div>
+
+      {/* Carga de la lista de asistencia — solo para quien ve toda la empresa:
+          el archivo del biométrico trae los datos de todos los colaboradores. */}
+      {tab === "novedades" && datos?.alcance === "todos" && <CargarListaAsistencia />}
 
       {/* Filtros */}
       <div className="flex flex-wrap items-end gap-3 border-b border-gray-100 bg-gray-50/60 px-6 py-4 sm:px-8">

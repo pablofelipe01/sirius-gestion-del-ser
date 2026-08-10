@@ -123,10 +123,8 @@ export function AvisoCompensacion({ permisos, apiBasePath = "" }: Props) {
     <>
       {resultado && (
         <div
-          className={`mb-6 flex items-start gap-3 rounded-2xl border px-5 py-4 print:hidden ${
-            resultado.ok
-              ? "border-green-200 bg-green-50 text-green-800"
-              : "border-amber-300 bg-amber-50 text-amber-900"
+          className={`glass mb-6 flex items-start gap-3 rounded-2xl px-5 py-4 print:hidden ${
+            resultado.ok ? "text-green-200" : "text-amber-100"
           }`}
         >
           <svg className="mt-0.5 h-5 w-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -146,10 +144,18 @@ export function AvisoCompensacion({ permisos, apiBasePath = "" }: Props) {
       )}
 
       {permisos.length > 0 && (
-      <div className="mb-8 overflow-hidden rounded-2xl border border-amber-200 bg-amber-50 print:hidden">
-        <div className="flex items-start gap-3 px-5 py-4 sm:px-6">
+      <div
+        className="glass relative mb-8 overflow-hidden rounded-2xl print:hidden"
+        style={{ borderColor: "rgba(245,158,11,0.35)" }}
+      >
+        {/* El ámbar del aviso encendido detrás del vidrio: pide acción sin gritar */}
+        <span
+          className="pointer-events-none absolute -left-16 -top-20 h-48 w-72 rounded-full opacity-25 blur-3xl"
+          style={{ background: "#f59e0b" }}
+        />
+        <div className="relative flex items-start gap-3 px-5 py-4 sm:px-6">
           <svg
-            className="mt-0.5 h-5 w-5 flex-shrink-0 text-amber-600"
+            className="mt-0.5 h-5 w-5 flex-shrink-0 text-amber-400"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -162,35 +168,35 @@ export function AvisoCompensacion({ permisos, apiBasePath = "" }: Props) {
             />
           </svg>
           <div className="min-w-0">
-            <p className="text-sm font-semibold text-amber-900">
+            <p className="text-sm font-semibold text-amber-100">
               {permisos.length === 1
                 ? "Falta definir cómo repones un permiso"
                 : `Falta definir cómo repones ${permisos.length} permisos`}
             </p>
-            <p className="mt-0.5 text-xs leading-relaxed text-amber-800/80">
+            <p className="mt-1 text-xs leading-relaxed text-amber-100/60">
               Estos permisos se aprobaron como compensatorios. Elige con cuál plan vas a
               reponer el tiempo.
             </p>
           </div>
         </div>
 
-        <ul className="divide-y divide-amber-200/70 border-t border-amber-200">
+        <ul className="relative divide-y divide-white/10 border-t border-white/10">
           {permisos.map((p) => (
             <li
               key={p.id}
-              className="flex flex-wrap items-center justify-between gap-3 px-5 py-3 sm:px-6"
+              className="flex flex-wrap items-center justify-between gap-3 px-5 py-3 transition-colors hover:bg-white/[0.04] sm:px-6"
             >
               <div className="min-w-0">
-                <p className="truncate text-sm font-medium text-amber-900">{p.tipo}</p>
-                <p className="mt-0.5 text-xs text-amber-800/70">
+                <p className="truncate text-sm font-medium text-white/90">{p.tipo}</p>
+                <p className="mt-0.5 text-xs text-white/45">
                   {formatFecha(p.fecha)} · {p.horasTotal} h por reponer
                 </p>
               </div>
               <button
                 type="button"
                 onClick={() => abrir(p)}
-                className="rounded-xl px-3.5 py-2 text-sm font-semibold text-white shadow-sm transition-all hover:brightness-110"
-                style={{ background: COLOR }}
+                className="rounded-xl px-3.5 py-2 text-sm font-semibold text-white shadow-lg transition-all hover:-translate-y-0.5 hover:brightness-110"
+                style={{ background: COLOR, boxShadow: `0 10px 24px -12px ${COLOR}` }}
               >
                 Definir cómo repongo
               </button>

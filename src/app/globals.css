@@ -33,6 +33,81 @@ textarea::placeholder {
   opacity: 1;
 }
 
+/* ─────────────────────────────────────────────────────────────────────────────
+   Superficie nocturna — vistas con la foto de fondo (/dashboard/solicitudes)
+
+   Las tarjetas dejan de ser blancas opacas y pasan a vidrio: la foto se ve a
+   través de ellas. `.glass` está aquí, y no repartido en clases de Tailwind por
+   componente, porque al imprimir hay que devolverlas TODAS a blanco sobre negro
+   de un solo golpe — un PDF con fondo translúcido sale ilegible.
+   ────────────────────────────────────────────────────────────────────────── */
+
+.glass {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(20px) saturate(140%);
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 18px 40px -24px rgba(0, 0, 0, 0.8);
+}
+
+/* Un nivel más sólido, para paneles con mucho texto encima de la foto. */
+.glass-solid {
+  background: rgba(9, 14, 26, 0.62);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(24px) saturate(130%);
+  -webkit-backdrop-filter: blur(24px) saturate(130%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    0 24px 50px -28px rgba(0, 0, 0, 0.85);
+}
+
+/* ── Movimiento ──────────────────────────────────────────────────────────── */
+
+/* Deriva lentísima de la foto: da vida al fondo sin competir con el contenido. */
+@keyframes deriva-fondo {
+  0%   { transform: scale(1.06) translate3d(0, 0, 0); }
+  100% { transform: scale(1.14) translate3d(-1.5%, -1.2%, 0); }
+}
+
+/* Resplandores de color que flotan detrás del vidrio. */
+@keyframes flotar-aurora {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  50%      { transform: translate3d(4%, -6%, 0) scale(1.12); }
+}
+
+@keyframes titilar {
+  0%, 100% { opacity: 0.15; }
+  50%      { opacity: 0.9; }
+}
+
+@keyframes entrar-arriba {
+  from { opacity: 0; transform: translate3d(0, 14px, 0); }
+  to   { opacity: 1; transform: none; }
+}
+
+.anim-deriva  { animation: deriva-fondo 48s ease-in-out infinite alternate; }
+.anim-aurora  { animation: flotar-aurora 26s ease-in-out infinite; }
+.anim-titilar { animation: titilar 4s ease-in-out infinite; }
+
+/* La entrada arranca oculta: sin esto se ve un salto en el primer frame. */
+.anim-entrada {
+  opacity: 0;
+  animation: entrar-arriba 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .anim-deriva,
+  .anim-aurora,
+  .anim-titilar,
+  .anim-entrada {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
 @media print {
   .print\:hidden {
     display: none !important;
@@ -41,6 +116,28 @@ textarea::placeholder {
   body {
     background: white;
     color: black;
+  }
+
+  /* El vidrio vuelve a papel: fondo blanco, borde gris, texto negro. */
+  .glass,
+  .glass-solid {
+    background: #ffffff !important;
+    border-color: #e5e7eb !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    box-shadow: none !important;
+  }
+
+  .glass,
+  .glass-solid,
+  .glass *,
+  .glass-solid * {
+    color: #111827 !important;
+  }
+
+  .anim-entrada {
+    opacity: 1 !important;
+    animation: none !important;
   }
 
   @page {

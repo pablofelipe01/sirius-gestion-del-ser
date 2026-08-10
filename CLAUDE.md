@@ -102,6 +102,25 @@ Personal por compatibilidad, pero la FK con la que se filtra es **`ID Personal C
 Usa hora de Colombia siempre (`fechaBogota()` / `horaBogota()`): `Fecha_Hora`
 guarda el instante en ISO UTC y `Fecha` / `Hora` el día y la hora locales.
 
+### Carga de la lista de asistencia (biométrico → n8n)
+
+`POST /api/asistencia/lista` recibe el Excel del biométrico y lo reenvía al flujo
+de n8n de `N8N_WEBHOOK_ASISTENCIA`. La UI es `CargarListaAsistencia`, montada en
+la **pestaña Novedades del histórico**.
+
+**El archivo pasa por el servidor, nunca del navegador al webhook.** Si el
+navegador llamara directo, la URL del flujo quedaría en el bundle del cliente y
+cualquiera podría enviarle archivos sin sesión. Además, en el servidor se puede
+exigir autoridad: solo quien tiene un permiso de autorización con **ámbito
+"Todos"** puede subirla, porque la lista trae los datos de todos los
+colaboradores. Es el mismo alcance que ya permite ver el histórico completo, y
+por eso la UI se muestra solo con `alcance === "todos"`.
+
+⚠️ Una URL `/webhook-test/` de n8n **solo responde con el flujo escuchando en el
+editor, y una sola vez por cada «Execute workflow»**. El endpoint traduce ese 404
+a un mensaje que lo dice; al activar el flujo hay que cambiar la variable a
+`/webhook/`.
+
 ## Estructura del Monorepo
 
 ```

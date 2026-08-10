@@ -15,6 +15,8 @@ export const TABLES = {
   NOVEDADES:   process.env.AIRTABLE_TABLE_NOVEDADES_NOMINA   ?? "Reportes Novedades Nomina",
   DIAS_PACTO:  process.env.AIRTABLE_TABLE_DIAS_PACTO         ?? "Dias_Pacto",
   ASISTENCIA:  process.env.AIRTABLE_TABLE_ASISTENCIA         ?? "Asistencia Personal",
+  // Marcaciones del biométrico que carga el flujo de n8n (ver /api/asistencia/lista)
+  REPORTE_ASISTENCIA: process.env.AIRTABLE_TABLE_REPORTE_ASISTENCIA ?? "Reporte Asistencia Guaicaramo",
 } as const;
 
 // ── FK compartida ─────────────────────────────────────────────────────────────
@@ -142,6 +144,19 @@ export const FIELDS = {
     UBICACION:  "Ubicacion",
     NOTAS:      "Notas",
     NOVEDADES:  "Novedades_Asistencia",
+  },
+  REPORTE_ASISTENCIA: {
+    DOCUMENTO:  "documento",
+    NOMBRE:     "nombre",
+    TURNO:      "turno",
+    PUNTO:      "punto",
+    FECHA:      "fecha",
+    HORA:       "hora",
+    FECHA_HORA: "fechaHora",
+    /** Minuto del día de la marcación (09:21:52 → 561). */
+    MINUTOS:    "minutosDelDia",
+    EVENTO:     "evento",
+    REGISTRO:   "registro",
   },
 } as const;
 
