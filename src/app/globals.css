@@ -63,6 +63,48 @@ textarea::placeholder {
     0 24px 50px -28px rgba(0, 0, 0, 0.85);
 }
 
+/* ── Controles de formulario sobre la superficie nocturna ────────────────── */
+
+/**
+ * Los campos claros no sirven encima de la foto, pero volverlos oscuros no basta:
+ * el calendario nativo de `type="date"` y el desplegable de `<select>` los pinta
+ * el sistema, no nosotros. Sin `color-scheme: dark` salen claros — y el texto
+ * blanco del campo queda blanco sobre blanco en el popup.
+ *
+ * Va por clase y no en `:root` porque la app sigue siendo clara donde no hay foto
+ * (documentos, impresión) y `color-scheme` se hereda.
+ */
+.campo-oscuro {
+  color-scheme: dark;
+}
+
+/* La barra de scroll clara corta la composición nocturna por el borde. */
+.scroll-noche {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.18) transparent;
+}
+
+.scroll-noche::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+.scroll-noche::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scroll-noche::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.16);
+  border-radius: 9999px;
+  border: 3px solid transparent;
+  background-clip: content-box;
+}
+
+.scroll-noche::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.28);
+  background-clip: content-box;
+}
+
 /* ── Movimiento ──────────────────────────────────────────────────────────── */
 
 /* Deriva lentísima de la foto: da vida al fondo sin competir con el contenido. */
@@ -138,6 +180,14 @@ textarea::placeholder {
   .anim-entrada {
     opacity: 1 !important;
     animation: none !important;
+  }
+
+  /* Un campo translúcido sobre papel no se ve: vuelve a caja blanca con borde. */
+  .campo-oscuro {
+    color-scheme: light;
+    background: #ffffff !important;
+    border-color: #d1d5db !important;
+    color: #111827 !important;
   }
 
   @page {

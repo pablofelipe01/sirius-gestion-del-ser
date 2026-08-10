@@ -123,7 +123,13 @@ export function FirmaCanvas({
 
   return (
     <div className="flex flex-col gap-3">
-      <div className="relative overflow-hidden rounded-xl border-2 border-dashed border-gray-200 bg-white transition-colors hover:border-gray-300">
+      {/*
+        El recuadro se queda BLANCO a propósito: el canvas se rellena de blanco y
+        el trazo es oscuro, y ese PNG es el que va a S3 y al PDF de autorización.
+        Oscurecerlo dejaría la firma invisible en el documento. Sobre el fondo
+        nocturno se lee como una hoja de papel puesta encima del vidrio.
+      */}
+      <div className="relative overflow-hidden rounded-xl border-2 border-dashed border-white/25 bg-white shadow-[0_18px_40px_-24px_rgba(0,0,0,0.9)] transition-colors hover:border-white/40">
         {/* Guía de firma — encima del canvas (que se rellena de blanco), sin capturar eventos */}
         <div className="pointer-events-none absolute inset-x-6 bottom-9 z-10 border-b border-dashed border-gray-200" />
         {!hayFirma && (
@@ -151,7 +157,7 @@ export function FirmaCanvas({
           type="button"
           onClick={limpiar}
           disabled={!hayFirma}
-          className="flex-1 rounded-xl border border-gray-200 px-4 py-2.5 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-40"
+          className="flex-1 rounded-xl border border-white/12 bg-white/[0.06] px-4 py-2.5 text-sm font-medium text-white/75 transition-colors hover:bg-white/12 hover:text-white disabled:cursor-not-allowed disabled:opacity-30"
         >
           Limpiar
         </button>
@@ -159,15 +165,15 @@ export function FirmaCanvas({
           type="button"
           onClick={capturarFirma}
           disabled={!hayFirma}
-          className="flex flex-1 items-center justify-center gap-1.5 rounded-xl px-4 py-2.5 text-sm font-medium text-white shadow-sm transition-all hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-40 disabled:shadow-none disabled:hover:brightness-100"
-          style={{ background: color }}
+          className="flex flex-1 items-center justify-center gap-1.5 rounded-xl px-4 py-2.5 text-sm font-medium text-white transition-all hover:-translate-y-0.5 hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-30 disabled:shadow-none disabled:hover:translate-y-0 disabled:hover:brightness-100"
+          style={{ background: color, boxShadow: `0 14px 30px -18px ${color}` }}
         >
           <Icon path={ICON_CHECK} className="h-4 w-4" strokeWidth={2.5} />
           Confirmar firma
         </button>
       </div>
 
-      <p className="text-center text-xs text-gray-400">
+      <p className="text-center text-xs text-white/35">
         Dibuja tu firma con el mouse o con el dedo en dispositivos táctiles
       </p>
     </div>

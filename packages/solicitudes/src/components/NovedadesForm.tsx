@@ -92,7 +92,7 @@ export function NovedadesForm({ apiBasePath = "", basePath = "/dashboard/solicit
 
       <form
         onSubmit={handleSubmit}
-        className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm"
+        className="glass-solid anim-entrada overflow-hidden rounded-2xl"
       >
         <div className="h-1" style={{ background: COLOR }} />
 
@@ -106,7 +106,7 @@ export function NovedadesForm({ apiBasePath = "", basePath = "/dashboard/solicit
           </div>
 
           {/* ── 2. Detalle de la novedad ─────────────────────────────────── */}
-          <div className="flex flex-col gap-4 border-t border-gray-100 pt-5">
+          <div className="flex flex-col gap-4 border-t border-white/10 pt-5">
             <SectionTitle color={COLOR} paso={2}>
               Detalle de la novedad
             </SectionTitle>

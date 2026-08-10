@@ -122,7 +122,7 @@ export function VacacionesForm({ apiBasePath = "", basePath = "/dashboard/solici
 
       <form
         onSubmit={handleSubmit}
-        className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm"
+        className="glass-solid anim-entrada overflow-hidden rounded-2xl"
       >
         <div className="h-1" style={{ background: COLOR }} />
 
@@ -136,7 +136,7 @@ export function VacacionesForm({ apiBasePath = "", basePath = "/dashboard/solici
           </div>
 
           {/* ── 2. Período ───────────────────────────────────────────────── */}
-          <div className="flex flex-col gap-4 border-t border-gray-100 pt-5">
+          <div className="flex flex-col gap-4 border-t border-white/10 pt-5">
             <SectionTitle color={COLOR} paso={2}>
               Período de vacaciones
             </SectionTitle>

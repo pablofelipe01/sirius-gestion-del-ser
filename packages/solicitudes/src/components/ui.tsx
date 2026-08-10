@@ -91,14 +91,19 @@ export const ICON_CHECK_CIRCLE = (
 
 /* ── Clases de campos ───────────────────────────────────────────────────── */
 
+/**
+ * `campo-oscuro` (definida en globals.css) es obligatoria en TODO campo: pone
+ * `color-scheme: dark` para que el calendario de `type="date"` y el desplegable
+ * del `<select>` —que los pinta el sistema— no salgan claros con texto blanco.
+ */
 const INPUT_BASE =
-  "w-full rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm text-gray-800 shadow-[0_1px_2px_rgba(15,23,42,0.04)] outline-none transition-all placeholder:text-gray-400 hover:border-gray-300 focus:ring-2";
+  "campo-oscuro w-full rounded-xl border border-white/12 bg-white/[0.06] px-4 py-2.5 text-sm text-white outline-none transition-all placeholder:text-white/35 hover:border-white/20 hover:bg-white/[0.09] focus:ring-2";
 
 // Clases literales — Tailwind escanea el código fuente, no acepta interpolación en runtime.
 const FOCUS_RING: Record<ModuloKey, string> = {
-  permiso:    "focus:border-[#1a51a8] focus:ring-[#1a51a8]/20",
-  vacaciones: "focus:border-[#6bb543] focus:ring-[#6bb543]/20",
-  novedades:  "focus:border-[#e07b39] focus:ring-[#e07b39]/20",
+  permiso:    "focus:border-[#4d8ee8] focus:ring-[#1a51a8]/40",
+  vacaciones: "focus:border-[#8fd363] focus:ring-[#6bb543]/35",
+  novedades:  "focus:border-[#f0a06a] focus:ring-[#e07b39]/35",
 };
 
 /** Input estándar con el focus ring del módulo. */
@@ -107,7 +112,7 @@ export function inputCls(modulo: ModuloKey) {
 }
 
 export const readonlyCls =
-  "w-full rounded-xl border border-gray-100 bg-gray-50/80 px-4 py-2.5 text-sm text-gray-600 cursor-default truncate";
+  "campo-oscuro w-full cursor-default truncate rounded-xl border border-white/8 bg-black/20 px-4 py-2.5 text-sm text-white/55";
 
 /* ── Campo con etiqueta ─────────────────────────────────────────────────── */
 
@@ -125,10 +130,10 @@ export function Field({
 
   return (
     <div className="flex flex-col gap-1.5">
-      <label className="flex items-baseline gap-1.5 text-sm font-medium text-gray-700">
+      <label className="flex items-baseline gap-1.5 text-sm font-medium text-white/80">
         <span>{texto}</span>
-        {obligatorio && <span className="text-red-400">*</span>}
-        {hint && <span className="text-xs font-normal text-gray-400">— {hint}</span>}
+        {obligatorio && <span className="text-rose-400">*</span>}
+        {hint && <span className="text-xs font-normal text-white/40">— {hint}</span>}
       </label>
       {children}
     </div>
@@ -151,25 +156,25 @@ export function FormHeader({
   const m = MODULOS[modulo];
 
   return (
-    <div className="mb-6 flex items-center gap-4">
+    <div className="anim-entrada mb-6 flex items-center gap-4">
       <Link
         href={backHref}
         aria-label="Volver a solicitudes"
-        className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-xl border border-gray-200 bg-white text-gray-500 shadow-sm transition-all hover:-translate-x-0.5 hover:border-gray-300 hover:text-gray-700"
+        className="glass flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-xl text-white/60 transition-all hover:-translate-x-0.5 hover:text-white"
       >
         <Icon path={ICON_CHEVRON_LEFT} className="h-4 w-4" strokeWidth={2} />
       </Link>
 
       <div
-        className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-2xl"
-        style={{ background: `${m.color}15` }}
+        className="relative flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-2xl ring-1 ring-inset ring-white/10"
+        style={{ background: `${m.color}26`, boxShadow: `0 12px 30px -18px ${m.color}` }}
       >
-        <Icon path={m.icon} className="h-5 w-5" stroke={m.color} />
+        <Icon path={m.icon} className="h-5 w-5" stroke={m.color} strokeWidth={1.7} />
       </div>
 
       <div className="min-w-0">
-        <h1 className="truncate text-xl font-bold tracking-tight text-gray-800">{titulo}</h1>
-        <p className="text-sm text-gray-500">{subtitulo}</p>
+        <h1 className="truncate text-xl font-bold tracking-tight text-white sm:text-2xl">{titulo}</h1>
+        <p className="text-sm text-white/45">{subtitulo}</p>
       </div>
     </div>
   );
@@ -190,15 +195,18 @@ export function SectionTitle({
     <div className="flex items-center gap-2.5">
       {paso !== undefined ? (
         <span
-          className="flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full text-[11px] font-bold"
-          style={{ background: `${color}18`, color }}
+          className="flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full text-[11px] font-bold ring-1 ring-inset ring-white/10"
+          style={{ background: `${color}33`, color: "#fff" }}
         >
           {paso}
         </span>
       ) : (
-        <span className="h-3.5 w-1 flex-shrink-0 rounded-full" style={{ background: color }} />
+        <span
+          className="h-3.5 w-1 flex-shrink-0 rounded-full"
+          style={{ background: color, boxShadow: `0 0 8px ${color}` }}
+        />
       )}
-      <p className="text-xs font-semibold uppercase tracking-wider text-gray-500">{children}</p>
+      <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-white/45">{children}</p>
     </div>
   );
 }
@@ -225,34 +233,34 @@ export function DatosEmpleado({
     : "··";
 
   return (
-    <div className="rounded-2xl border border-gray-100 bg-gray-50/60 p-4">
+    <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
       <div className="flex items-center gap-3">
         <div
-          className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full text-sm font-bold text-white"
-          style={{ background: color }}
+          className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full text-sm font-bold text-white ring-1 ring-inset ring-white/15"
+          style={{ background: color, boxShadow: `0 10px 24px -14px ${color}` }}
         >
           {iniciales}
         </div>
         <div className="min-w-0 flex-1">
-          <p className="truncate text-sm font-semibold text-gray-800">
+          <p className="truncate text-sm font-semibold text-white">
             {me?.nombre ?? "Cargando..."}
           </p>
-          <p className="truncate text-xs text-gray-500">{me?.cargo || "Sin cargo asignado"}</p>
+          <p className="truncate text-xs text-white/45">{me?.cargo || "Sin cargo asignado"}</p>
         </div>
-        <span className="hidden flex-shrink-0 rounded-full bg-white px-2.5 py-1 text-[11px] font-medium text-gray-500 ring-1 ring-gray-200 sm:inline">
+        <span className="hidden flex-shrink-0 rounded-full bg-white/[0.07] px-2.5 py-1 text-[11px] font-medium text-white/55 ring-1 ring-inset ring-white/10 sm:inline">
           {me?.idCore ?? "—"}
         </span>
       </div>
 
       {!compacto && (
-        <dl className="mt-3 grid grid-cols-2 gap-x-4 gap-y-2 border-t border-gray-200/70 pt-3 text-xs">
+        <dl className="mt-3 grid grid-cols-2 gap-x-4 gap-y-2 border-t border-white/10 pt-3 text-xs">
           <div className="flex flex-col gap-0.5">
-            <dt className="text-gray-400">Cédula</dt>
-            <dd className="font-medium text-gray-700">{me?.cedula ?? "—"}</dd>
+            <dt className="text-white/35">Cédula</dt>
+            <dd className="font-medium text-white/80">{me?.cedula ?? "—"}</dd>
           </div>
           <div className="flex flex-col gap-0.5 sm:hidden">
-            <dt className="text-gray-400">ID empleado</dt>
-            <dd className="font-medium text-gray-700">{me?.idCore ?? "—"}</dd>
+            <dt className="text-white/35">ID empleado</dt>
+            <dd className="font-medium text-white/80">{me?.idCore ?? "—"}</dd>
           </div>
         </dl>
       )}
@@ -267,7 +275,7 @@ export function ErrorMsg({ children }: { children: React.ReactNode }) {
   return (
     <div
       role="alert"
-      className="flex items-start gap-2.5 rounded-xl border border-red-100 bg-red-50 px-4 py-3 text-sm text-red-700"
+      className="flex items-start gap-2.5 rounded-xl border border-rose-400/35 bg-rose-500/12 px-4 py-3 text-sm text-rose-200"
     >
       <Icon
         path={
@@ -302,8 +310,8 @@ export function SubmitButton({
     <button
       type="submit"
       disabled={disabled}
-      className="flex w-full items-center justify-center gap-2 rounded-xl py-3 text-sm font-semibold text-white shadow-sm transition-all hover:brightness-110 hover:shadow-md active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-50 disabled:shadow-none disabled:hover:brightness-100"
-      style={{ background: color }}
+      className="flex w-full items-center justify-center gap-2 rounded-xl py-3 text-sm font-semibold text-white transition-all hover:-translate-y-0.5 hover:brightness-110 active:translate-y-0 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-40 disabled:shadow-none disabled:hover:translate-y-0 disabled:hover:brightness-100"
+      style={{ background: color, boxShadow: `0 16px 34px -18px ${color}` }}
     >
       {loading && (
         <svg className="h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none">
@@ -334,31 +342,38 @@ export function SuccessCard({
   basePath: string;
 }) {
   return (
-    <div className="mx-auto max-w-2xl p-4 sm:p-8">
-      <div className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm">
+    <div className="mx-auto max-w-2xl p-4 pt-8 sm:p-8 sm:pt-12">
+      <div className="glass-solid anim-entrada relative overflow-hidden rounded-2xl">
         <div className="h-1.5" style={{ background: color }} />
-        <div className="flex flex-col items-center gap-4 px-6 py-10 text-center sm:px-10">
+
+        {/* El color del módulo celebra el envío detrás del vidrio */}
+        <span
+          className="pointer-events-none absolute -top-24 left-1/2 h-56 w-72 -translate-x-1/2 rounded-full opacity-30 blur-3xl"
+          style={{ background: color }}
+        />
+
+        <div className="relative flex flex-col items-center gap-4 px-6 py-12 text-center sm:px-10">
           <div
-            className="flex h-16 w-16 items-center justify-center rounded-full"
-            style={{ background: `${color}14` }}
+            className="flex h-16 w-16 items-center justify-center rounded-full ring-1 ring-inset ring-white/15"
+            style={{ background: `${color}33`, boxShadow: `0 18px 40px -20px ${color}` }}
           >
-            <Icon path={ICON_CHECK} className="h-8 w-8" stroke={color} strokeWidth={2.2} />
+            <Icon path={ICON_CHECK} className="h-8 w-8" stroke="#fff" strokeWidth={2.2} />
           </div>
           <div>
-            <h2 className="text-xl font-bold tracking-tight text-gray-800">{titulo}</h2>
-            <p className="mt-1.5 text-sm leading-relaxed text-gray-500">{mensaje}</p>
+            <h2 className="text-xl font-bold tracking-tight text-white sm:text-2xl">{titulo}</h2>
+            <p className="mx-auto mt-2 max-w-sm text-sm leading-relaxed text-white/50">{mensaje}</p>
           </div>
           <div className="mt-2 flex w-full flex-col gap-2.5 sm:w-auto sm:flex-row">
             <button
               onClick={onReset}
-              className="rounded-xl border border-gray-200 px-5 py-2.5 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-50"
+              className="rounded-xl border border-white/12 bg-white/[0.06] px-5 py-2.5 text-sm font-medium text-white/75 transition-colors hover:bg-white/12 hover:text-white"
             >
               {resetLabel}
             </button>
             <Link
               href={basePath}
-              className="rounded-xl px-5 py-2.5 text-center text-sm font-medium text-white shadow-sm transition-all hover:brightness-110 hover:shadow-md"
-              style={{ background: color }}
+              className="rounded-xl px-5 py-2.5 text-center text-sm font-medium text-white transition-all hover:-translate-y-0.5 hover:brightness-110"
+              style={{ background: color, boxShadow: `0 14px 30px -16px ${color}` }}
             >
               Ver mis solicitudes
             </Link>

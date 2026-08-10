@@ -206,7 +206,7 @@ export function PermisoForm({ apiBasePath = "", basePath = "/dashboard/solicitud
 
       <form
         onSubmit={handleSubmit}
-        className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm"
+        className="glass-solid anim-entrada overflow-hidden rounded-2xl"
       >
         <div className="h-1" style={{ background: COLOR }} />
 
@@ -220,7 +220,7 @@ export function PermisoForm({ apiBasePath = "", basePath = "/dashboard/solicitud
           </div>
 
           {/* ── 2. Detalle del permiso ───────────────────────────────────── */}
-          <div className="flex flex-col gap-4 border-t border-gray-100 pt-5">
+          <div className="flex flex-col gap-4 border-t border-white/10 pt-5">
             <SectionTitle color={COLOR} paso={2}>
               Detalle del permiso
             </SectionTitle>
@@ -292,20 +292,20 @@ export function PermisoForm({ apiBasePath = "", basePath = "/dashboard/solicitud
                         type="button"
                         onClick={() => setModalidad(o.v)}
                         aria-pressed={activo}
-                        className="rounded-xl border px-4 py-3 text-left transition-all"
+                        className="rounded-xl border px-4 py-3 text-left transition-all hover:-translate-y-0.5"
                         style={{
-                          borderColor: activo ? COLOR : "#e5e7eb",
-                          background: activo ? `${COLOR}0d` : "white",
-                          boxShadow: activo ? `0 0 0 1px ${COLOR}` : undefined,
+                          borderColor: activo ? COLOR : "rgba(255,255,255,0.12)",
+                          background: activo ? `${COLOR}2e` : "rgba(255,255,255,0.05)",
+                          boxShadow: activo ? `0 0 0 1px ${COLOR}, 0 14px 30px -20px ${COLOR}` : undefined,
                         }}
                       >
                         <p
                           className="text-sm font-medium"
-                          style={{ color: activo ? COLOR : "#374151" }}
+                          style={{ color: activo ? "#fff" : "rgba(255,255,255,0.75)" }}
                         >
                           {o.label}
                         </p>
-                        <p className="mt-0.5 text-xs text-gray-500">{o.desc}</p>
+                        <p className="mt-0.5 text-xs text-white/45">{o.desc}</p>
                       </button>
                     );
                   })}

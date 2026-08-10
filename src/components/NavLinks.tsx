@@ -63,11 +63,15 @@ export default function NavLinks() {
           <Link
             key={item.href}
             href={item.href}
-            className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all duration-200"
+            className={`flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-all duration-200 ${
+              active ? "" : "hover:bg-white/[0.06] hover:text-white/85"
+            }`}
             style={{
               color: active ? "#fff" : "rgba(255,255,255,0.55)",
               background: active ? "rgba(255,255,255,0.12)" : "transparent",
               borderLeft: active ? "2px solid #29b6e8" : "2px solid transparent",
+              // El acento cian de marca también ilumina el borde del activo.
+              boxShadow: active ? "-6px 0 18px -10px #29b6e8" : undefined,
             }}
           >
             <svg className="w-5 h-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>

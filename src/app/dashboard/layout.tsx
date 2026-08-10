@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { verifyJWT } from "@/lib/auth";
 import LogoutButton from "@/components/LogoutButton";
 import NavLinks from "@/components/NavLinks";
+import { FondoNocturno } from "@/components/FondoNocturno";
 
 const ROL_LABEL: Record<string, string> = {
   "Super Admin": "Super Admin",
@@ -65,8 +66,22 @@ export default async function DashboardLayout({ children }: { children: React.Re
       </aside>
 
       {/* ── Contenido ──────────────────────────────────────────────────────── */}
-      <main className="flex-1 overflow-y-auto">
-        {children}
+      {/*
+        El fondo nocturno vive aquí y no en cada página: así toda la aplicación
+        comparte la misma superficie y las páginas solo aportan contenido. Va
+        dentro del <main> —no en el contenedor de arriba— porque el sidebar es su
+        hermano y un fondo por encima lo taparía.
+      */}
+      <main className="scroll-noche flex-1 overflow-y-auto" style={{ background: "#070c18" }}>
+        {/*
+          El envoltorio `relative min-h-full` es el que le da altura al fondo: un
+          `absolute inset-0` colgado del <main> con scroll se quedaría del tamaño
+          de la ventana y se iría al desplazar. Aquí crece con el contenido.
+        */}
+        <div className="relative min-h-full">
+          <FondoNocturno />
+          <div className="relative">{children}</div>
+        </div>
       </main>
     </div>
   );
