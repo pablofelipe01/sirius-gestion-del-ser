@@ -13,7 +13,7 @@ export const TABLES = {
   PERMISO:     process.env.AIRTABLE_TABLE_SOLICITUD_PERMISO  ?? "Solicitud_Permiso",
   VACACIONES:  process.env.AIRTABLE_TABLE_SOLICITUD_VACACIONES ?? "Solicitud_Vacaciones",
   NOVEDADES:   process.env.AIRTABLE_TABLE_NOVEDADES_NOMINA   ?? "Reportes Novedades Nomina",
-  DIAS_PACTO:  process.env.AIRTABLE_TABLE_DIAS_PACTO         ?? "Dias_Pacto",
+  DIAS_SIRIANOS: process.env.AIRTABLE_TABLE_DIAS_SIRIANOS    ?? "Dias_Sirianos",
   ASISTENCIA:  process.env.AIRTABLE_TABLE_ASISTENCIA         ?? "Asistencia Personal",
   // Marcaciones del biométrico que carga el flujo de n8n (ver /api/asistencia/lista)
   REPORTE_ASISTENCIA: process.env.AIRTABLE_TABLE_REPORTE_ASISTENCIA ?? "Reporte Asistencia Guaicaramo",
@@ -52,7 +52,6 @@ export const FIELDS = {
     COMPENSADO:      "Compensado",
     FECHA_COMP:      "Fecha de compensatorio",
     ESTADO:          "Estado_Permiso",
-    ID_PACTO_REF:    "id_pacto_ref",
     REVISADO:        "Revisado",
     // Firma del trabajador
     FIRMA_S3_KEY:      "Firma_S3_Key",
@@ -121,7 +120,7 @@ export const FIELDS = {
     FECHA_CREACION: "Fecha Creación",
     ADJUNTOS:       "Documentación Adicional",
   },
-  DIAS_PACTO: {
+  DIAS_SIRIANOS: {
     ID_COLABORADOR:   "id_colaborador_core",
     SALDO_DISPONIBLE: "saldo_disponible",
     SALDO_USADO:      "saldo_usado",
@@ -186,5 +185,5 @@ export const FIELDS_AUTORIZACION = {
   FECHA_FIRMA:        "Fecha_Firma_Autorizador",
 } as const;
 
-// ── Periodo actual de días de pacto ───────────────────────────────────────────
+// ── Periodo actual de días sirianos ───────────────────────────────────────────
 export const PERIODO_ACTUAL = "2026-S2";

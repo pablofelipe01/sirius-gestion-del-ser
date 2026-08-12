@@ -65,8 +65,8 @@ export const S3_CONFIG = {
     FIRMAS_CONTRATOS: "firmas/contratos",
     // Firmas de quien autoriza una solicitud (distintas de las del trabajador)
     FIRMAS_AUTORIZACIONES: "firmas/autorizaciones",
-    // PDFs de permisos de día de pacto (documentos ya autorizados)
-    PDF_PERMISOS_PACTO: "permisos/dias-pacto",
+    // PDFs de permisos de día siriano (documentos ya autorizados)
+    PDF_PERMISOS_SIRIANOS: "permisos/dias-sirianos",
     // PDFs de solicitudes resueltas por el flujo de autorización
     PDF_AUTORIZACIONES: "autorizaciones",
   },

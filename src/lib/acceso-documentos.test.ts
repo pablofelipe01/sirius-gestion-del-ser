@@ -197,8 +197,18 @@ describe("recursoCoincide", () => {
     expect(recursoCoincide("documento", FIRMA_DUEÑO, DUEÑO)).toBe(false);
   });
 
-  it("acepta ambos orígenes de documento: día de pacto y flujo de autorización", () => {
+  it("acepta ambos orígenes de documento: día siriano y flujo de autorización", () => {
     expect(recursoCoincide("documento", PDF, DUEÑO)).toBe(true);
+    expect(
+      recursoCoincide(
+        "documento",
+        "permisos/dias-sirianos/2026/08/SIRIUS-PER-0002_1006774686_2026-08-04_1785877971866.pdf",
+        DUEÑO,
+      ),
+    ).toBe(true);
+  });
+
+  it("sigue aceptando el prefijo dias-pacto anterior al renombre", () => {
     expect(
       recursoCoincide(
         "documento",

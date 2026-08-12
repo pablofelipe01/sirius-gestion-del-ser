@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 import { Suspense } from "react";
 import { verifyJWT } from "@/lib/auth";
 import { SolicitudesOverview } from "@sirius/solicitudes";
-import { DiasPactoWidget } from "@/components/DiasPactoWidget";
+import { DiasSirianosWidget } from "@/components/DiasSirianosWidget";
 import DashboardAutorizaciones from "@/components/DashboardAutorizaciones";
 
 export default async function SolicitudesPage() {
@@ -15,13 +15,13 @@ export default async function SolicitudesPage() {
   return (
     <>
       {/*
-        El widget de días de pacto entra como slot del overview y no antes: en
+        El widget de días sirianos entra como slot del overview y no antes: en
         esta vista el título va primero, sobre el cielo, y meter un aviso encima
         del encabezado partía la composición en dos.
       */}
       <SolicitudesOverview idCore={payload.idCore} nombre={payload.nombre}>
         <Suspense fallback={<div className="glass h-24 animate-pulse rounded-2xl print:hidden" />}>
-          <DiasPactoWidget />
+          <DiasSirianosWidget />
         </Suspense>
       </SolicitudesOverview>
 

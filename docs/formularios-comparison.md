@@ -9,11 +9,11 @@
 | Funcionalidad | Estado | Descripción |
 |---------------|--------|-------------|
 | Campos auto-llenados | ✅ | Nombre, cédula, cargo, ID empleado |
-| Tipo de permiso | ✅ | 8 opciones (incluye "Día de pacto") |
+| Tipo de permiso | ✅ | 8 opciones (incluye "Día siriano") |
 | Selector de modalidad | ✅ | Por días / Por horas (máx. 4) |
 | Calendario visual | ✅ | Selección múltiple de fechas |
-| Días de pacto | ✅ | Validación de saldo disponible |
-| Políticas visuales | ✅ | Banner informativo para días de pacto |
+| Días sirianos | ✅ | Validación de saldo disponible |
+| Políticas visuales | ✅ | Banner informativo para días sirianos |
 | Campo motivo | ✅ | Textarea obligatorio |
 | **Nota de voz** | ✅ | Web Speech API español-CO |
 | **Firma digital** | ✅ | Canvas obligatorio + upload S3 |
@@ -201,7 +201,7 @@ if (body.firmaBase64) {
 | **Validación firma** | ✅ | ✅ | ➖ No aplica |
 | **Pantalla éxito completa** | ✅ | ✅ | ✅ |
 | **Calendario visual** | ✅ | ❌ | N/A |
-| **Cálculo automático** | ✅ (días pacto) | ✅ (días calendario) | N/A |
+| **Cálculo automático** | ✅ (días sirianos) | ✅ (días calendario) | N/A |
 | **Campos Airtable** | ✅ | ⚠️ Pendiente | ➖ No aplica |
 
 ---

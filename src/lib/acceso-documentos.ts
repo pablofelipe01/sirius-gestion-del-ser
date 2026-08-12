@@ -162,9 +162,11 @@ export function recursoCoincide(
   dueñoIdCore: string,
 ): boolean {
   if (clase === "documento") {
-    // PDFs: día de pacto o flujo de autorización.
+    // PDFs: día siriano o flujo de autorización. `dias-pacto` es el prefijo con
+    // el que se archivaron los documentos antes del renombre — sus keys viven en
+    // Airtable y sin él quedarían inaccesibles.
     return (
-      /^permisos\/dias-pacto\//.test(s3Key) ||
+      /^permisos\/dias-(sirianos|pacto)\//.test(s3Key) ||
       /^autorizaciones\/(permiso|vacaciones)\//.test(s3Key)
     );
   }

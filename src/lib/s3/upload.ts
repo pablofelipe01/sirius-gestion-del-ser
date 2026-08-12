@@ -123,13 +123,16 @@ export function validateS3Key(s3Key: string): boolean {
   // Firmas:  firmas/{tipo}/{idCore}/{timestamp}_{cedula}.png
   const firmas =
     /^firmas\/(permisos|vacaciones|contratos|autorizaciones)\/SIRIUS-PER-\d{4}\/\d+_\d+\.png$/;
-  // PDFs de día de pacto: permisos/dias-pacto/{año}/{mes}/{idCore}_{cedula}_{fecha}_{timestamp}.pdf
-  const pdfPacto =
-    /^permisos\/dias-pacto\/\d{4}\/\d{2}\/SIRIUS-PER-\d{4}_\d+_\d{4}-\d{2}-\d{2}_\d+\.pdf$/;
+  // PDFs de día siriano: permisos/dias-sirianos/{año}/{mes}/{idCore}_{cedula}_{fecha}_{timestamp}.pdf
+  // Se acepta también el prefijo `dias-pacto` con el que se archivaron los
+  // documentos antes del renombre: sus keys ya están guardadas en Airtable y
+  // rechazarlas dejaría inaccesibles PDFs firmados que sí existen en el bucket.
+  const pdfSiriano =
+    /^permisos\/dias-(sirianos|pacto)\/\d{4}\/\d{2}\/SIRIUS-PER-\d{4}_\d+_\d{4}-\d{2}-\d{2}_\d+\.pdf$/;
   // PDFs de autorización: autorizaciones/{tipo}/{año}/{mes}/{idCore}_{recordId}_{timestamp}.pdf
   const pdfAutorizacion =
     /^autorizaciones\/(permiso|vacaciones)\/\d{4}\/\d{2}\/SIRIUS-PER-\d{4}_rec[A-Za-z0-9]+_\d+\.pdf$/;
-  return firmas.test(s3Key) || pdfPacto.test(s3Key) || pdfAutorizacion.test(s3Key);
+  return firmas.test(s3Key) || pdfSiriano.test(s3Key) || pdfAutorizacion.test(s3Key);
 }
 
 export interface UploadPdfAutorizacionParams {
@@ -215,11 +218,11 @@ export async function uploadPdfAutorizacion(
   }
 }
 
-export interface UploadPdfPermisoPactoParams {
+export interface UploadPdfPermisoSirianoParams {
   pdf: Uint8Array;
   cedula: string;
   idCore: string;
-  /** Día de pacto autorizado, ISO "YYYY-MM-DD" — organiza el archivo por año/mes. */
+  /** Día siriano autorizado, ISO "YYYY-MM-DD" — organiza el archivo por año/mes. */
   fechaPermiso: string;
   metadata?: Record<string, string>;
 }
@@ -233,13 +236,13 @@ export interface UploadPdfResult extends UploadFirmaResult {
 }
 
 /**
- * Archiva en S3 el PDF de un permiso de día de pacto ya autorizado.
+ * Archiva en S3 el PDF de un permiso de día siriano ya autorizado.
  *
- * Estructura: permisos/dias-pacto/{año}/{mes}/{idCore}_{cedula}_{fecha}_{timestamp}.pdf
- * Ejemplo:    permisos/dias-pacto/2026/07/SIRIUS-PER-0002_1006774686_2026-07-31_1785442156866.pdf
+ * Estructura: permisos/dias-sirianos/{año}/{mes}/{idCore}_{cedula}_{fecha}_{timestamp}.pdf
+ * Ejemplo:    permisos/dias-sirianos/2026/07/SIRIUS-PER-0002_1006774686_2026-07-31_1785442156866.pdf
  */
-export async function uploadPdfPermisoPacto(
-  params: UploadPdfPermisoPactoParams
+export async function uploadPdfPermisoSiriano(
+  params: UploadPdfPermisoSirianoParams
 ): Promise<UploadPdfResult> {
   const { pdf, cedula, idCore, fechaPermiso, metadata = {} } = params;
 
@@ -254,7 +257,7 @@ export async function uploadPdfPermisoPacto(
 
   const timestamp = Date.now();
   const filename = `${idCore}_${cedula}_${fechaPermiso}_${timestamp}.pdf`;
-  const s3Key = `${S3_CONFIG.PATHS.PDF_PERMISOS_PACTO}/${anio}/${mes}/${filename}`;
+  const s3Key = `${S3_CONFIG.PATHS.PDF_PERMISOS_SIRIANOS}/${anio}/${mes}/${filename}`;
   const uploadedAt = new Date().toISOString();
   const buffer = Buffer.from(pdf);
   const sha256 = createHash("sha256").update(buffer).digest("hex");
@@ -262,7 +265,7 @@ export async function uploadPdfPermisoPacto(
   const auditMetadata: Record<string, string> = {
     cedula,
     idCore,
-    tipo: "permiso-dia-pacto",
+    tipo: "permiso-dia-siriano",
     fechaPermiso,
     estado: "autorizado",
     sha256,

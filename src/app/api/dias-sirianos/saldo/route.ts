@@ -19,10 +19,10 @@ export async function GET() {
   const periodo = escapeAirtableValue(PERIODO_ACTUAL);
 
   const formula = encodeURIComponent(
-    `AND({${FIELDS.DIAS_PACTO.ID_COLABORADOR}}='${idCore}', {${FIELDS.DIAS_PACTO.PERIODO}}='${periodo}')`
+    `AND({${FIELDS.DIAS_SIRIANOS.ID_COLABORADOR}}='${idCore}', {${FIELDS.DIAS_SIRIANOS.PERIODO}}='${periodo}')`
   );
 
-  const url = `https://api.airtable.com/v0/${BASE}/${encodeURIComponent(TABLES.DIAS_PACTO)}?filterByFormula=${formula}`;
+  const url = `https://api.airtable.com/v0/${BASE}/${encodeURIComponent(TABLES.DIAS_SIRIANOS)}?filterByFormula=${formula}`;
 
   const res = await fetch(url, {
     headers: { Authorization: `Bearer ${KEY}` },
@@ -31,7 +31,7 @@ export async function GET() {
 
   if (!res.ok) {
     const error = await res.text();
-    console.error("[dias-pacto/saldo GET]", error);
+    console.error("[dias-sirianos/saldo GET]", error);
     return NextResponse.json({ error: "Error al consultar Airtable" }, { status: 500 });
   }
 
@@ -51,9 +51,9 @@ export async function GET() {
   const fields = record.fields;
 
   return NextResponse.json({
-    saldo_disponible: fields[FIELDS.DIAS_PACTO.SALDO_DISPONIBLE] ?? 0,
-    saldo_usado: fields[FIELDS.DIAS_PACTO.SALDO_USADO] ?? 0,
-    periodo: fields[FIELDS.DIAS_PACTO.PERIODO] ?? PERIODO_ACTUAL,
-    fecha_ultimo_uso: fields[FIELDS.DIAS_PACTO.FECHA_ULTIMO_USO] ?? null,
+    saldo_disponible: fields[FIELDS.DIAS_SIRIANOS.SALDO_DISPONIBLE] ?? 0,
+    saldo_usado: fields[FIELDS.DIAS_SIRIANOS.SALDO_USADO] ?? 0,
+    periodo: fields[FIELDS.DIAS_SIRIANOS.PERIODO] ?? PERIODO_ACTUAL,
+    fecha_ultimo_uso: fields[FIELDS.DIAS_SIRIANOS.FECHA_ULTIMO_USO] ?? null,
   });
 }

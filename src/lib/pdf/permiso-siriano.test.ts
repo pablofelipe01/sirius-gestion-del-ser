@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { PDFDocument } from "pdf-lib";
-import { generarPdfPermisoPacto } from "./permiso-pacto";
+import { generarPdfPermisoSiriano } from "./permiso-siriano";
 
 // PNG 2x2 válido — simula la firma capturada en el canvas.
 const FIRMA_PNG =
@@ -19,9 +19,9 @@ const BASE = {
   saldoRestante: 1,
 };
 
-describe("generarPdfPermisoPacto", () => {
+describe("generarPdfPermisoSiriano", () => {
   it("emite un PDF de una página con la firma incrustada", async () => {
-    const bytes = await generarPdfPermisoPacto({ ...BASE, firmaBase64: FIRMA_PNG });
+    const bytes = await generarPdfPermisoSiriano({ ...BASE, firmaBase64: FIRMA_PNG });
 
     const doc = await PDFDocument.load(bytes);
     expect(doc.getPageCount()).toBe(1);
@@ -29,13 +29,13 @@ describe("generarPdfPermisoPacto", () => {
   });
 
   it("no falla si la firma no es un PNG válido", async () => {
-    const bytes = await generarPdfPermisoPacto({ ...BASE, firmaBase64: "no-es-png" });
+    const bytes = await generarPdfPermisoSiriano({ ...BASE, firmaBase64: "no-es-png" });
 
     expect((await PDFDocument.load(bytes)).getPageCount()).toBe(1);
   });
 
   it("mantiene una sola página con un motivo muy largo", async () => {
-    const bytes = await generarPdfPermisoPacto({
+    const bytes = await generarPdfPermisoSiriano({
       ...BASE,
       motivo: "Motivo extenso con acentos áéíóúñ. ".repeat(80),
       firmaBase64: FIRMA_PNG,
@@ -45,7 +45,7 @@ describe("generarPdfPermisoPacto", () => {
   });
 
   it("acepta motivo vacío y saldo en cero", async () => {
-    const bytes = await generarPdfPermisoPacto({ ...BASE, motivo: "", saldoRestante: 0 });
+    const bytes = await generarPdfPermisoSiriano({ ...BASE, motivo: "", saldoRestante: 0 });
 
     expect((await PDFDocument.load(bytes)).getPageCount()).toBe(1);
   });

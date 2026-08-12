@@ -3,9 +3,9 @@
  */
 
 export {
-  generarPdfPermisoPacto,
-  type PermisoPactoPdfParams,
-} from "./permiso-pacto";
+  generarPdfPermisoSiriano,
+  type PermisoSirianoPdfParams,
+} from "./permiso-siriano";
 
 export {
   generarPdfAutorizacion,

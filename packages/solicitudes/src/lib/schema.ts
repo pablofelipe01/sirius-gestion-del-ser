@@ -27,7 +27,7 @@ export const FIELDS = {
     COMPENSADO:           "Compensado",
     FECHA_COMP:           "Fecha de compensatorio",
     ESTADO:               "Estado_Permiso",
-    DIAS_PACTO_LINK:      "Dias_Pacto",  // Relación multipleRecordLinks → tabla Dias_Pacto
+    DIAS_SIRIANOS_LINK:   "Dias_Sirianos",  // Relación multipleRecordLinks → tabla Dias_Sirianos
     REVISADO:             "Revisado",
     FIRMA_S3_KEY:         "Firma_S3_Key",
     FECHA_FIRMA_TRAB:     "Fecha_Firma_Trabajador",

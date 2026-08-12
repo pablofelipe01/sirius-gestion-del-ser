@@ -503,12 +503,19 @@ if (body.firmaBase64) {
 
 ```
 firmas/{permisos|vacaciones|contratos|autorizaciones}/{idCore}/{timestamp}_{cedula}.png
-permisos/dias-pacto/{año}/{mes}/{idCore}_{cedula}_{fecha}_{timestamp}.pdf
+permisos/dias-sirianos/{año}/{mes}/{idCore}_{cedula}_{fecha}_{timestamp}.pdf
 autorizaciones/{permiso|vacaciones|novedades}/{año}/{mes}/{idCore}_{recordId}_{timestamp}.pdf
 ```
 
 Todo S3 key nuevo debe añadirse a `validateS3Key()` en `src/lib/s3/upload.ts`, o
 `/api/documentos` lo rechazará.
+
+⚠️ **`permisos/dias-pacto/` sigue siendo un prefijo válido de lectura.** Es el
+nombre que tenía la carpeta antes de que los «días de pacto» pasaran a llamarse
+**días sirianos**, y esas keys están guardadas en `PDF_Autorizacion_S3_Key` de
+permisos ya emitidos: quitarlo de `validateS3Key()` y de `recursoCoincide()`
+dejaría inaccesibles PDFs firmados que sí existen en el bucket. Solo se escribe
+bajo `dias-sirianos/`.
 
 ### Planes de compensación de un permiso
 

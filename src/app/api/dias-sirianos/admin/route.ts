@@ -24,29 +24,29 @@ export async function GET() {
 
   const periodo = escapeAirtableValue(PERIODO_ACTUAL);
 
-  // 1. Obtener todos los registros de Dias_Pacto del periodo actual
-  const formula = encodeURIComponent(`{${FIELDS.DIAS_PACTO.PERIODO}}='${periodo}'`);
-  const sort = encodeURIComponent(FIELDS.DIAS_PACTO.SALDO_USADO);
+  // 1. Obtener todos los registros de Dias_Sirianos del periodo actual
+  const formula = encodeURIComponent(`{${FIELDS.DIAS_SIRIANOS.PERIODO}}='${periodo}'`);
+  const sort = encodeURIComponent(FIELDS.DIAS_SIRIANOS.SALDO_USADO);
 
-  const urlDiasPacto = `https://api.airtable.com/v0/${BASE_NOVEDADES}/${encodeURIComponent(TABLES.DIAS_PACTO)}?filterByFormula=${formula}&sort[0][field]=${sort}&sort[0][direction]=desc`;
+  const urlDiasSirianos = `https://api.airtable.com/v0/${BASE_NOVEDADES}/${encodeURIComponent(TABLES.DIAS_SIRIANOS)}?filterByFormula=${formula}&sort[0][field]=${sort}&sort[0][direction]=desc`;
 
-  const resDiasPacto = await fetch(urlDiasPacto, {
+  const resDiasSirianos = await fetch(urlDiasSirianos, {
     headers: { Authorization: `Bearer ${KEY_NOVEDADES}` },
     cache: "no-store",
   });
 
-  if (!resDiasPacto.ok) {
-    const error = await resDiasPacto.text();
-    console.error("[dias-pacto/admin GET Dias_Pacto]", error);
-    return NextResponse.json({ error: "Error al consultar Dias_Pacto" }, { status: 500 });
+  if (!resDiasSirianos.ok) {
+    const error = await resDiasSirianos.text();
+    console.error("[dias-sirianos/admin GET Dias_Sirianos]", error);
+    return NextResponse.json({ error: "Error al consultar Dias_Sirianos" }, { status: 500 });
   }
 
-  const dataDiasPacto = await resDiasPacto.json();
-  const recordsDiasPacto = dataDiasPacto.records ?? [];
+  const dataDiasSirianos = await resDiasSirianos.json();
+  const recordsDiasSirianos = dataDiasSirianos.records ?? [];
 
   // 2. Obtener nombres de colaboradores desde Personal
-  const idsCore = recordsDiasPacto
-    .map((r: { fields: Record<string, unknown> }) => r.fields[FIELDS.DIAS_PACTO.ID_COLABORADOR])
+  const idsCore = recordsDiasSirianos
+    .map((r: { fields: Record<string, unknown> }) => r.fields[FIELDS.DIAS_SIRIANOS.ID_COLABORADOR])
     .filter(Boolean)
     .map((id: unknown) => `'${escapeAirtableValue(String(id))}'`)
     .join(",");
@@ -56,8 +56,8 @@ export async function GET() {
   }
 
   const formulaPersonal = encodeURIComponent(
-    `OR(${recordsDiasPacto.map((r: { fields: Record<string, unknown> }) => {
-      const idCore = r.fields[FIELDS.DIAS_PACTO.ID_COLABORADOR];
+    `OR(${recordsDiasSirianos.map((r: { fields: Record<string, unknown> }) => {
+      const idCore = r.fields[FIELDS.DIAS_SIRIANOS.ID_COLABORADOR];
       return `{${FIELDS.PERSONAL.ID_EMPLEADO}}='${escapeAirtableValue(String(idCore))}'`;
     }).join(",")})`
   );
@@ -71,7 +71,7 @@ export async function GET() {
 
   if (!resPersonal.ok) {
     const error = await resPersonal.text();
-    console.error("[dias-pacto/admin GET Personal]", error);
+    console.error("[dias-sirianos/admin GET Personal]", error);
     return NextResponse.json({ error: "Error al consultar Personal" }, { status: 500 });
   }
 
@@ -89,18 +89,18 @@ export async function GET() {
   }
 
   // 4. Combinar datos
-  const resultado = recordsDiasPacto.map((r: { fields: Record<string, unknown> }) => {
-    const idCore = String(r.fields[FIELDS.DIAS_PACTO.ID_COLABORADOR] ?? "");
+  const resultado = recordsDiasSirianos.map((r: { fields: Record<string, unknown> }) => {
+    const idCore = String(r.fields[FIELDS.DIAS_SIRIANOS.ID_COLABORADOR] ?? "");
     const nombre = mapaNombres.get(idCore) ?? "Desconocido";
 
     return {
       id_colaborador: idCore,
       nombre,
-      saldo_disponible: r.fields[FIELDS.DIAS_PACTO.SALDO_DISPONIBLE] ?? 0,
-      saldo_usado: r.fields[FIELDS.DIAS_PACTO.SALDO_USADO] ?? 0,
-      periodo: r.fields[FIELDS.DIAS_PACTO.PERIODO] ?? PERIODO_ACTUAL,
-      fecha_ultimo_uso: r.fields[FIELDS.DIAS_PACTO.FECHA_ULTIMO_USO] ?? null,
-      estado: r.fields[FIELDS.DIAS_PACTO.ESTADO] ?? "Activo",
+      saldo_disponible: r.fields[FIELDS.DIAS_SIRIANOS.SALDO_DISPONIBLE] ?? 0,
+      saldo_usado: r.fields[FIELDS.DIAS_SIRIANOS.SALDO_USADO] ?? 0,
+      periodo: r.fields[FIELDS.DIAS_SIRIANOS.PERIODO] ?? PERIODO_ACTUAL,
+      fecha_ultimo_uso: r.fields[FIELDS.DIAS_SIRIANOS.FECHA_ULTIMO_USO] ?? null,
+      estado: r.fields[FIELDS.DIAS_SIRIANOS.ESTADO] ?? "Activo",
     };
   });
 

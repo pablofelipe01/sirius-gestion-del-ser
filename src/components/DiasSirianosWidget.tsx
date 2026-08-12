@@ -2,22 +2,22 @@
 
 import { useEffect, useState } from "react";
 
-type DiasPactoData = {
+type DiasSirianosData = {
   saldo_disponible: number;
   saldo_usado: number;
   periodo: string;
   fecha_ultimo_uso: string | null;
 };
 
-export function DiasPactoWidget() {
-  const [data, setData] = useState<DiasPactoData | null>(null);
+export function DiasSirianosWidget() {
+  const [data, setData] = useState<DiasSirianosData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    fetch("/api/dias-pacto/saldo")
+    fetch("/api/dias-sirianos/saldo")
       .then((res) => {
-        if (!res.ok) throw new Error("Error al cargar días de pacto");
+        if (!res.ok) throw new Error("Error al cargar días sirianos");
         return res.json();
       })
       .then((json) => {
@@ -25,7 +25,7 @@ export function DiasPactoWidget() {
         setLoading(false);
       })
       .catch((err) => {
-        console.error("[DiasPactoWidget]", err);
+        console.error("[DiasSirianosWidget]", err);
         setError(err.message);
         setLoading(false);
       });
@@ -55,13 +55,13 @@ export function DiasPactoWidget() {
   let acento: string;
 
   if (saldo_disponible === 2) {
-    mensaje = "Tienes 2 días de pacto disponibles";
+    mensaje = "Tienes 2 días sirianos disponibles";
     acento = "#22c55e";
   } else if (saldo_disponible === 1) {
-    mensaje = "Te queda 1 día de pacto disponible";
+    mensaje = "Te queda 1 día siriano disponible";
     acento = "#eab308";
   } else {
-    mensaje = "Ya usaste tus días de pacto. Cualquier permiso adicional debe negociarse con tu jefe.";
+    mensaje = "Ya usaste tus días sirianos. Cualquier permiso adicional debe negociarse con tu jefe.";
     acento = "#ef4444";
   }
 
@@ -89,7 +89,7 @@ export function DiasPactoWidget() {
       </div>
 
       <div className="relative flex-1">
-        <h3 className="text-sm font-semibold text-white/90">Días de Pacto {periodo}</h3>
+        <h3 className="text-sm font-semibold text-white/90">Días Sirianos {periodo}</h3>
         <p className="mt-1 text-xs leading-relaxed text-white/80">{mensaje}</p>
         {fecha_ultimo_uso && (
           <p className="mt-2 text-xs text-white/60">

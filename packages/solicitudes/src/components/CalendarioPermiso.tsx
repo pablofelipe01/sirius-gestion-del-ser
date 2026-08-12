@@ -5,7 +5,7 @@ import { esFestivo } from "../lib/festivos";
 import { Icon, ICON_CHEVRON_LEFT, ICON_CHEVRON_RIGHT, MODULOS, formatFecha } from "./ui";
 
 /**
- * `multiple` — días independientes (permisos, días de pacto).
+ * `multiple` — días independientes (permisos, días sirianos).
  * `rango`    — período: el primer clic fija el inicio y el segundo el fin. Una vez
  *              cerrado el período, cada clic agrega o quita un día puntual.
  */

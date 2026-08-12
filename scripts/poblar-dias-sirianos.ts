@@ -1,10 +1,10 @@
 #!/usr/bin/env tsx
 /**
- * Script para poblar tabla Dias_Pacto con registros iniciales
+ * Script para poblar tabla Dias_Sirianos con registros iniciales
  * de todos los colaboradores activos en Personal.
  *
  * Uso:
- *   npx tsx scripts/poblar-dias-pacto.ts
+ *   npx tsx scripts/poblar-dias-sirianos.ts
  *
  * Requisitos:
  *   - Variables de entorno configuradas en .env.local
@@ -17,7 +17,7 @@ const BASE_NOVEDADES = process.env.AIRTABLE_BASE_ID_NOVEDADES_NOMINA!;
 const KEY_NOVEDADES = process.env.AIRTABLE_API_KEY_NOVEDADES_NOMINA!;
 
 const TABLE_PERSONAL = "Personal";
-const TABLE_DIAS_PACTO = "Dias_Pacto";
+const TABLE_DIAS_SIRIANOS = "Dias_Sirianos";
 const PERIODO_ACTUAL = "2026-S2";
 
 type PersonalRecord = {
@@ -29,7 +29,7 @@ type PersonalRecord = {
   };
 };
 
-type DiasPactoFields = {
+type DiasSirianosFields = {
   id_colaborador_core: string;
   saldo_disponible: number;
   saldo_usado: number;
@@ -60,9 +60,9 @@ async function fetchColaboradoresActivos(): Promise<PersonalRecord[]> {
 }
 
 async function verificarRegistrosExistentes(): Promise<Set<string>> {
-  console.log("\n🔍 Verificando registros existentes en Dias_Pacto...");
+  console.log("\n🔍 Verificando registros existentes en Dias_Sirianos...");
 
-  const url = `https://api.airtable.com/v0/${BASE_NOVEDADES}/${encodeURIComponent(TABLE_DIAS_PACTO)}`;
+  const url = `https://api.airtable.com/v0/${BASE_NOVEDADES}/${encodeURIComponent(TABLE_DIAS_SIRIANOS)}`;
 
   const res = await fetch(url, {
     headers: { Authorization: `Bearer ${KEY_NOVEDADES}` },
@@ -70,7 +70,7 @@ async function verificarRegistrosExistentes(): Promise<Set<string>> {
 
   if (!res.ok) {
     const error = await res.text();
-    throw new Error(`Error fetching Dias_Pacto: ${res.status} - ${error}`);
+    throw new Error(`Error fetching Dias_Sirianos: ${res.status} - ${error}`);
   }
 
   const data = await res.json();
@@ -85,12 +85,12 @@ async function verificarRegistrosExistentes(): Promise<Set<string>> {
   return existentes;
 }
 
-async function crearRegistrosBatch(registros: DiasPactoFields[]): Promise<void> {
+async function crearRegistrosBatch(registros: DiasSirianosFields[]): Promise<void> {
   if (registros.length === 0) return;
 
-  console.log(`\n📤 Creando ${registros.length} registros en Dias_Pacto...`);
+  console.log(`\n📤 Creando ${registros.length} registros en Dias_Sirianos...`);
 
-  const url = `https://api.airtable.com/v0/${BASE_NOVEDADES}/${encodeURIComponent(TABLE_DIAS_PACTO)}`;
+  const url = `https://api.airtable.com/v0/${BASE_NOVEDADES}/${encodeURIComponent(TABLE_DIAS_SIRIANOS)}`;
 
   // Airtable permite máximo 10 records por batch
   const BATCH_SIZE = 10;
@@ -129,7 +129,7 @@ async function crearRegistrosBatch(registros: DiasPactoFields[]): Promise<void> 
 }
 
 async function main() {
-  console.log("🚀 Iniciando poblado de tabla Dias_Pacto\n");
+  console.log("🚀 Iniciando poblado de tabla Dias_Sirianos\n");
   console.log(`   Base Nómina: ${BASE_NOMINA}`);
   console.log(`   Base Novedades: ${BASE_NOVEDADES}`);
   console.log(`   Periodo: ${PERIODO_ACTUAL}\n`);
@@ -147,7 +147,7 @@ async function main() {
     const existentes = await verificarRegistrosExistentes();
 
     // 3. Filtrar colaboradores que no tienen registro
-    const nuevos: DiasPactoFields[] = [];
+    const nuevos: DiasSirianosFields[] = [];
     const omitidos: string[] = [];
 
     for (const collab of colaboradores) {

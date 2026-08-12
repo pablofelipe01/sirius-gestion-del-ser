@@ -27,10 +27,10 @@ export async function POST(req: NextRequest) {
 
   // 1. Buscar registro actual
   const formula = encodeURIComponent(
-    `AND({${FIELDS.DIAS_PACTO.ID_COLABORADOR}}='${idCore}', {${FIELDS.DIAS_PACTO.PERIODO}}='${periodo}')`
+    `AND({${FIELDS.DIAS_SIRIANOS.ID_COLABORADOR}}='${idCore}', {${FIELDS.DIAS_SIRIANOS.PERIODO}}='${periodo}')`
   );
 
-  const urlGet = `https://api.airtable.com/v0/${BASE}/${encodeURIComponent(TABLES.DIAS_PACTO)}?filterByFormula=${formula}`;
+  const urlGet = `https://api.airtable.com/v0/${BASE}/${encodeURIComponent(TABLES.DIAS_SIRIANOS)}?filterByFormula=${formula}`;
 
   const resGet = await fetch(urlGet, {
     headers: { Authorization: `Bearer ${KEY}` },
@@ -39,7 +39,7 @@ export async function POST(req: NextRequest) {
 
   if (!resGet.ok) {
     const error = await resGet.text();
-    console.error("[dias-pacto/usar GET]", error);
+    console.error("[dias-sirianos/usar GET]", error);
     return NextResponse.json({ error: "Error al consultar Airtable" }, { status: 500 });
   }
 
@@ -48,7 +48,7 @@ export async function POST(req: NextRequest) {
 
   if (records.length === 0) {
     return NextResponse.json(
-      { error: "No se encontró registro de días de pacto para este periodo" },
+      { error: "No se encontró registro de días sirianos para este periodo" },
       { status: 404 }
     );
   }
@@ -57,22 +57,22 @@ export async function POST(req: NextRequest) {
   const recordId = record.id;
   const fields = record.fields;
 
-  const saldoDisponible = (fields[FIELDS.DIAS_PACTO.SALDO_DISPONIBLE] ?? 0) as number;
-  const saldoUsado = (fields[FIELDS.DIAS_PACTO.SALDO_USADO] ?? 0) as number;
+  const saldoDisponible = (fields[FIELDS.DIAS_SIRIANOS.SALDO_DISPONIBLE] ?? 0) as number;
+  const saldoUsado = (fields[FIELDS.DIAS_SIRIANOS.SALDO_USADO] ?? 0) as number;
 
   // 2. Validar saldo disponible
   if (saldoDisponible <= 0) {
     return NextResponse.json(
-      { error: "Sin días de pacto disponibles" },
+      { error: "Sin días sirianos disponibles" },
       { status: 400 }
     );
   }
 
   // 3. Actualizar registro
-  const observacionesActuales = (fields[FIELDS.DIAS_PACTO.OBSERVACIONES] ?? "") as string;
+  const observacionesActuales = (fields[FIELDS.DIAS_SIRIANOS.OBSERVACIONES] ?? "") as string;
   const nuevaObservacion = motivo
     ? `${fecha_uso}: ${motivo}`
-    : `${fecha_uso}: Día de pacto usado`;
+    : `${fecha_uso}: Día siriano usado`;
   const observacionesActualizadas = observacionesActuales
     ? `${observacionesActuales}\n${nuevaObservacion}`
     : nuevaObservacion;
@@ -81,7 +81,7 @@ export async function POST(req: NextRequest) {
   const nuevoSaldoUsado = saldoUsado + 1;
   const nuevoEstado = nuevoSaldoDisponible === 0 ? "Agotado" : "Activo";
 
-  const urlPatch = `https://api.airtable.com/v0/${BASE}/${encodeURIComponent(TABLES.DIAS_PACTO)}/${recordId}`;
+  const urlPatch = `https://api.airtable.com/v0/${BASE}/${encodeURIComponent(TABLES.DIAS_SIRIANOS)}/${recordId}`;
 
   const resPatch = await fetch(urlPatch, {
     method: "PATCH",
@@ -91,18 +91,18 @@ export async function POST(req: NextRequest) {
     },
     body: JSON.stringify({
       fields: {
-        [FIELDS.DIAS_PACTO.SALDO_DISPONIBLE]: nuevoSaldoDisponible,
-        [FIELDS.DIAS_PACTO.SALDO_USADO]: nuevoSaldoUsado,
-        [FIELDS.DIAS_PACTO.FECHA_ULTIMO_USO]: fecha_uso,
-        [FIELDS.DIAS_PACTO.OBSERVACIONES]: observacionesActualizadas,
-        [FIELDS.DIAS_PACTO.ESTADO]: nuevoEstado,
+        [FIELDS.DIAS_SIRIANOS.SALDO_DISPONIBLE]: nuevoSaldoDisponible,
+        [FIELDS.DIAS_SIRIANOS.SALDO_USADO]: nuevoSaldoUsado,
+        [FIELDS.DIAS_SIRIANOS.FECHA_ULTIMO_USO]: fecha_uso,
+        [FIELDS.DIAS_SIRIANOS.OBSERVACIONES]: observacionesActualizadas,
+        [FIELDS.DIAS_SIRIANOS.ESTADO]: nuevoEstado,
       },
     }),
   });
 
   if (!resPatch.ok) {
     const error = await resPatch.text();
-    console.error("[dias-pacto/usar PATCH]", error);
+    console.error("[dias-sirianos/usar PATCH]", error);
     return NextResponse.json({ error: "Error al actualizar registro" }, { status: 500 });
   }
 

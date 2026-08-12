@@ -1,28 +1,28 @@
 /**
- * Generación del PDF de un permiso por Día de Pacto.
+ * Generación del PDF de un permiso por Día Siriano.
  *
- * Los días de pacto son un beneficio ya concedido por la empresa: no pasan por
+ * Los días sirianos son un beneficio ya concedido por la empresa: no pasan por
  * el flujo de autorización, así que el PDF se emite directamente como documento
- * autorizado y se archiva en S3 (ver uploadPdfPermisoPacto).
+ * autorizado y se archiva en S3 (ver uploadPdfPermisoSiriano).
  */
 
 import { PDFDocument, StandardFonts, rgb, type PDFFont, type PDFPage } from "pdf-lib";
 import { LOGO_PROPORCION, LOGO_SIRIUS_BASE64 } from "./logo";
 
-export interface PermisoPactoPdfParams {
+export interface PermisoSirianoPdfParams {
   /** ID del registro en Solicitud_Permiso (recXXX) — sirve de folio del documento. */
   solicitudId: string;
   nombre: string;
   cedula: string;
   cargo: string;
   idCore: string;
-  /** Día de pacto solicitado, ISO "YYYY-MM-DD". */
+  /** Día siriano solicitado, ISO "YYYY-MM-DD". */
   fechaPermiso: string;
   /** Fecha en que se radicó la solicitud, ISO "YYYY-MM-DD". */
   fechaSolicitud: string;
   motivo: string;
   periodo: string;
-  /** Saldo de días de pacto que queda tras este permiso. */
+  /** Saldo de días sirianos que queda tras este permiso. */
   saldoRestante: number;
   /** Firma del trabajador en PNG base64 (sin el prefijo data:). */
   firmaBase64?: string;
@@ -96,16 +96,16 @@ function campo(
 }
 
 /**
- * Construye el PDF del permiso de día de pacto ya autorizado.
+ * Construye el PDF del permiso de día siriano ya autorizado.
  *
  * @returns Bytes del PDF listos para subir a S3.
  */
-export async function generarPdfPermisoPacto(
-  params: PermisoPactoPdfParams,
+export async function generarPdfPermisoSiriano(
+  params: PermisoSirianoPdfParams,
 ): Promise<Uint8Array> {
   const doc = await PDFDocument.create();
-  doc.setTitle(`Permiso Día de Pacto — ${params.nombre}`);
-  doc.setSubject("Permiso de Día de Pacto autorizado");
+  doc.setTitle(`Permiso Día Siriano — ${params.nombre}`);
+  doc.setSubject("Permiso de Día Siriano autorizado");
   doc.setProducer("Sirius Gestión del Ser");
   doc.setCreator("Sirius Gestión del Ser");
 
@@ -131,7 +131,7 @@ export async function generarPdfPermisoPacto(
       width: LOGO_ALTO * LOGO_PROPORCION,
     });
   } catch (error) {
-    console.error("[pdf dia-pacto] No se pudo incrustar el logo:", error);
+    console.error("[pdf dia-siriano] No se pudo incrustar el logo:", error);
   }
 
   page.drawText("SIRIUS REGENERATIVE SOLUTIONS", {
@@ -143,7 +143,7 @@ export async function generarPdfPermisoPacto(
   });
   y -= 26;
 
-  page.drawText("Permiso por Día de Pacto", { x: MARGEN, y, size: 20, font: bold, color: GRIS_TEXTO });
+  page.drawText("Permiso por Día Siriano", { x: MARGEN, y, size: 20, font: bold, color: GRIS_TEXTO });
   y -= 18;
 
   page.drawText(`Documento autorizado · Folio ${params.solicitudId}`, {
@@ -213,7 +213,7 @@ export async function generarPdfPermisoPacto(
   page.drawText("DETALLE DEL PERMISO", { x: MARGEN, y, size: 8.5, font: bold, color: VERDE });
   y -= 22;
 
-  campo(page, MARGEN, y, "Día de pacto autorizado", formatearFecha(params.fechaPermiso), fonts);
+  campo(page, MARGEN, y, "Día siriano autorizado", formatearFecha(params.fechaPermiso), fonts);
   yDer = campo(page, col2, y, "Fecha de solicitud", formatearFecha(params.fechaSolicitud), fonts);
   y = campo(page, MARGEN, y - 36, "Periodo", params.periodo, fonts);
   yDer = campo(
@@ -251,7 +251,7 @@ export async function generarPdfPermisoPacto(
 
   // ── Nota legal ──
   const nota =
-    "Los días de pacto son un beneficio previamente concedido por Sirius Regenerative Solutions. " +
+    "Los días sirianos son un beneficio previamente concedido por Sirius Regenerative Solutions. " +
     "Por tratarse de un derecho ya pactado, este permiso no requiere autorización adicional de jefatura " +
     "y se emite como documento autorizado en el momento de la solicitud. El saldo del periodo se " +
     "descuenta automáticamente al radicarse.";
@@ -275,7 +275,7 @@ export async function generarPdfPermisoPacto(
       y -= firma.height * escala - 6;
     } catch (error) {
       // Una firma ilegible no debe impedir la emisión del documento
-      console.error("[pdf permiso-pacto] No se pudo incrustar la firma:", error);
+      console.error("[pdf permiso-siriano] No se pudo incrustar la firma:", error);
     }
   }
 

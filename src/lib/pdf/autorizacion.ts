@@ -2,7 +2,7 @@
  * Generación del documento oficial de una solicitud de permiso o vacaciones
  * resuelta por el flujo de autorización.
  *
- * A diferencia del PDF de día de pacto, aquí sí hubo una decisión de jefatura:
+ * A diferencia del PDF de día siriano, aquí sí hubo una decisión de jefatura:
  * el documento lleva el sello de la decisión y las dos firmas — la del
  * trabajador que solicitó y la de quien autorizó o rechazó.
  */

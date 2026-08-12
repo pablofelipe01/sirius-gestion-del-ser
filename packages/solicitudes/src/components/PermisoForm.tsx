@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, FormEvent } from "react";
-import { TIPOS_PERMISO, TIPO_DIA_PACTO, TIPO_PERMISO_OTRO } from "../lib/constants";
+import { TIPOS_PERMISO, TIPO_DIA_SIRIANO, TIPO_PERMISO_OTRO } from "../lib/constants";
 import { CalendarioPermiso } from "./CalendarioPermiso";
 import { SelectorFecha } from "./SelectorFecha";
 import { FirmaSection } from "./FirmaSection";
@@ -24,14 +24,14 @@ interface Props {
 }
 
 type Me = { nombre: string; cedula: string; idCore: string; cargo: string };
-type DiasPactoData = { saldo_disponible: number };
+type DiasSirianosData = { saldo_disponible: number };
 
 const COLOR = MODULOS.permiso.color;
 const CLS = inputCls("permiso");
 
 export function PermisoForm({ apiBasePath = "", basePath = "/dashboard/solicitudes" }: Props) {
   const [me, setMe] = useState<Me | null>(null);
-  const [diasPacto, setDiasPacto] = useState<DiasPactoData | null>(null);
+  const [diasSirianos, setDiasSirianos] = useState<DiasSirianosData | null>(null);
   const [tipo, setTipo] = useState("");
   const [tipoOtro, setTipoOtro] = useState("");
   const [modalidad, setModalidad] = useState<"dias" | "horas">("dias");
@@ -44,7 +44,7 @@ export function PermisoForm({ apiBasePath = "", basePath = "/dashboard/solicitud
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState("");
 
-  const esDiaPacto = tipo === TIPO_DIA_PACTO;
+  const esDiaSiriano = tipo === TIPO_DIA_SIRIANO;
   const esOtro = tipo === TIPO_PERMISO_OTRO;
 
   useEffect(() => {
@@ -55,13 +55,13 @@ export function PermisoForm({ apiBasePath = "", basePath = "/dashboard/solicitud
   }, [apiBasePath]);
 
   useEffect(() => {
-    if (esDiaPacto) {
-      fetch(`${apiBasePath}/api/dias-pacto/saldo`)
+    if (esDiaSiriano) {
+      fetch(`${apiBasePath}/api/dias-sirianos/saldo`)
         .then((r) => r.json())
-        .then(setDiasPacto)
-        .catch((err) => console.error("[PermisoForm] Error fetching dias-pacto:", err));
+        .then(setDiasSirianos)
+        .catch((err) => console.error("[PermisoForm] Error fetching dias-sirianos:", err));
     }
-  }, [esDiaPacto, apiBasePath]);
+  }, [esDiaSiriano, apiBasePath]);
 
   function resetForm() {
     setSuccess(false);
@@ -143,10 +143,10 @@ export function PermisoForm({ apiBasePath = "", basePath = "/dashboard/solicitud
         if (fechasSeleccionadas.length > 1) {
           body.fechaFin = fechasSeleccionadas[fechasSeleccionadas.length - 1];
         }
-        // Días de pacto: se envían todas las fechas elegidas para descontar
+        // Días sirianos: se envían todas las fechas elegidas para descontar
         // el saldo real (antes solo se descontaba 1 día sin importar cuántos).
-        if (esDiaPacto) {
-          body.fechasPacto = fechasSeleccionadas;
+        if (esDiaSiriano) {
+          body.fechasSirianas = fechasSeleccionadas;
         }
       } else {
         body.fechaInicio = fechasSeleccionadas[0];
@@ -167,7 +167,7 @@ export function PermisoForm({ apiBasePath = "", basePath = "/dashboard/solicitud
 
       setSuccess(true);
 
-      if (esDiaPacto) {
+      if (esDiaSiriano) {
         setTimeout(() => (window.location.href = basePath), 1500);
       }
     } catch {
@@ -181,10 +181,10 @@ export function PermisoForm({ apiBasePath = "", basePath = "/dashboard/solicitud
     return (
       <SuccessCard
         color={COLOR}
-        titulo={esDiaPacto ? "Día de pacto autorizado" : "Solicitud enviada"}
+        titulo={esDiaSiriano ? "Día siriano autorizado" : "Solicitud enviada"}
         mensaje={
-          esDiaPacto
-            ? "Tu día de pacto quedó autorizado automáticamente y su comprobante en PDF fue archivado. No requiere aprobación de tu jefe."
+          esDiaSiriano
+            ? "Tu día siriano quedó autorizado automáticamente y su comprobante en PDF fue archivado. No requiere aprobación de tu jefe."
             : "Tu solicitud de permiso fue registrada exitosamente. RRHH la revisará pronto."
         }
         onReset={resetForm}
@@ -193,7 +193,7 @@ export function PermisoForm({ apiBasePath = "", basePath = "/dashboard/solicitud
       />
     );
 
-  const sinSaldo = esDiaPacto && diasPacto !== null && diasPacto.saldo_disponible === 0;
+  const sinSaldo = esDiaSiriano && diasSirianos !== null && diasSirianos.saldo_disponible === 0;
 
   return (
     <div className="mx-auto max-w-2xl p-4 sm:p-8">
@@ -256,10 +256,10 @@ export function PermisoForm({ apiBasePath = "", basePath = "/dashboard/solicitud
               </Field>
             )}
 
-            {/* Día de Pacto: calendario de un solo día — una solicitud por día */}
-            {esDiaPacto && diasPacto && (
+            {/* Día Siriano: calendario de un solo día — una solicitud por día */}
+            {esDiaSiriano && diasSirianos && (
               <Field
-                label="Selecciona el día de pacto *"
+                label="Selecciona el día siriano *"
                 hint="un día por solicitud"
               >
                 <CalendarioPermiso
@@ -276,7 +276,7 @@ export function PermisoForm({ apiBasePath = "", basePath = "/dashboard/solicitud
             )}
 
             {/* Otros permisos: selector de modalidad */}
-            {tipo && !esDiaPacto && (
+            {tipo && !esDiaSiriano && (
               <Field label="Modalidad del permiso *">
                 <div className="grid grid-cols-2 gap-2.5">
                   {(
@@ -313,8 +313,8 @@ export function PermisoForm({ apiBasePath = "", basePath = "/dashboard/solicitud
               </Field>
             )}
 
-            {/* Calendario para permisos por días (NO día de pacto) */}
-            {tipo && !esDiaPacto && modalidad === "dias" && (
+            {/* Calendario para permisos por días (NO día siriano) */}
+            {tipo && !esDiaSiriano && modalidad === "dias" && (
               <Field label="Selecciona los días de permiso *">
                 <CalendarioPermiso
                   fechasSeleccionadas={fechasSeleccionadas}
@@ -325,7 +325,7 @@ export function PermisoForm({ apiBasePath = "", basePath = "/dashboard/solicitud
             )}
 
             {/* Permiso por horas */}
-            {tipo && !esDiaPacto && modalidad === "horas" && (
+            {tipo && !esDiaSiriano && modalidad === "horas" && (
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                 <Field label="Fecha del permiso *">
                   <SelectorFecha
@@ -397,7 +397,7 @@ export function PermisoForm({ apiBasePath = "", basePath = "/dashboard/solicitud
             loading={loading}
             disabled={loading || !me || sinSaldo || !firmaConfirmada}
           >
-            {loading ? "Enviando..." : sinSaldo ? "Sin días de pacto disponibles" : "Enviar solicitud"}
+            {loading ? "Enviando..." : sinSaldo ? "Sin días sirianos disponibles" : "Enviar solicitud"}
           </SubmitButton>
         </div>
       </form>

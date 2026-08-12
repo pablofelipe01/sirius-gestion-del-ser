@@ -23,7 +23,9 @@
  * │       └── {idCore}/
  * │           └── {timestamp}_{cedula}.png
  * ├── permisos/
- * │   └── dias-pacto/            PDFs de permisos de día de pacto (ya autorizados)
+ * │   └── dias-sirianos/         PDFs de permisos de día siriano (ya autorizados)
+ * │                              (`dias-pacto/` es el prefijo anterior al renombre
+ * │                               y sigue siendo legible, no se escribe más)
  * │       └── {año}/{mes}/
  * │           └── {idCore}_{cedula}_{fecha}_{timestamp}.pdf
  * └── autorizaciones/            PDFs de solicitudes resueltas (aprobadas o rechazadas)
@@ -35,12 +37,12 @@
 export { getS3Client, S3_CONFIG } from "./client";
 export {
   uploadFirmaTrabajador,
-  uploadPdfPermisoPacto,
+  uploadPdfPermisoSiriano,
   uploadPdfAutorizacion,
   validateS3Key,
   type UploadFirmaParams,
   type UploadFirmaResult,
-  type UploadPdfPermisoPactoParams,
+  type UploadPdfPermisoSirianoParams,
   type UploadPdfAutorizacionParams,
   type UploadPdfResult,
 } from "./upload";

@@ -8,21 +8,21 @@ import {
   ESTADO_CONCEDIDO,
   PERIODO_ACTUAL,
 } from "../lib/schema";
-import { TIPO_DIA_PACTO } from "../lib/constants";
+import { TIPO_DIA_SIRIANO } from "../lib/constants";
 import type { ResolvePayload } from "../types";
-import { uploadFirmaTrabajador, uploadPdfPermisoPacto } from "@/lib/s3";
-import { generarPdfPermisoPacto } from "@/lib/pdf";
+import { uploadFirmaTrabajador, uploadPdfPermisoSiriano } from "@/lib/s3";
+import { generarPdfPermisoSiriano } from "@/lib/pdf";
 import { subirAdjuntoAirtable } from "@/lib/airtable-attachments";
 
-/** Texto que queda como autorizador en los permisos de día de pacto. */
-const AUTORIZACION_AUTOMATICA = "Autorización automática — Día de Pacto";
+/** Texto que queda como autorizador en los permisos de día siriano. */
+const AUTORIZACION_AUTOMATICA = "Autorización automática — Día Siriano";
 
 const base = () => process.env.AIRTABLE_BASE_ID_NOVEDADES_NOMINA!;
 const key  = () => process.env.AIRTABLE_API_KEY_NOVEDADES_NOMINA!;
 
-// Tabla Dias_Pacto
-const TABLA_DIAS_PACTO = process.env.AIRTABLE_TABLE_DIAS_PACTO ?? "Dias_Pacto";
-const CAMPOS_DIAS_PACTO = {
+// Tabla Dias_Sirianos
+const TABLA_DIAS_SIRIANOS = process.env.AIRTABLE_TABLE_DIAS_SIRIANOS ?? "Dias_Sirianos";
+const CAMPOS_DIAS_SIRIANOS = {
   ID_COLABORADOR:   "id_colaborador_core",
   SALDO_DISPONIBLE: "saldo_disponible",
   SALDO_USADO:      "saldo_usado",
@@ -54,70 +54,70 @@ export function createPermisoHandlers(resolvePayload: ResolvePayload) {
 
     const body  = await req.json();
     const today = new Date().toISOString().split("T")[0];
-    const esDiaPacto = body.tipo === TIPO_DIA_PACTO;
+    const esDiaSiriano = body.tipo === TIPO_DIA_SIRIANO;
 
-    // Regla de negocio: un día de pacto por solicitud.
-    const fechasPacto: string[] = Array.isArray(body.fechasPacto)
-      ? (body.fechasPacto as string[]).filter((f) => typeof f === "string" && f)
+    // Regla de negocio: un día siriano por solicitud.
+    const fechasSirianas: string[] = Array.isArray(body.fechasSirianas)
+      ? (body.fechasSirianas as string[]).filter((f) => typeof f === "string" && f)
       : [];
 
-    if (esDiaPacto && fechasPacto.length > 1) {
+    if (esDiaSiriano && fechasSirianas.length > 1) {
       return NextResponse.json(
-        { error: "Solo puedes solicitar un día de pacto por solicitud" },
+        { error: "Solo puedes solicitar un día siriano por solicitud" },
         { status: 400 }
       );
     }
 
-    const fechaPacto = fechasPacto[0] ?? (body.fechaInicio as string);
+    const fechaSiriana = fechasSirianas[0] ?? (body.fechaInicio as string);
 
-    let pactoRecordId: string | null = null;
-    let pactoRecord: { id: string; fields: Record<string, unknown> } | null = null;
-    let saldoPactoDisponible = 0;
+    let sirianoRecordId: string | null = null;
+    let sirianoRecord: { id: string; fields: Record<string, unknown> } | null = null;
+    let saldoSirianoDisponible = 0;
 
-    // Si es día de pacto, validar saldo y obtener recordId
-    if (esDiaPacto) {
+    // Si es día siriano, validar saldo y obtener recordId
+    if (esDiaSiriano) {
       const idCore = escapeAirtableValue(payload.idCore);
       const periodo = escapeAirtableValue(PERIODO_ACTUAL);
-      const formulaPacto = encodeURIComponent(
-        `AND({${CAMPOS_DIAS_PACTO.ID_COLABORADOR}}='${idCore}', {${CAMPOS_DIAS_PACTO.PERIODO}}='${periodo}')`
+      const formulaSiriano = encodeURIComponent(
+        `AND({${CAMPOS_DIAS_SIRIANOS.ID_COLABORADOR}}='${idCore}', {${CAMPOS_DIAS_SIRIANOS.PERIODO}}='${periodo}')`
       );
 
-      const urlPacto = `https://api.airtable.com/v0/${base()}/${encodeURIComponent(TABLA_DIAS_PACTO)}?filterByFormula=${formulaPacto}`;
+      const urlSiriano = `https://api.airtable.com/v0/${base()}/${encodeURIComponent(TABLA_DIAS_SIRIANOS)}?filterByFormula=${formulaSiriano}`;
 
-      const resPacto = await fetch(urlPacto, {
+      const resSiriano = await fetch(urlSiriano, {
         headers: { Authorization: `Bearer ${key()}` },
         cache: "no-store",
       });
 
-      if (!resPacto.ok) {
-        const error = await resPacto.text();
-        console.error("[permiso POST - fetch pacto]", error);
-        return NextResponse.json({ error: "Error al consultar días de pacto" }, { status: 500 });
+      if (!resSiriano.ok) {
+        const error = await resSiriano.text();
+        console.error("[permiso POST - fetch siriano]", error);
+        return NextResponse.json({ error: "Error al consultar días sirianos" }, { status: 500 });
       }
 
-      const dataPacto = await resPacto.json();
-      const recordsPacto = dataPacto.records ?? [];
+      const dataSiriano = await resSiriano.json();
+      const recordsSiriano = dataSiriano.records ?? [];
 
-      if (recordsPacto.length === 0) {
+      if (recordsSiriano.length === 0) {
         return NextResponse.json(
-          { error: "No se encontró registro de días de pacto para este periodo" },
+          { error: "No se encontró registro de días sirianos para este periodo" },
           { status: 404 }
         );
       }
 
-      const record = recordsPacto[0];
-      const saldoDisponible = (record.fields[CAMPOS_DIAS_PACTO.SALDO_DISPONIBLE] ?? 0) as number;
+      const record = recordsSiriano[0];
+      const saldoDisponible = (record.fields[CAMPOS_DIAS_SIRIANOS.SALDO_DISPONIBLE] ?? 0) as number;
 
       if (saldoDisponible <= 0) {
         return NextResponse.json(
-          { error: "No tienes días de pacto disponibles para este periodo" },
+          { error: "No tienes días sirianos disponibles para este periodo" },
           { status: 400 }
         );
       }
 
-      pactoRecord = record;
-      pactoRecordId = record.id;
-      saldoPactoDisponible = saldoDisponible;
+      sirianoRecord = record;
+      sirianoRecordId = record.id;
+      saldoSirianoDisponible = saldoDisponible;
     }
 
     // Crear permiso en Solicitud_Permiso
@@ -127,28 +127,28 @@ export function createPermisoHandlers(resolvePayload: ResolvePayload) {
       [FIELDS.PERMISO.CARGO]:           body.cargo ?? "",
       [FK_ID_CORE]:                     payload.idCore,
       [FIELDS.PERMISO.FECHA_SOLICITUD]: today,
-      [FIELDS.PERMISO.FECHA_INICIO]:    esDiaPacto ? fechaPacto : body.fechaInicio,
+      [FIELDS.PERMISO.FECHA_INICIO]:    esDiaSiriano ? fechaSiriana : body.fechaInicio,
       [FIELDS.PERMISO.TIPO]:            body.tipo,
       [FIELDS.PERMISO.MOTIVO]:          body.motivo,
       [FIELDS.PERMISO.HORAS]:           body.horas ? String(body.horas) : "",
       [FIELDS.PERMISO.REMUNERADO]:      body.remunerado ?? false,
       [FIELDS.PERMISO.COMPENSADO]:      body.compensado ?? false,
-      // Los días de pacto son un beneficio ya concedido: quedan autorizados al radicarse.
-      [FIELDS.PERMISO.ESTADO]:          esDiaPacto ? ESTADO_CONCEDIDO : ESTADO_PENDIENTE,
+      // Los días sirianos son un beneficio ya concedido: quedan autorizados al radicarse.
+      [FIELDS.PERMISO.ESTADO]:          esDiaSiriano ? ESTADO_CONCEDIDO : ESTADO_PENDIENTE,
     };
 
-    if (esDiaPacto) {
+    if (esDiaSiriano) {
       fields[FIELDS.PERMISO.FECHA_AUTORIZACION] = today;
       fields[FIELDS.PERMISO.AUTORIZADO_POR_NOM] = AUTORIZACION_AUTOMATICA;
       fields[FIELDS.PERMISO.COMENTARIO_AUTORIZACION] =
-        "Día de pacto: beneficio ya concedido, no requiere autorización de jefatura.";
+        "Día siriano: beneficio ya concedido, no requiere autorización de jefatura.";
     }
 
-    // Un día de pacto por solicitud: nunca lleva rango inicio–fin.
-    if (body.fechaFin && !esDiaPacto) fields[FIELDS.PERMISO.FECHA_FIN] = body.fechaFin;
+    // Un día siriano por solicitud: nunca lleva rango inicio–fin.
+    if (body.fechaFin && !esDiaSiriano) fields[FIELDS.PERMISO.FECHA_FIN] = body.fechaFin;
     if (body.fechaCompensatorio) fields[FIELDS.PERMISO.FECHA_COMP] = body.fechaCompensatorio;
-    if (esDiaPacto && pactoRecordId) {
-      fields[FIELDS.PERMISO.DIAS_PACTO_LINK] = [pactoRecordId];  // Relación: array de record IDs
+    if (esDiaSiriano && sirianoRecordId) {
+      fields[FIELDS.PERMISO.DIAS_SIRIANOS_LINK] = [sirianoRecordId];  // Relación: array de record IDs
     }
 
     // Firma del trabajador - Upload a S3
@@ -212,24 +212,24 @@ export function createPermisoHandlers(resolvePayload: ResolvePayload) {
       });
     }
 
-    // Si es día de pacto, actualizar saldo en Dias_Pacto
-    if (esDiaPacto && pactoRecord) {
-      const saldoDisponible = (pactoRecord.fields[CAMPOS_DIAS_PACTO.SALDO_DISPONIBLE] ?? 0) as number;
-      const saldoUsado = (pactoRecord.fields[CAMPOS_DIAS_PACTO.SALDO_USADO] ?? 0) as number;
-      const observacionesActuales = (pactoRecord.fields[CAMPOS_DIAS_PACTO.OBSERVACIONES] ?? "") as string;
+    // Si es día siriano, actualizar saldo en Dias_Sirianos
+    if (esDiaSiriano && sirianoRecord) {
+      const saldoDisponible = (sirianoRecord.fields[CAMPOS_DIAS_SIRIANOS.SALDO_DISPONIBLE] ?? 0) as number;
+      const saldoUsado = (sirianoRecord.fields[CAMPOS_DIAS_SIRIANOS.SALDO_USADO] ?? 0) as number;
+      const observacionesActuales = (sirianoRecord.fields[CAMPOS_DIAS_SIRIANOS.OBSERVACIONES] ?? "") as string;
 
       const nuevoSaldoDisponible = saldoDisponible - 1;
       const nuevoSaldoUsado = saldoUsado + 1;
       const nuevoEstado = nuevoSaldoDisponible <= 0 ? "Agotado" : "Activo";
 
-      const nuevaObservacion = `${fechaPacto}: Permiso ${permisoCreado.id} - ${body.motivo || "Día de pacto"}`;
+      const nuevaObservacion = `${fechaSiriana}: Permiso ${permisoCreado.id} - ${body.motivo || "Día siriano"}`;
       const observacionesActualizadas = observacionesActuales
         ? `${observacionesActuales}\n${nuevaObservacion}`
         : nuevaObservacion;
 
-      const urlPatchPacto = `https://api.airtable.com/v0/${base()}/${encodeURIComponent(TABLA_DIAS_PACTO)}/${pactoRecord.id}`;
+      const urlPatchSiriano = `https://api.airtable.com/v0/${base()}/${encodeURIComponent(TABLA_DIAS_SIRIANOS)}/${sirianoRecord.id}`;
 
-      const resPatchPacto = await fetch(urlPatchPacto, {
+      const resPatchSiriano = await fetch(urlPatchSiriano, {
         method: "PATCH",
         headers: {
           Authorization: `Bearer ${key()}`,
@@ -237,48 +237,48 @@ export function createPermisoHandlers(resolvePayload: ResolvePayload) {
         },
         body: JSON.stringify({
           fields: {
-            [CAMPOS_DIAS_PACTO.SALDO_DISPONIBLE]: nuevoSaldoDisponible,
-            [CAMPOS_DIAS_PACTO.SALDO_USADO]: nuevoSaldoUsado,
-            [CAMPOS_DIAS_PACTO.FECHA_ULTIMO_USO]: fechaPacto,
-            [CAMPOS_DIAS_PACTO.OBSERVACIONES]: observacionesActualizadas,
-            [CAMPOS_DIAS_PACTO.ESTADO]: nuevoEstado,
+            [CAMPOS_DIAS_SIRIANOS.SALDO_DISPONIBLE]: nuevoSaldoDisponible,
+            [CAMPOS_DIAS_SIRIANOS.SALDO_USADO]: nuevoSaldoUsado,
+            [CAMPOS_DIAS_SIRIANOS.FECHA_ULTIMO_USO]: fechaSiriana,
+            [CAMPOS_DIAS_SIRIANOS.OBSERVACIONES]: observacionesActualizadas,
+            [CAMPOS_DIAS_SIRIANOS.ESTADO]: nuevoEstado,
           },
         }),
       });
 
-      if (!resPatchPacto.ok) {
-        const errorPacto = await resPatchPacto.text();
-        console.error("[permiso POST - update pacto]", errorPacto);
+      if (!resPatchSiriano.ok) {
+        const errorSiriano = await resPatchSiriano.text();
+        console.error("[permiso POST - update siriano]", errorSiriano);
         // No revertimos el permiso - mejor log del error y notificar a admin
-        console.error(`IMPORTANTE: Permiso ${permisoCreado.id} creado pero no se pudo actualizar días de pacto ${pactoRecord.id}`);
+        console.error(`IMPORTANTE: Permiso ${permisoCreado.id} creado pero no se pudo actualizar días sirianos ${sirianoRecord.id}`);
       }
     }
 
-    // Día de pacto: el permiso nace autorizado, así que se emite el PDF y se
+    // Día siriano: el permiso nace autorizado, así que se emite el PDF y se
     // archiva en S3. Un fallo aquí no invalida el permiso ya registrado.
     let pdfUrl: string | null = null;
 
-    if (esDiaPacto) {
+    if (esDiaSiriano) {
       try {
-        const pdf = await generarPdfPermisoPacto({
+        const pdf = await generarPdfPermisoSiriano({
           solicitudId: permisoCreado.id,
           nombre: payload.nombre,
           cedula: payload.cedula,
           cargo: body.cargo ?? "",
           idCore: payload.idCore,
-          fechaPermiso: fechaPacto,
+          fechaPermiso: fechaSiriana,
           fechaSolicitud: today,
           motivo: body.motivo ?? "",
           periodo: PERIODO_ACTUAL,
-          saldoRestante: Math.max(0, saldoPactoDisponible - 1),
+          saldoRestante: Math.max(0, saldoSirianoDisponible - 1),
           firmaBase64: body.firmaBase64,
         });
 
-        const subida = await uploadPdfPermisoPacto({
+        const subida = await uploadPdfPermisoSiriano({
           pdf,
           cedula: payload.cedula,
           idCore: payload.idCore,
-          fechaPermiso: fechaPacto,
+          fechaPermiso: fechaSiriana,
           metadata: {
             solicitudId: permisoCreado.id,
             periodo: PERIODO_ACTUAL,
@@ -331,7 +331,7 @@ export function createPermisoHandlers(resolvePayload: ResolvePayload) {
           contentType: "application/pdf",
         });
       } catch (error) {
-        console.error("[permiso POST - pdf dia de pacto]", error);
+        console.error("[permiso POST - pdf dia siriano]", error);
         console.error(
           `IMPORTANTE: Permiso ${permisoCreado.id} autorizado pero sin PDF archivado en S3`
         );
@@ -339,7 +339,7 @@ export function createPermisoHandlers(resolvePayload: ResolvePayload) {
     }
 
     return NextResponse.json(
-      { ok: true, id: permisoCreado.id, autorizado: esDiaPacto, pdfUrl },
+      { ok: true, id: permisoCreado.id, autorizado: esDiaSiriano, pdfUrl },
       { status: 201 }
     );
   }

@@ -292,7 +292,7 @@ export async function SolicitudesOverview({
       {/* ── Encabezado sobre la foto ────────────────────────────────────── */}
       <Hero nombre={nombre} rows={recientes} />
 
-      {/* ── Avisos contextuales del host (días de pacto) ────────────────── */}
+      {/* ── Avisos contextuales del host (días sirianos) ────────────────── */}
       {children && (
         <div className="anim-entrada mb-6 print:hidden" style={{ animationDelay: "420ms" }}>
           {children}
