@@ -97,7 +97,7 @@ export const ICON_CHECK_CIRCLE = (
  * del `<select>` —que los pinta el sistema— no salgan claros con texto blanco.
  */
 const INPUT_BASE =
-  "campo-oscuro w-full rounded-xl border border-white/12 bg-white/[0.06] px-4 py-2.5 text-sm text-white outline-none transition-all placeholder:text-white/35 hover:border-white/20 hover:bg-white/[0.09] focus:ring-2";
+  "campo-oscuro w-full rounded-xl border border-white/12 bg-white/[0.06] px-4 py-2.5 text-sm text-white outline-none transition-all placeholder:text-white/60 hover:border-white/20 hover:bg-white/[0.09] focus:ring-2";
 
 // Clases literales — Tailwind escanea el código fuente, no acepta interpolación en runtime.
 const FOCUS_RING: Record<ModuloKey, string> = {
@@ -112,7 +112,7 @@ export function inputCls(modulo: ModuloKey) {
 }
 
 export const readonlyCls =
-  "campo-oscuro w-full cursor-default truncate rounded-xl border border-white/8 bg-black/20 px-4 py-2.5 text-sm text-white/55";
+  "campo-oscuro w-full cursor-default truncate rounded-xl border border-white/8 bg-black/20 px-4 py-2.5 text-sm text-white/80";
 
 /* ── Campo con etiqueta ─────────────────────────────────────────────────── */
 
@@ -133,7 +133,7 @@ export function Field({
       <label className="flex items-baseline gap-1.5 text-sm font-medium text-white/80">
         <span>{texto}</span>
         {obligatorio && <span className="text-rose-400">*</span>}
-        {hint && <span className="text-xs font-normal text-white/40">— {hint}</span>}
+        {hint && <span className="text-xs font-normal text-white/65">— {hint}</span>}
       </label>
       {children}
     </div>
@@ -160,7 +160,7 @@ export function FormHeader({
       <Link
         href={backHref}
         aria-label="Volver a solicitudes"
-        className="glass flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-xl text-white/60 transition-all hover:-translate-x-0.5 hover:text-white"
+        className="glass flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-xl text-white/80 transition-all hover:-translate-x-0.5 hover:text-white"
       >
         <Icon path={ICON_CHEVRON_LEFT} className="h-4 w-4" strokeWidth={2} />
       </Link>
@@ -174,7 +174,7 @@ export function FormHeader({
 
       <div className="min-w-0">
         <h1 className="truncate text-xl font-bold tracking-tight text-white sm:text-2xl">{titulo}</h1>
-        <p className="text-sm text-white/45">{subtitulo}</p>
+        <p className="text-sm text-white/70">{subtitulo}</p>
       </div>
     </div>
   );
@@ -206,7 +206,7 @@ export function SectionTitle({
           style={{ background: color, boxShadow: `0 0 8px ${color}` }}
         />
       )}
-      <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-white/45">{children}</p>
+      <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-white/70">{children}</p>
     </div>
   );
 }
@@ -245,9 +245,9 @@ export function DatosEmpleado({
           <p className="truncate text-sm font-semibold text-white">
             {me?.nombre ?? "Cargando..."}
           </p>
-          <p className="truncate text-xs text-white/45">{me?.cargo || "Sin cargo asignado"}</p>
+          <p className="truncate text-xs text-white/70">{me?.cargo || "Sin cargo asignado"}</p>
         </div>
-        <span className="hidden flex-shrink-0 rounded-full bg-white/[0.07] px-2.5 py-1 text-[11px] font-medium text-white/55 ring-1 ring-inset ring-white/10 sm:inline">
+        <span className="hidden flex-shrink-0 rounded-full bg-white/[0.07] px-2.5 py-1 text-[11px] font-medium text-white/80 ring-1 ring-inset ring-white/10 sm:inline">
           {me?.idCore ?? "—"}
         </span>
       </div>
@@ -255,11 +255,11 @@ export function DatosEmpleado({
       {!compacto && (
         <dl className="mt-3 grid grid-cols-2 gap-x-4 gap-y-2 border-t border-white/10 pt-3 text-xs">
           <div className="flex flex-col gap-0.5">
-            <dt className="text-white/35">Cédula</dt>
+            <dt className="text-white/60">Cédula</dt>
             <dd className="font-medium text-white/80">{me?.cedula ?? "—"}</dd>
           </div>
           <div className="flex flex-col gap-0.5 sm:hidden">
-            <dt className="text-white/35">ID empleado</dt>
+            <dt className="text-white/60">ID empleado</dt>
             <dd className="font-medium text-white/80">{me?.idCore ?? "—"}</dd>
           </div>
         </dl>
@@ -361,12 +361,12 @@ export function SuccessCard({
           </div>
           <div>
             <h2 className="text-xl font-bold tracking-tight text-white sm:text-2xl">{titulo}</h2>
-            <p className="mx-auto mt-2 max-w-sm text-sm leading-relaxed text-white/50">{mensaje}</p>
+            <p className="mx-auto mt-2 max-w-sm text-sm leading-relaxed text-white/75">{mensaje}</p>
           </div>
           <div className="mt-2 flex w-full flex-col gap-2.5 sm:w-auto sm:flex-row">
             <button
               onClick={onReset}
-              className="rounded-xl border border-white/12 bg-white/[0.06] px-5 py-2.5 text-sm font-medium text-white/75 transition-colors hover:bg-white/12 hover:text-white"
+              className="rounded-xl border border-white/12 bg-white/[0.06] px-5 py-2.5 text-sm font-medium text-white/90 transition-colors hover:bg-white/12 hover:text-white"
             >
               {resetLabel}
             </button>

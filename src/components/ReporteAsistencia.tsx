@@ -186,7 +186,7 @@ export default function ReporteAsistencia() {
             <h2 className="text-xl font-semibold tracking-tight text-white sm:text-2xl">
               Reporte de asistencia
             </h2>
-            <p className="mt-1 text-sm text-white/50">
+            <p className="mt-1 text-sm text-white/75">
               Marcaciones del biométrico consolidadas por colaborador y día
             </p>
           </div>
@@ -194,13 +194,13 @@ export default function ReporteAsistencia() {
             <button
               onClick={exportarCsv}
               disabled={filtradas.length === 0}
-              className="inline-flex items-center gap-2 rounded-lg border border-white/12 bg-white/[0.06] px-3 py-2 text-sm font-medium text-white/70 transition-colors hover:bg-white/12 hover:text-white disabled:opacity-30"
+              className="inline-flex items-center gap-2 rounded-lg border border-white/12 bg-white/[0.06] px-3 py-2 text-sm font-medium text-white/85 transition-colors hover:bg-white/12 hover:text-white disabled:opacity-30"
             >
               Exportar CSV
             </button>
             <button
               onClick={cargar}
-              className="inline-flex items-center gap-2 rounded-lg border border-white/12 bg-white/[0.06] px-3 py-2 text-sm font-medium text-white/70 transition-colors hover:bg-white/12 hover:text-white"
+              className="inline-flex items-center gap-2 rounded-lg border border-white/12 bg-white/[0.06] px-3 py-2 text-sm font-medium text-white/85 transition-colors hover:bg-white/12 hover:text-white"
             >
               Actualizar
             </button>
@@ -225,7 +225,7 @@ export default function ReporteAsistencia() {
         </dl>
 
         {resumen && resumen.jornadas > 0 && (
-          <p className="mt-3 text-xs text-white/40">
+          <p className="mt-3 text-xs text-white/65">
             {resumen.marcaciones} marcaciones · {resumen.dias} días ·{" "}
             {resumen.sinSalida} sin salida · {resumen.sinEntrada} sin entrada ·{" "}
             {resumen.invalidas} inválidas
@@ -236,13 +236,13 @@ export default function ReporteAsistencia() {
       {/* Filtros */}
       <div className="flex flex-wrap items-end gap-3 border-b border-white/10 bg-black/25 px-6 py-4 sm:px-8">
         <div className="min-w-[200px] flex-1">
-          <label className="mb-1 block text-xs text-white/45">Buscar</label>
+          <label className="mb-1 block text-xs text-white/70">Buscar</label>
           <input
             type="search"
             value={busqueda}
             onChange={(e) => setBusqueda(e.target.value)}
             placeholder="Nombre o cédula…"
-            className="campo-oscuro w-full rounded-lg border border-white/12 bg-white/[0.06] px-3 py-2 text-sm text-white placeholder:text-white/35 focus:border-[#29b6e8]/60 focus:ring-2 focus:ring-[#29b6e8]/25 focus:outline-none"
+            className="campo-oscuro w-full rounded-lg border border-white/12 bg-white/[0.06] px-3 py-2 text-sm text-white placeholder:text-white/60 focus:border-[#29b6e8]/60 focus:ring-2 focus:ring-[#29b6e8]/25 focus:outline-none"
           />
         </div>
         <Campo etiqueta="Desde">
@@ -320,7 +320,7 @@ export default function ReporteAsistencia() {
           {error}
         </div>
       ) : porColaborador.length === 0 ? (
-        <p className="px-8 py-16 text-center text-sm text-white/40">
+        <p className="px-8 py-16 text-center text-sm text-white/65">
           No hay jornadas que coincidan con los filtros.
         </p>
       ) : (
@@ -337,7 +337,7 @@ export default function ReporteAsistencia() {
                 >
                   <div className="flex min-w-0 items-center gap-3">
                     <svg
-                      className={`h-4 w-4 flex-shrink-0 text-white/40 transition-transform ${colapsado ? "" : "rotate-90"}`}
+                      className={`h-4 w-4 flex-shrink-0 text-white/65 transition-transform ${colapsado ? "" : "rotate-90"}`}
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -347,13 +347,13 @@ export default function ReporteAsistencia() {
                     </svg>
                     <div className="min-w-0">
                       <p className="truncate text-sm font-semibold text-white">{persona.nombre}</p>
-                      <p className="truncate text-xs text-white/45">
+                      <p className="truncate text-xs text-white/70">
                         C.C. {persona.documento} · {persona.turno || "Sin turno"}
                       </p>
                     </div>
                   </div>
                   <div className="flex flex-wrap items-center gap-2 text-xs">
-                    <span className="rounded-full bg-white/[0.07] px-2.5 py-1 text-white/60 ring-1 ring-inset ring-white/10">
+                    <span className="rounded-full bg-white/[0.07] px-2.5 py-1 text-white/80 ring-1 ring-inset ring-white/10">
                       {persona.jornadas.length}{" "}
                       {persona.jornadas.length === 1 ? "jornada" : "jornadas"}
                     </span>
@@ -378,7 +378,7 @@ export default function ReporteAsistencia() {
                   <div className="overflow-x-auto pb-2">
                     <table className="w-full min-w-[760px] text-sm">
                       <thead>
-                        <tr className="text-left text-[10px] uppercase tracking-[0.14em] text-white/40">
+                        <tr className="text-left text-[10px] uppercase tracking-[0.14em] text-white/65">
                           <th className="py-2 pl-14 pr-3 font-medium">Día</th>
                           <th className="px-3 py-2 font-medium">Entrada</th>
                           <th className="px-3 py-2 font-medium">Salida</th>
@@ -401,16 +401,16 @@ export default function ReporteAsistencia() {
                                 <td className="py-2.5 pl-14 pr-3 whitespace-nowrap text-white/85 capitalize">
                                   {fechaCorta(jornada.fecha)}
                                 </td>
-                                <td className="px-3 py-2.5 tabular-nums text-white/60">
+                                <td className="px-3 py-2.5 tabular-nums text-white/80">
                                   {horaCorta(jornada.entrada)}
                                 </td>
-                                <td className="px-3 py-2.5 tabular-nums text-white/60">
+                                <td className="px-3 py-2.5 tabular-nums text-white/80">
                                   {horaCorta(jornada.salida)}
                                 </td>
                                 <td className="px-3 py-2.5 font-medium tabular-nums text-white/90">
                                   {formatearMinutos(jornada.minutosTrabajados)}
                                 </td>
-                                <td className="px-3 py-2.5 text-xs text-white/45">{jornada.punto}</td>
+                                <td className="px-3 py-2.5 text-xs text-white/70">{jornada.punto}</td>
                                 <td className="px-3 py-2.5">
                                   <span
                                     className={`inline-block rounded-full px-2.5 py-1 text-xs font-medium ${estilo.fondo} ${estilo.texto}`}
@@ -428,7 +428,7 @@ export default function ReporteAsistencia() {
                                   ) : esIncidencia(jornada) ? (
                                     <span className="text-rose-600">Sin justificar</span>
                                   ) : (
-                                    <span className="text-white/25">—</span>
+                                    <span className="text-white/45">—</span>
                                   )}
                                 </td>
                               </tr>
@@ -437,17 +437,17 @@ export default function ReporteAsistencia() {
                               {abierta && (
                                 <tr className="bg-black/25">
                                   <td colSpan={7} className="px-6 py-3 sm:px-8">
-                                    <p className="mb-2 pl-8 text-xs font-medium text-white/45">
+                                    <p className="mb-2 pl-8 text-xs font-medium text-white/70">
                                       Marcaciones registradas ({jornada.marcaciones.length})
                                     </p>
                                     <ul className="space-y-1 pl-8">
                                       {jornada.marcaciones.map((m) => (
-                                        <li key={m.id} className="text-xs text-white/60">
+                                        <li key={m.id} className="text-xs text-white/80">
                                           <span className="inline-block w-20 tabular-nums font-medium text-white/90">
                                             {m.hora}
                                           </span>
                                           <span className="inline-block w-24">{m.evento}</span>
-                                          <span className="text-white/45">
+                                          <span className="text-white/70">
                                             {m.punto} · {m.turno}
                                           </span>
                                         </li>
@@ -475,7 +475,7 @@ export default function ReporteAsistencia() {
 function Campo({ etiqueta, children }: { etiqueta: string; children: React.ReactNode }) {
   return (
     <div>
-      <label className="mb-1 block text-xs text-white/45">{etiqueta}</label>
+      <label className="mb-1 block text-xs text-white/70">{etiqueta}</label>
       {children}
     </div>
   );

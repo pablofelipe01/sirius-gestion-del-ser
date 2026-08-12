@@ -305,7 +305,7 @@ export function PermisoForm({ apiBasePath = "", basePath = "/dashboard/solicitud
                         >
                           {o.label}
                         </p>
-                        <p className="mt-0.5 text-xs text-white/45">{o.desc}</p>
+                        <p className="mt-0.5 text-xs text-white/70">{o.desc}</p>
                       </button>
                     );
                   })}

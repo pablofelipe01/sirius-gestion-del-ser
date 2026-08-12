@@ -42,10 +42,10 @@ export default function LoginPage() {
   // Mismo campo que el resto de la aplicación: `campo-oscuro` deja en oscuro los
   // controles que pinta el sistema (autocompletado, gestor de contraseñas).
   const campoCls =
-    "campo-oscuro rounded-xl border border-white/20 bg-white/10 px-4 py-3 text-sm text-white transition-all duration-200 placeholder:text-white/40 focus:border-[#29b6e8] focus:bg-white/15 focus:outline-none focus:ring-2 focus:ring-[#29b6e8]/25";
+    "campo-oscuro rounded-xl border border-white/20 bg-white/10 px-4 py-3 text-sm text-white transition-all duration-200 placeholder:text-white/65 focus:border-[#29b6e8] focus:bg-white/15 focus:outline-none focus:ring-2 focus:ring-[#29b6e8]/25";
 
   return (
-    <main className="relative flex min-h-screen items-center justify-center overflow-hidden">
+    <main className="superficie-noche relative flex min-h-screen items-center justify-center overflow-hidden">
       {/* El mismo cielo nocturno que el resto de la aplicación */}
       <FondoNocturno completo />
 
@@ -58,7 +58,7 @@ export default function LoginPage() {
           </div>
 
           <h2 className="mb-1 text-center text-xl font-semibold text-white">Bienvenido</h2>
-          <p className="mb-7 text-center text-sm text-white/50">
+          <p className="mb-7 text-center text-sm text-white/75">
             Ingresa tus credenciales para continuar
           </p>
 

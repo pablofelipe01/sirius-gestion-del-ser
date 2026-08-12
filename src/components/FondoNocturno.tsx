@@ -47,7 +47,7 @@ export function FondoNocturno({ completo = false }: Props) {
           style={{
             background: completo
               ? "linear-gradient(160deg, rgba(7,12,24,0.55) 0%, rgba(10,22,40,0.62) 50%, rgba(4,7,17,0.78) 100%)"
-              : "linear-gradient(180deg, rgba(7,12,24,0.35) 0%, rgba(7,12,24,0.55) 42%, rgba(7,12,24,0.88) 78%, #070c18 100%)",
+              : "linear-gradient(180deg, rgba(7,12,24,0.58) 0%, rgba(7,12,24,0.7) 42%, rgba(7,12,24,0.9) 78%, #070c18 100%)",
           }}
         />
       </div>

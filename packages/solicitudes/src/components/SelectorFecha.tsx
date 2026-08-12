@@ -93,7 +93,7 @@ export function SelectorFecha({
             d={ICON_CALENDARIO}
           />
         </svg>
-        <span className={valor ? "text-white" : "text-white/40"}>
+        <span className={valor ? "text-white" : "text-white/65"}>
           {valor ? formatFecha(valor) : placeholder}
         </span>
       </button>

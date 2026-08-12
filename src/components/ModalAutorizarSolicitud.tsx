@@ -249,10 +249,10 @@ export function ModalAutorizarSolicitud({ tipo, solicitud, onClose, onSuccess }:
             <h2 className="text-lg font-semibold tracking-tight text-white">
               Autorizar {TITULOS[tipo]}
             </h2>
-            <p className="mt-1 truncate text-sm text-white/55">
+            <p className="mt-1 truncate text-sm text-white/80">
               {nombre} · CC {cedula}
             </p>
-            <p className="mt-0.5 truncate text-xs text-white/40">
+            <p className="mt-0.5 truncate text-xs text-white/65">
               {cargo} · {idCore}
             </p>
           </div>
@@ -260,7 +260,7 @@ export function ModalAutorizarSolicitud({ tipo, solicitud, onClose, onSuccess }:
             onClick={onClose}
             disabled={loading}
             aria-label="Cerrar"
-            className="-mr-1 -mt-1 rounded-lg p-1.5 text-white/40 transition-colors hover:bg-white/10 hover:text-white disabled:opacity-40"
+            className="-mr-1 -mt-1 rounded-lg p-1.5 text-white/65 transition-colors hover:bg-white/10 hover:text-white disabled:opacity-40"
           >
             <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
@@ -292,7 +292,7 @@ export function ModalAutorizarSolicitud({ tipo, solicitud, onClose, onSuccess }:
                     d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
                   />
                 </svg>
-                <p className="text-sm text-white/55">
+                <p className="text-sm text-white/80">
                   Firmado por el trabajador
                   {f["Fecha_Firma_Trabajador"] ? ` el ${fmtFecha(f["Fecha_Firma_Trabajador"])}` : ""}
                 </p>
@@ -310,7 +310,7 @@ export function ModalAutorizarSolicitud({ tipo, solicitud, onClose, onSuccess }:
 
           {/* Decisión — control persistente: sustituye el panel duplicado con botón "Cambiar" */}
           <div>
-            <p className="mb-2 text-sm font-medium text-white/70">Decisión</p>
+            <p className="mb-2 text-sm font-medium text-white/85">Decisión</p>
             <div className="grid grid-cols-2 gap-3">
               <BotonDecision
                 activo={accion === "aprobar"}
@@ -354,10 +354,10 @@ export function ModalAutorizarSolicitud({ tipo, solicitud, onClose, onSuccess }:
               <div>
                 <label
                   htmlFor="comentario-autorizacion"
-                  className="mb-2 block text-sm font-medium text-white/70"
+                  className="mb-2 block text-sm font-medium text-white/85"
                 >
                   Comentario{" "}
-                  <span className="font-normal text-white/35">
+                  <span className="font-normal text-white/60">
                     {accion === "rechazar" ? "(obligatorio)" : "(opcional)"}
                   </span>
                 </label>
@@ -371,14 +371,14 @@ export function ModalAutorizarSolicitud({ tipo, solicitud, onClose, onSuccess }:
                       : "Observaciones sobre esta autorización..."
                   }
                   rows={3}
-                  className="campo-oscuro w-full resize-none rounded-xl border border-white/12 bg-white/[0.06] px-3.5 py-2.5 text-sm text-white placeholder:text-white/35 focus:border-[#29b6e8]/60 focus:ring-2 focus:ring-[#29b6e8]/25 focus:outline-none"
+                  className="campo-oscuro w-full resize-none rounded-xl border border-white/12 bg-white/[0.06] px-3.5 py-2.5 text-sm text-white placeholder:text-white/60 focus:border-[#29b6e8]/60 focus:ring-2 focus:ring-[#29b6e8]/25 focus:outline-none"
                 />
               </div>
 
               {/* Firma del autorizador — FirmaCanvas ya trae su propia instrucción */}
               <div>
                 <div className="mb-2 flex items-center justify-between">
-                  <label className="text-sm font-medium text-white/70">Su firma</label>
+                  <label className="text-sm font-medium text-white/85">Su firma</label>
                   {firmaBlob && (
                     <span className="inline-flex items-center gap-1 text-xs font-medium text-emerald-700">
                       <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -428,7 +428,7 @@ export function ModalAutorizarSolicitud({ tipo, solicitud, onClose, onSuccess }:
           <button
             onClick={onClose}
             disabled={loading}
-            className="rounded-xl px-4 py-2.5 text-sm font-medium text-white/60 transition-colors hover:bg-white/10 hover:text-white disabled:opacity-40"
+            className="rounded-xl px-4 py-2.5 text-sm font-medium text-white/80 transition-colors hover:bg-white/10 hover:text-white disabled:opacity-40"
           >
             Cancelar
           </button>
@@ -436,7 +436,7 @@ export function ModalAutorizarSolicitud({ tipo, solicitud, onClose, onSuccess }:
           <button
             onClick={handleSubmit}
             disabled={loading || !accion || !firmaBlob}
-            className={`rounded-xl px-5 py-2.5 text-sm font-semibold text-white transition-all hover:brightness-110 disabled:cursor-not-allowed disabled:bg-white/10 disabled:text-white/35 disabled:shadow-none disabled:hover:brightness-100 ${
+            className={`rounded-xl px-5 py-2.5 text-sm font-semibold text-white transition-all hover:brightness-110 disabled:cursor-not-allowed disabled:bg-white/10 disabled:text-white/60 disabled:shadow-none disabled:hover:brightness-100 ${
               accion === "rechazar" ? "bg-rose-600" : "bg-emerald-600"
             }`}
           >
@@ -470,7 +470,7 @@ function BotonDecision({
       ? "border-emerald-400 bg-emerald-500/20 text-emerald-100 ring-1 ring-emerald-400"
       : "border-rose-400 bg-rose-500/20 text-rose-100 ring-1 ring-rose-400";
   const inactivoCls =
-    "border-white/12 bg-white/[0.05] text-white/60 hover:border-white/25 hover:bg-white/10 hover:text-white";
+    "border-white/12 bg-white/[0.05] text-white/80 hover:border-white/25 hover:bg-white/10 hover:text-white";
 
   return (
     <button
@@ -493,7 +493,7 @@ function BotonDecision({
 function Dato({ label, valor }: { label: string; valor: CampoAirtable }) {
   return (
     <div>
-      <dt className="text-xs text-white/40">{label}</dt>
+      <dt className="text-xs text-white/65">{label}</dt>
       <dd className="mt-0.5 text-sm font-medium text-white/90">{txt(valor)}</dd>
     </div>
   );
@@ -511,7 +511,7 @@ function Ficha({ titulo, children }: { titulo: string; children: React.ReactNode
 function TextoLargo({ label, valor }: { label: string; valor: CampoAirtable }) {
   return (
     <div className="mt-4 border-t border-white/10 pt-4">
-      <p className="text-xs text-white/40">{label}</p>
+      <p className="text-xs text-white/65">{label}</p>
       <p className="mt-1 text-sm whitespace-pre-wrap text-white/85">{txt(valor)}</p>
     </div>
   );
@@ -586,14 +586,14 @@ function Toggle({
       />
       <span className="min-w-0">
         <span className="block text-sm font-medium text-white/90">{titulo}</span>
-        <span className="mt-0.5 block text-xs text-white/45">{descripcion}</span>
+        <span className="mt-0.5 block text-xs text-white/70">{descripcion}</span>
       </span>
     </label>
   );
 }
 
 const inputCls =
-  "campo-oscuro w-full rounded-lg border border-white/12 bg-white/[0.06] px-3 py-2 text-sm text-white placeholder:text-white/35 focus:border-[#29b6e8]/60 focus:ring-2 focus:ring-[#29b6e8]/25 focus:outline-none";
+  "campo-oscuro w-full rounded-lg border border-white/12 bg-white/[0.06] px-3 py-2 text-sm text-white placeholder:text-white/60 focus:border-[#29b6e8]/60 focus:ring-2 focus:ring-[#29b6e8]/25 focus:outline-none";
 
 function CamposPermiso({
   remunerado,
@@ -645,9 +645,9 @@ function CamposPermiso({
         <div className="rounded-xl border border-white/10 bg-white/[0.03] p-4">
           <h4 className="text-sm font-semibold text-white">
             ¿Cómo repone las {horasTotal} h?{" "}
-            <span className="font-normal text-white/35">(opcional)</span>
+            <span className="font-normal text-white/60">(opcional)</span>
           </h4>
-          <p className="mt-1 mb-3 text-xs text-white/45">
+          <p className="mt-1 mb-3 text-xs text-white/70">
             Si no elige un plan, el colaborador escogerá cómo repone desde su lista de
             solicitudes y quedará avisado allí.
           </p>
@@ -678,7 +678,7 @@ function CamposPermiso({
               <div key={index} className="rounded-lg border border-white/[0.08] bg-black/25 p-3">
                 <div className="flex items-end gap-3">
                   <div className="w-48">
-                    <label className="mb-1 block text-xs text-white/45">Fecha</label>
+                    <label className="mb-1 block text-xs text-white/70">Fecha</label>
                     {/* Un día ajustado a mano puede caer en cualquier fecha: aquí
                         el calendario no restringe días de la semana. */}
                     <SelectorFecha
@@ -689,7 +689,7 @@ function CamposPermiso({
                     />
                   </div>
                   <div className="w-24">
-                    <label className="mb-1 block text-xs text-white/45">Horas</label>
+                    <label className="mb-1 block text-xs text-white/70">Horas</label>
                     <input
                       type="number"
                       value={dia.horas || ""}
@@ -705,7 +705,7 @@ function CamposPermiso({
                       type="button"
                       onClick={() => eliminarDia(index)}
                       aria-label="Eliminar día"
-                      className="ml-auto rounded-lg p-2 text-white/40 transition-colors hover:bg-rose-500/15 hover:text-rose-300"
+                      className="ml-auto rounded-lg p-2 text-white/65 transition-colors hover:bg-rose-500/15 hover:text-rose-300"
                     >
                       <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path
@@ -719,7 +719,7 @@ function CamposPermiso({
                   )}
                 </div>
                 <div className="mt-3">
-                  <label className="mb-1 block text-xs text-white/45">Descripción</label>
+                  <label className="mb-1 block text-xs text-white/70">Descripción</label>
                   <input
                     type="text"
                     value={dia.descripcion}

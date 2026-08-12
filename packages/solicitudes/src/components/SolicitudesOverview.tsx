@@ -208,14 +208,14 @@ function Resumen({ rows }: { rows: Row[] }) {
               className="h-1.5 w-1.5 rounded-full"
               style={{ background: s.color, boxShadow: `0 0 8px ${s.color}` }}
             />
-            <p className="text-[10px] font-medium uppercase tracking-[0.14em] text-white/55">
+            <p className="text-[10px] font-medium uppercase tracking-[0.14em] text-white/80">
               {s.label}
             </p>
           </div>
           <p className="relative mt-1 text-3xl font-bold leading-none tracking-tight text-white tabular-nums">
             {s.valor}
           </p>
-          <p className="relative mt-1 text-[11px] text-white/40">{s.pista}</p>
+          <p className="relative mt-1 text-[11px] text-white/65">{s.pista}</p>
         </div>
         </div>
       ))}
@@ -240,7 +240,7 @@ function Hero({ nombre, rows }: { nombre?: string; rows: Row[] }) {
     <header className="mb-8 print:hidden">
       <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
         <div className="anim-entrada max-w-xl" style={{ animationDelay: "60ms" }}>
-          <span className="glass inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-[11px] font-medium text-white/70">
+          <span className="glass inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-[11px] font-medium text-white/85">
             <span
               className="anim-titilar h-1.5 w-1.5 rounded-full bg-[#29b6e8]"
               style={{ boxShadow: "0 0 8px #29b6e8" }}
@@ -252,7 +252,7 @@ function Hero({ nombre, rows }: { nombre?: string; rows: Row[] }) {
             Solicitudes
           </h1>
 
-          <p className="mt-3 text-sm leading-relaxed text-white/55 sm:text-base">
+          <p className="mt-3 text-sm leading-relaxed text-white/80 sm:text-base">
             {primerNombre ? `${primerNombre}, aquí ` : "Aquí "}
             gestionas tus permisos, vacaciones y novedades de nómina — y sigues el estado
             de cada trámite hasta su documento firmado.
@@ -304,7 +304,7 @@ export async function SolicitudesOverview({
 
       {/* ── Acciones ────────────────────────────────────────────────────── */}
       <div className="mb-4 flex items-center gap-3 print:hidden">
-        <h2 className="text-[11px] font-semibold uppercase tracking-[0.16em] text-white/45">
+        <h2 className="text-[11px] font-semibold uppercase tracking-[0.16em] text-white/70">
           Nueva solicitud
         </h2>
         <span className="h-px flex-1 bg-gradient-to-r from-white/20 to-transparent" />
@@ -342,13 +342,13 @@ export async function SolicitudesOverview({
                     </div>
                     <Icon
                       path={ICON_CHEVRON_RIGHT}
-                      className="h-4 w-4 text-white/25 transition-all duration-300 group-hover:translate-x-1 group-hover:text-white/70"
+                      className="h-4 w-4 text-white/45 transition-all duration-300 group-hover:translate-x-1 group-hover:text-white/85"
                       strokeWidth={2}
                     />
                   </div>
                   <div className="relative">
                     <p className="text-sm font-semibold text-white">{a.label}</p>
-                    <p className="mt-1 text-xs leading-relaxed text-white/45">{m.desc}</p>
+                    <p className="mt-1 text-xs leading-relaxed text-white/70">{m.desc}</p>
                   </div>
                 </Link>
               </TarjetaTilt>
@@ -365,7 +365,7 @@ export async function SolicitudesOverview({
         <div className="flex items-center justify-between border-b border-white/10 px-5 py-4 sm:px-6">
           <h2 className="text-sm font-semibold text-white/90">Mis solicitudes recientes</h2>
           {recientes.length > 0 && (
-            <span className="rounded-full bg-white/10 px-2.5 py-0.5 text-xs font-medium text-white/60">
+            <span className="rounded-full bg-white/10 px-2.5 py-0.5 text-xs font-medium text-white/80">
               {recientes.length}
             </span>
           )}
@@ -382,12 +382,12 @@ export async function SolicitudesOverview({
                     d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"
                   />
                 }
-                className="h-6 w-6 text-white/35"
+                className="h-6 w-6 text-white/60"
               />
             </div>
             <div>
               <p className="text-sm font-medium text-white/80">Aún no tienes solicitudes</p>
-              <p className="mt-1 text-xs text-white/40">
+              <p className="mt-1 text-xs text-white/65">
                 Usa las tarjetas de arriba para crear la primera.
               </p>
             </div>
@@ -398,10 +398,10 @@ export async function SolicitudesOverview({
             <table className="hidden w-full text-sm sm:table print:table">
               <thead>
                 <tr className="bg-white/[0.04]">
-                  <th className="px-6 py-3 text-left text-[10px] font-medium uppercase tracking-[0.14em] text-white/40">Tipo</th>
-                  <th className="px-6 py-3 text-left text-[10px] font-medium uppercase tracking-[0.14em] text-white/40">Detalle</th>
-                  <th className="px-6 py-3 text-left text-[10px] font-medium uppercase tracking-[0.14em] text-white/40">Fecha</th>
-                  <th className="px-6 py-3 text-right text-[10px] font-medium uppercase tracking-[0.14em] text-white/40">Estado</th>
+                  <th className="px-6 py-3 text-left text-[10px] font-medium uppercase tracking-[0.14em] text-white/65">Tipo</th>
+                  <th className="px-6 py-3 text-left text-[10px] font-medium uppercase tracking-[0.14em] text-white/65">Detalle</th>
+                  <th className="px-6 py-3 text-left text-[10px] font-medium uppercase tracking-[0.14em] text-white/65">Fecha</th>
+                  <th className="px-6 py-3 text-right text-[10px] font-medium uppercase tracking-[0.14em] text-white/65">Estado</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-white/[0.07]">
@@ -424,8 +424,8 @@ export async function SolicitudesOverview({
                           <span className="font-medium text-white/90">{row.tipo}</span>
                         </div>
                       </td>
-                      <td className="max-w-xs truncate px-6 py-4 text-white/55">{row.subtipo}</td>
-                      <td className="whitespace-nowrap px-6 py-4 text-white/45">{formatFecha(row.fecha)}</td>
+                      <td className="max-w-xs truncate px-6 py-4 text-white/80">{row.subtipo}</td>
+                      <td className="whitespace-nowrap px-6 py-4 text-white/70">{formatFecha(row.fecha)}</td>
                       <td className="px-6 py-4 text-right">
                         <EstadoBadge estado={row.estado} />
                       </td>
@@ -453,8 +453,8 @@ export async function SolicitudesOverview({
                         <p className="text-sm font-medium text-white/90">{row.tipo}</p>
                         <EstadoBadge estado={row.estado} />
                       </div>
-                      <p className="mt-0.5 truncate text-xs text-white/55">{row.subtipo}</p>
-                      <p className="mt-1 text-xs text-white/40">{formatFecha(row.fecha)}</p>
+                      <p className="mt-0.5 truncate text-xs text-white/80">{row.subtipo}</p>
+                      <p className="mt-1 text-xs text-white/65">{formatFecha(row.fecha)}</p>
                     </div>
                   </li>
                 );

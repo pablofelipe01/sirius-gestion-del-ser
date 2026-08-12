@@ -202,7 +202,7 @@ export function VoiceNoteButton({
         className={`inline-flex w-fit items-center gap-2 rounded-full border px-3.5 py-1.5 text-xs font-medium transition-all disabled:cursor-not-allowed disabled:opacity-50 ${
           escuchando
             ? "border-rose-400/40 bg-rose-500/15 text-rose-200"
-            : "border-white/12 bg-white/[0.06] text-white/70 hover:border-white/25 hover:bg-white/12 hover:text-white"
+            : "border-white/12 bg-white/[0.06] text-white/85 hover:border-white/25 hover:bg-white/12 hover:text-white"
         }`}
         title={escuchando ? "Haz clic para detener" : "Haz clic y habla"}
       >
@@ -239,7 +239,7 @@ export function VoiceNoteButton({
       )}
 
       {escuchando && (
-        <p className="text-xs italic text-white/50">
+        <p className="text-xs italic text-white/75">
           {parcial
             ? parcial
             : "Escuchando... habla con normalidad y pulsa “Detener grabación” al terminar."}

@@ -136,15 +136,42 @@ primitivas están en `src/app/globals.css` y el fondo en
 | `.scroll-noche` | Contenedor con scroll (el `<main>` del dashboard) |
 | `.anim-deriva` `.anim-aurora` `.anim-titilar` `.anim-entrada` | Movimiento |
 
-Cuatro reglas que se rompen sin darse cuenta:
+### Piso de contraste del texto
+
+**`text-white/60` es el mínimo para texto**, y `/45` solo para adornos sin
+información (separadores, iconos decorativos). Por debajo de 60 % el blanco sobre
+el fondo nocturno baja de 4.5:1 y el texto deja de leerse — es exactamente el
+problema que hubo que corregir de un barrido en 22 archivos. Escala en uso:
+`/100` títulos · `/85–90` cuerpo · `/70–80` secundario · `/65` terciario.
+
+Dos apoyos del mismo piso:
+
+- **El tinte de `.glass` es oscuro, no blanco.** Encima va texto blanco: aclarar
+  la tarjeta le quita contraste justo donde se lee. El efecto de vidrio lo dan el
+  `blur` y el brillo del borde, no la opacidad del relleno.
+- **`.superficie-noche`** (en el `<main>` del dashboard, `/` y `/login`) da color
+  de texto claro por herencia. El `body` sigue siendo claro porque los documentos
+  y la impresión lo son, y sin esta clase cualquier texto al que se le olvide una
+  clase de color hereda `#171717` y desaparece. `@media print` la devuelve a negro
+  sobre blanco.
+
+Cuatro reglas más que se rompen sin darse cuenta:
 
 1. **`.glass` vive en `globals.css`, no repartido en clases de Tailwind.** Al
    imprimir hay que devolver todas las tarjetas a blanco sobre negro de un solo
    golpe: un PDF de permiso con fondo translúcido sale ilegible. El `@media print`
    ya lo hace para `.glass`, `.glass-solid` y `.campo-oscuro`.
 2. **`.campo-oscuro` no es decoración.** Pone `color-scheme: dark`, y sin eso el
-   calendario de `type="date"` y el desplegable del `<select>` —que los pinta el
-   sistema— salen claros con el texto blanco del campo encima: blanco sobre blanco.
+   calendario de `type="date"` —que lo pinta el sistema— sale claro con el texto
+   blanco del campo encima: blanco sobre blanco.
+
+   Con el `<select>` `color-scheme` **no alcanza**: el popup toma el
+   `background-color` del control, y un fondo declarado por el autor gana sobre el
+   lienzo oscuro del sistema, así que el relleno translúcido de los demás campos
+   lo devolvía a casi blanco. Por eso el `select` es el único campo con relleno
+   **opaco** (`select.campo-oscuro` en `globals.css`, elemento + clase para
+   ganarle a la utilidad de Tailwind del call site) y las `option` llevan fondo y
+   color explícitos. **No le pongas `bg-white/[…]` a un `<select>`.**
 3. **`.anim-entrada` y `hover:-translate-*` no pueden ir en el mismo elemento.**
    La animación usa `forwards`, deja fijado `transform: none` y se come el hover.
    Van en envoltorio (entrada) + hijo (hover).

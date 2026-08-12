@@ -90,9 +90,9 @@ export function DiasPactoWidget() {
 
       <div className="relative flex-1">
         <h3 className="text-sm font-semibold text-white/90">Días de Pacto {periodo}</h3>
-        <p className="mt-1 text-xs leading-relaxed text-white/55">{mensaje}</p>
+        <p className="mt-1 text-xs leading-relaxed text-white/80">{mensaje}</p>
         {fecha_ultimo_uso && (
-          <p className="mt-2 text-xs text-white/35">
+          <p className="mt-2 text-xs text-white/60">
             Último usado: {new Date(fecha_ultimo_uso).toLocaleDateString("es-CO")}
           </p>
         )}

@@ -72,7 +72,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
         dentro del <main> —no en el contenedor de arriba— porque el sidebar es su
         hermano y un fondo por encima lo taparía.
       */}
-      <main className="scroll-noche flex-1 overflow-y-auto" style={{ background: "#070c18" }}>
+      <main className="superficie-noche scroll-noche flex-1 overflow-y-auto" style={{ background: "#070c18" }}>
         {/*
           El envoltorio `relative min-h-full` es el que le da altura al fondo: un
           `absolute inset-0` colgado del <main> con scroll se quedaría del tamaño

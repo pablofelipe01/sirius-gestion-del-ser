@@ -219,7 +219,7 @@ export function CalendarioPermiso({
 
   const dias = obtenerDiasDelMes(mesActual, anioActual);
   const navBtn =
-    "flex h-8 w-8 items-center justify-center rounded-lg border border-white/12 bg-white/[0.06] text-white/60 transition-colors hover:bg-white/12 hover:text-white";
+    "flex h-8 w-8 items-center justify-center rounded-lg border border-white/12 bg-white/[0.06] text-white/80 transition-colors hover:bg-white/12 hover:text-white";
 
   return (
     <div className="rounded-xl border border-white/10 bg-black/25 p-4">
@@ -230,7 +230,7 @@ export function CalendarioPermiso({
         </button>
 
         <div className="text-sm font-semibold text-white">
-          {NOMBRES_MESES[mesActual]} <span className="font-normal text-white/40">{anioActual}</span>
+          {NOMBRES_MESES[mesActual]} <span className="font-normal text-white/65">{anioActual}</span>
         </div>
 
         <button type="button" onClick={() => cambiarMes(1)} aria-label="Mes siguiente" className={navBtn}>
@@ -240,7 +240,7 @@ export function CalendarioPermiso({
 
       {/* Instrucción en modo rango */}
       {esRango && (
-        <p className="mb-3 rounded-lg bg-white/[0.06] px-3 py-2 text-center text-xs text-white/55">
+        <p className="mb-3 rounded-lg bg-white/[0.06] px-3 py-2 text-center text-xs text-white/80">
           {anclaPendiente
             ? "Ahora selecciona el último día del período"
             : fechasSeleccionadas.length === 0
@@ -255,7 +255,7 @@ export function CalendarioPermiso({
           <div
             key={nombre}
             className={`py-1 text-center text-[11px] font-medium uppercase tracking-wide ${
-              i === 0 || i === 6 ? "text-white/25" : "text-white/40"
+              i === 0 || i === 6 ? "text-white/45" : "text-white/65"
             }`}
           >
             {nombre}
@@ -319,9 +319,9 @@ export function CalendarioPermiso({
                 seleccionado
                   ? "shadow-sm"
                   : noDisponible
-                    ? "cursor-not-allowed bg-white/[0.03] text-white/20 line-through decoration-white/25"
+                    ? "cursor-not-allowed bg-white/[0.03] text-white/40 line-through decoration-white/25"
                     : bloqueado
-                      ? "cursor-not-allowed text-white/20"
+                      ? "cursor-not-allowed text-white/40"
                       : "text-white/80 hover:bg-white/12 active:scale-95"
               }`}
               style={estilo}
@@ -343,7 +343,7 @@ export function CalendarioPermiso({
 
       {/* Leyenda de días no disponibles */}
       {(excluirDomingos || excluirFestivos || diasSemanaPermitidos) && (
-        <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] text-white/40">
+        <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] text-white/65">
           <span className="flex items-center gap-1.5">
             <span className="h-2.5 w-2.5 rounded-sm bg-white/[0.06] ring-1 ring-inset ring-white/15" />
             No disponible
@@ -354,7 +354,7 @@ export function CalendarioPermiso({
               Festivo
             </span>
           )}
-          <span className="text-white/40">
+          <span className="text-white/65">
             {diasSemanaPermitidos
               ? `Solo se pueden elegir ${nombreDiasPermitidos}.`
               : excluirDomingos && excluirFestivos
@@ -369,12 +369,12 @@ export function CalendarioPermiso({
       {/* Resumen de la selección */}
       {fechasSeleccionadas.length > 0 && (
         <div className="mt-3 flex flex-wrap items-center justify-between gap-2 border-t border-white/10 pt-3">
-          <div className="flex flex-wrap items-baseline gap-1.5 text-sm text-white/70">
+          <div className="flex flex-wrap items-baseline gap-1.5 text-sm text-white/85">
             <span className="font-semibold" style={{ color }}>
               {fechasSeleccionadas.length}
             </span>
             {!esRango && maxDias && !seleccionUnica ? (
-              <span className="text-white/40">de {maxDias}</span>
+              <span className="text-white/65">de {maxDias}</span>
             ) : null}
             <span>
               {fechasSeleccionadas.length === 1 ? "día" : "días"}
@@ -385,7 +385,7 @@ export function CalendarioPermiso({
                 : ""}
             </span>
             {esRango && fechasSeleccionadas.length > 1 && (
-              <span className="text-xs text-white/40">
+              <span className="text-xs text-white/65">
                 · {formatFecha(primera)} → {formatFecha(ultima)}
               </span>
             )}
@@ -393,7 +393,7 @@ export function CalendarioPermiso({
           <button
             type="button"
             onClick={limpiar}
-            className="text-xs font-medium text-white/45 underline underline-offset-2 transition-colors hover:text-white/80"
+            className="text-xs font-medium text-white/70 underline underline-offset-2 transition-colors hover:text-white/80"
           >
             Limpiar
           </button>
@@ -402,7 +402,7 @@ export function CalendarioPermiso({
 
       {/* Contador vacío cuando hay un tope definido */}
       {fechasSeleccionadas.length === 0 && !esRango && maxDias ? (
-        <p className="mt-3 border-t border-white/10 pt-3 text-center text-sm text-white/40">
+        <p className="mt-3 border-t border-white/10 pt-3 text-center text-sm text-white/65">
           {seleccionUnica ? "Selecciona un día" : `0 de ${maxDias} días seleccionados`}
         </p>
       ) : null}

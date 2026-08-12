@@ -54,7 +54,7 @@ interface Props {
 }
 
 const campoCls =
-  "campo-oscuro w-full rounded-lg border border-white/12 bg-white/[0.06] px-3 py-2 text-sm text-white placeholder:text-white/35 focus:border-white/25 focus:outline-none focus:ring-2 focus:ring-white/15";
+  "campo-oscuro w-full rounded-lg border border-white/12 bg-white/[0.06] px-3 py-2 text-sm text-white placeholder:text-white/60 focus:border-white/25 focus:outline-none focus:ring-2 focus:ring-white/15";
 
 export function PlanCompensacion({
   plan,
@@ -106,7 +106,7 @@ export function PlanCompensacion({
               >
                 {opcion.nombre}
               </p>
-              <p className="mt-0.5 text-xs text-white/45">{opcion.resumen}</p>
+              <p className="mt-0.5 text-xs text-white/70">{opcion.resumen}</p>
             </button>
           );
         })}
@@ -115,7 +115,7 @@ export function PlanCompensacion({
       {/* Plan 1 — sábados de 7:00 a. m. a 12:00 m. */}
       {plan === PLAN_SABADO && (
         <div className="rounded-xl border border-white/10 bg-black/20 p-3.5">
-          <p className="mb-2 text-xs font-medium text-white/70">
+          <p className="mb-2 text-xs font-medium text-white/85">
             Marca en el calendario los sábados en los que asistirá
           </p>
 
@@ -131,12 +131,12 @@ export function PlanCompensacion({
           </div>
 
           {sabadosElegidos.length > 0 && (
-            <p className="mt-2 text-xs text-white/65">
+            <p className="mt-2 text-xs text-white/85">
               {sabadosElegidos.map(formatFecha).join(" · ")}
             </p>
           )}
           {faltantes > 0 && (
-            <p className="mt-2 text-xs text-white/45">
+            <p className="mt-2 text-xs text-white/70">
               Con jornadas de 5 h faltan {faltantes} sábado{faltantes > 1 ? "s" : ""} para
               cubrir las {horasTotal} h.
             </p>
@@ -147,7 +147,7 @@ export function PlanCompensacion({
       {/* Plan 2 — una hora diaria hasta completar */}
       {plan === PLAN_HORA_DIARIA && (
         <div className="rounded-xl border border-white/10 bg-black/20 p-3.5">
-          <label className="mb-1.5 block text-xs font-medium text-white/70">
+          <label className="mb-1.5 block text-xs font-medium text-white/85">
             Desde qué día empieza a reponer
           </label>
           <SelectorFecha
@@ -161,7 +161,7 @@ export function PlanCompensacion({
             color={color}
             disabled={disabled}
           />
-          <p className="mt-2 text-xs text-white/45">
+          <p className="mt-2 text-xs text-white/70">
             Se agenda una hora por día hábil (lunes a viernes) hasta completar las{" "}
             {horasTotal} h.
           </p>
@@ -172,7 +172,7 @@ export function PlanCompensacion({
       {plan === PLAN_RETO && (
         <div className="flex flex-col gap-3 rounded-xl border border-white/10 bg-black/20 p-3.5">
           <div>
-            <label className="mb-1.5 block text-xs font-medium text-white/70">
+            <label className="mb-1.5 block text-xs font-medium text-white/85">
               ¿En qué consiste el reto?
             </label>
             <textarea
@@ -185,7 +185,7 @@ export function PlanCompensacion({
             />
           </div>
           <div>
-            <label className="mb-1.5 block text-xs font-medium text-white/70">
+            <label className="mb-1.5 block text-xs font-medium text-white/85">
               Fecha límite para cumplirlo
             </label>
             <SelectorFecha
@@ -201,7 +201,7 @@ export function PlanCompensacion({
       )}
 
       {dias.length > 0 && (
-        <p className="text-xs text-white/45">
+        <p className="text-xs text-white/70">
           {dias.length} jornada{dias.length > 1 ? "s" : ""} · {horasCubiertas} h de{" "}
           {horasTotal} h por reponer.
         </p>

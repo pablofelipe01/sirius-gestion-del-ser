@@ -113,14 +113,14 @@ function ModuleCard({ mod, orden }: { mod: (typeof MODULES)[0]; orden: number })
           </svg>
         </div>
         {!mod.ready && (
-          <span className="rounded-full bg-white/[0.07] px-2 py-0.5 text-xs font-medium text-white/40 ring-1 ring-inset ring-white/10">
+          <span className="rounded-full bg-white/[0.07] px-2 py-0.5 text-xs font-medium text-white/65 ring-1 ring-inset ring-white/10">
             Próximamente
           </span>
         )}
       </div>
       <div className="relative">
         <h3 className="mb-1 font-semibold text-white">{mod.label}</h3>
-        <p className="text-sm leading-relaxed text-white/45">{mod.desc}</p>
+        <p className="text-sm leading-relaxed text-white/70">{mod.desc}</p>
       </div>
     </div>
   );
@@ -156,7 +156,7 @@ export default async function DashboardPage() {
     <div className="mx-auto max-w-6xl px-4 pb-14 pt-8 sm:px-8 sm:pt-12">
       {/* ── Encabezado sobre el cielo ──────────────────────────────────────── */}
       <div className="anim-entrada mb-10">
-        <p className="mb-2 text-sm text-white/45">{greeting()},</p>
+        <p className="mb-2 text-sm text-white/70">{greeting()},</p>
         <h1 className="text-4xl font-bold leading-[1.05] tracking-tight text-white sm:text-5xl">
           {firstName}
         </h1>
@@ -167,7 +167,7 @@ export default async function DashboardPage() {
           >
             {payload.rol}
           </span>
-          <span className="glass rounded-full px-2.5 py-1 text-xs font-medium text-white/55">
+          <span className="glass rounded-full px-2.5 py-1 text-xs font-medium text-white/80">
             {payload.idCore}
           </span>
         </div>
@@ -187,7 +187,7 @@ export default async function DashboardPage() {
           <h2 className="mb-1 text-lg font-semibold text-white">
             Bienvenido a Sirius Gestión del Ser
           </h2>
-          <p className="max-w-xl text-sm leading-relaxed text-white/50">
+          <p className="max-w-xl text-sm leading-relaxed text-white/75">
             Plataforma integral de talento humano. Los módulos se irán habilitando progresivamente.
           </p>
         </div>
@@ -203,7 +203,7 @@ export default async function DashboardPage() {
 
       {/* ── Módulos ─────────────────────────────────────────────────────────── */}
       <div className="anim-entrada mb-4 flex items-center gap-3" style={{ animationDelay: "200ms" }}>
-        <h2 className="text-[11px] font-semibold uppercase tracking-[0.16em] text-white/45">
+        <h2 className="text-[11px] font-semibold uppercase tracking-[0.16em] text-white/70">
           Módulos
         </h2>
         <span className="h-px flex-1 bg-gradient-to-r from-white/20 to-transparent" />

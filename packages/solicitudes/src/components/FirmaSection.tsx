@@ -32,7 +32,7 @@ export function FirmaSection({ color, paso, firmaConfirmada, onFirmar, onLimpiar
 
       {!firmaConfirmada ? (
         <>
-          <p className="text-xs text-white/45">
+          <p className="text-xs text-white/70">
             Dibuja tu firma en el recuadro. Es obligatoria para enviar la solicitud.
           </p>
           <FirmaCanvas onFirmaCapturada={onFirmar} onLimpiar={onLimpiar} color={color} />

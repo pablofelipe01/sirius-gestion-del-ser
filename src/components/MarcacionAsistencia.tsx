@@ -139,7 +139,7 @@ export default function MarcacionAsistencia() {
     <div className="flex flex-col gap-6">
       <div>
         <h1 className="text-4xl font-bold leading-[1.05] tracking-tight text-white sm:text-5xl">Asistencia</h1>
-        <p className="mt-3 text-sm text-white/50">
+        <p className="mt-3 text-sm text-white/75">
           Marca tu entrada al empezar y tu salida al terminar. Nada más.
         </p>
       </div>
@@ -148,7 +148,7 @@ export default function MarcacionAsistencia() {
       <div className="glass-solid anim-entrada relative overflow-hidden rounded-2xl p-8">
         <div className="relative flex flex-col items-center gap-6 text-center">
           <div>
-            <p className="text-sm capitalize text-white/45">
+            <p className="text-sm capitalize text-white/70">
               {formatearFechaLarga(hoy?.fecha ?? new Date().toISOString().slice(0, 10))}
             </p>
             <p className="mt-1 text-5xl font-bold tabular-nums tracking-tight text-white">
@@ -232,7 +232,7 @@ export default function MarcacionAsistencia() {
               {hoy.marcaciones.map((marcacion) => (
                 <span
                   key={marcacion.id}
-                  className="rounded-lg bg-white/[0.07] px-2.5 py-1 text-xs text-white/65 ring-1 ring-inset ring-white/10"
+                  className="rounded-lg bg-white/[0.07] px-2.5 py-1 text-xs text-white/85 ring-1 ring-inset ring-white/10"
                 >
                   <span
                     className="mr-1.5 inline-block h-1.5 w-1.5 rounded-full align-middle"
@@ -254,7 +254,7 @@ export default function MarcacionAsistencia() {
         <div className="mb-4 flex items-center justify-between gap-4">
           <div>
             <h2 className="font-semibold text-white">Mi mes</h2>
-            <p className="text-sm capitalize text-white/45">{nombreMes(mes)}</p>
+            <p className="text-sm capitalize text-white/70">{nombreMes(mes)}</p>
           </div>
           <div className="flex items-center gap-2">
             <BotonMes
@@ -273,9 +273,9 @@ export default function MarcacionAsistencia() {
         </div>
 
         {cargando ? (
-          <p className="py-8 text-center text-sm text-white/40">Cargando…</p>
+          <p className="py-8 text-center text-sm text-white/65">Cargando…</p>
         ) : !datos || datos.dias.length === 0 ? (
-          <p className="py-8 text-center text-sm text-white/40">
+          <p className="py-8 text-center text-sm text-white/65">
             Sin marcaciones registradas en este mes.
           </p>
         ) : (
@@ -283,7 +283,7 @@ export default function MarcacionAsistencia() {
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="border-b border-white/10 text-left text-[10px] uppercase tracking-[0.14em] text-white/40">
+                  <tr className="border-b border-white/10 text-left text-[10px] uppercase tracking-[0.14em] text-white/65">
                     <th className="pb-2 font-medium">Día</th>
                     <th className="pb-2 font-medium">Entrada</th>
                     <th className="pb-2 font-medium">Salida</th>
@@ -296,10 +296,10 @@ export default function MarcacionAsistencia() {
                       <td className="py-2.5 capitalize text-white/85">
                         {formatearFechaLarga(dia.fecha)}
                       </td>
-                      <td className="py-2.5 tabular-nums text-white/60">
+                      <td className="py-2.5 tabular-nums text-white/80">
                         {dia.primeraEntrada ?? "—"}
                       </td>
-                      <td className="py-2.5 tabular-nums text-white/60">
+                      <td className="py-2.5 tabular-nums text-white/80">
                         {dia.jornadaAbierta && !dia.ultimaSalida ? (
                           <span className="text-amber-300">Sin salida</span>
                         ) : (
@@ -315,7 +315,7 @@ export default function MarcacionAsistencia() {
               </table>
             </div>
             <div className="mt-4 flex items-center justify-between border-t border-white/10 pt-4 text-sm">
-              <span className="text-white/45">
+              <span className="text-white/70">
                 {datos.dias.length} {datos.dias.length === 1 ? "día" : "días"} con registro
               </span>
               <span className="font-semibold text-white">
@@ -343,7 +343,7 @@ function Chip({
       className={`rounded-full px-3 py-1.5 text-xs ${
         destacado
           ? "bg-white/90 text-slate-900"
-          : "bg-white/[0.07] text-white/65 ring-1 ring-inset ring-white/10"
+          : "bg-white/[0.07] text-white/85 ring-1 ring-inset ring-white/10"
       }`}
     >
       {etiqueta}: <strong className="font-semibold tabular-nums">{valor}</strong>
@@ -369,7 +369,7 @@ function BotonMes({
       disabled={deshabilitado}
       aria-label={etiqueta}
       title={etiqueta}
-      className="rounded-lg border border-white/12 bg-white/[0.06] p-1.5 text-white/60 transition-colors hover:bg-white/12 hover:text-white disabled:cursor-not-allowed disabled:opacity-30"
+      className="rounded-lg border border-white/12 bg-white/[0.06] p-1.5 text-white/80 transition-colors hover:bg-white/12 hover:text-white disabled:cursor-not-allowed disabled:opacity-30"
     >
       <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
         <path

@@ -188,7 +188,7 @@ export function AvisoCompensacion({ permisos, apiBasePath = "" }: Props) {
             >
               <div className="min-w-0">
                 <p className="truncate text-sm font-medium text-white/90">{p.tipo}</p>
-                <p className="mt-0.5 text-xs text-white/45">
+                <p className="mt-0.5 text-xs text-white/70">
                   {formatFecha(p.fecha)} · {p.horasTotal} h por reponer
                 </p>
               </div>
@@ -213,7 +213,7 @@ export function AvisoCompensacion({ permisos, apiBasePath = "" }: Props) {
               <h2 className="text-lg font-semibold tracking-tight text-white">
                 ¿Cómo vas a reponer el tiempo?
               </h2>
-              <p className="mt-1 text-sm text-white/45">
+              <p className="mt-1 text-sm text-white/70">
                 {abierto.tipo} del {formatFecha(abierto.fecha)} · {abierto.horasTotal} h por
                 reponer
               </p>
@@ -242,7 +242,7 @@ export function AvisoCompensacion({ permisos, apiBasePath = "" }: Props) {
                 type="button"
                 onClick={() => setAbierto(null)}
                 disabled={guardando}
-                className="rounded-xl px-4 py-2.5 text-sm font-medium text-white/60 transition-colors hover:bg-white/10 hover:text-white disabled:opacity-40"
+                className="rounded-xl px-4 py-2.5 text-sm font-medium text-white/80 transition-colors hover:bg-white/10 hover:text-white disabled:opacity-40"
               >
                 Cancelar
               </button>
@@ -250,7 +250,7 @@ export function AvisoCompensacion({ permisos, apiBasePath = "" }: Props) {
                 type="button"
                 onClick={guardar}
                 disabled={guardando || !plan}
-                className="rounded-xl px-5 py-2.5 text-sm font-semibold text-white transition-all hover:brightness-110 disabled:cursor-not-allowed disabled:bg-white/10 disabled:text-white/35"
+                className="rounded-xl px-5 py-2.5 text-sm font-semibold text-white transition-all hover:brightness-110 disabled:cursor-not-allowed disabled:bg-white/10 disabled:text-white/60"
                 style={plan && !guardando ? { background: COLOR, boxShadow: `0 14px 30px -16px ${COLOR}` } : undefined}
               >
                 {guardando ? "Guardando..." : "Confirmar plan"}

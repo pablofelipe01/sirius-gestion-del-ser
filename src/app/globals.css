@@ -42,25 +42,44 @@ textarea::placeholder {
    de un solo golpe — un PDF con fondo translúcido sale ilegible.
    ────────────────────────────────────────────────────────────────────────── */
 
+/**
+ * El tinte es oscuro, no blanco: encima va texto blanco, y aclarar la tarjeta le
+ * quita contraste justo donde se lee. La sensación de vidrio la dan el `blur` y
+ * el brillo interior del borde, no la opacidad del relleno — así que el vidrio se
+ * nota igual y las letras se ven sobre cualquier zona de la foto, incluida la
+ * franja clara del cielo.
+ */
 .glass {
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(10, 16, 30, 0.44);
+  border: 1px solid rgba(255, 255, 255, 0.16);
   backdrop-filter: blur(20px) saturate(140%);
   -webkit-backdrop-filter: blur(20px) saturate(140%);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
     0 18px 40px -24px rgba(0, 0, 0, 0.8);
 }
 
 /* Un nivel más sólido, para paneles con mucho texto encima de la foto. */
 .glass-solid {
-  background: rgba(9, 14, 26, 0.62);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(9, 14, 26, 0.82);
+  border: 1px solid rgba(255, 255, 255, 0.14);
   backdrop-filter: blur(24px) saturate(130%);
   -webkit-backdrop-filter: blur(24px) saturate(130%);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
     0 24px 50px -28px rgba(0, 0, 0, 0.85);
+}
+
+/**
+ * Color de texto por defecto de la superficie nocturna.
+ *
+ * El `body` es claro (`--foreground: #171717`) porque los documentos y la
+ * impresión lo siguen siendo. Sobre la foto, cualquier texto al que se le olvide
+ * una clase de color hereda ese gris casi negro y desaparece. Esto le da un
+ * suelo legible: las clases explícitas de Tailwind siguen ganando.
+ */
+.superficie-noche {
+  color: #e8ecf5;
 }
 
 /* ── Controles de formulario sobre la superficie nocturna ────────────────── */
@@ -76,6 +95,39 @@ textarea::placeholder {
  */
 .campo-oscuro {
   color-scheme: dark;
+  /* Gana por especificidad a la regla `input, textarea, select { color: #0f172a }`
+     de arriba: un campo oscuro al que se le olvide `text-white` quedaría con
+     texto casi negro sobre su propio relleno oscuro. */
+  color: #ffffff;
+}
+
+.campo-oscuro::placeholder {
+  color: rgba(255, 255, 255, 0.55);
+  opacity: 1;
+}
+
+/**
+ * El desplegable de un `<select>` lo pinta el sistema, y toma el
+ * `background-color` que le demos al control. Con el relleno translúcido del
+ * resto de los campos (`bg-white/[0.06]`) el popup se compone sobre lienzo
+ * blanco: queda casi blanco con el texto blanco del campo encima — invisible.
+ * `color-scheme: dark` no alcanza, porque un fondo declarado por el autor gana
+ * sobre el lienzo oscuro del sistema.
+ *
+ * Por eso el `select` es el único campo con relleno **opaco**, y las `option`
+ * llevan color y fondo explícitos: heredarlos deja el mismo blanco sobre blanco.
+ * El selector es `select.campo-oscuro` (elemento + clase) para ganarle a la
+ * utilidad de Tailwind de cada call site sin repetir el color en los 8
+ * desplegables de la aplicación.
+ */
+select.campo-oscuro {
+  background-color: #131d33;
+}
+
+.campo-oscuro option,
+.campo-oscuro optgroup {
+  background-color: #131d33;
+  color: #ffffff;
 }
 
 /* La barra de scroll clara corta la composición nocturna por el borde. */
@@ -155,7 +207,9 @@ textarea::placeholder {
     display: none !important;
   }
 
-  body {
+  body,
+  /* En papel el suelo claro de la superficie nocturna sería blanco sobre blanco. */
+  .superficie-noche {
     background: white;
     color: black;
   }

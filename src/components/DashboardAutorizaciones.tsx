@@ -172,7 +172,7 @@ export default function DashboardAutorizaciones() {
                   <h2 className="text-xl font-semibold text-white sm:text-2xl">
                     Panel de Autorizaciones
                   </h2>
-                  <p className="text-sm text-white/50">
+                  <p className="text-sm text-white/75">
                     {conteos.todas === 0
                       ? "No hay solicitudes pendientes de su aprobación"
                       : `${conteos.todas} solicitud${conteos.todas !== 1 ? "es" : ""} pendiente${
@@ -187,7 +187,7 @@ export default function DashboardAutorizaciones() {
                 {datos.permisos.map((p, idx) => (
                   <span
                     key={idx}
-                    className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.06] px-3 py-1 text-xs font-medium text-white/60"
+                    className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.06] px-3 py-1 text-xs font-medium text-white/80"
                     title={p.notas}
                   >
                     <span
@@ -202,7 +202,7 @@ export default function DashboardAutorizaciones() {
 
             <button
               onClick={fetchDatos}
-              className="group inline-flex shrink-0 items-center gap-2 rounded-lg border border-white/12 bg-white/[0.06] px-3 py-2 text-sm font-medium text-white/70 transition-colors hover:bg-white/12 hover:text-white"
+              className="group inline-flex shrink-0 items-center gap-2 rounded-lg border border-white/12 bg-white/[0.06] px-3 py-2 text-sm font-medium text-white/85 transition-colors hover:bg-white/12 hover:text-white"
             >
               <svg
                 className="h-4 w-4 transition-transform duration-500 group-hover:rotate-180"
@@ -236,7 +236,7 @@ export default function DashboardAutorizaciones() {
                   className={`whitespace-nowrap border-b-2 px-1 py-4 text-sm font-medium transition-colors ${
                     activo
                       ? estiloActivo
-                      : "border-transparent text-white/45 hover:text-white/80"
+                      : "border-transparent text-white/70 hover:text-white/80"
                   }`}
                 >
                   {t === "todas" ? "Todas" : ESTILO_CATEGORIA[t].etiqueta + "s"} ({conteos[t]})
@@ -248,7 +248,7 @@ export default function DashboardAutorizaciones() {
           {conteos.todas > 0 && (
             <div className="relative py-3 w-full sm:w-64">
               <svg
-                className="pointer-events-none absolute left-3 top-1/2 z-10 h-4 w-4 -translate-y-1/2 text-white/40"
+                className="pointer-events-none absolute left-3 top-1/2 z-10 h-4 w-4 -translate-y-1/2 text-white/65"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -265,7 +265,7 @@ export default function DashboardAutorizaciones() {
                 value={busqueda}
                 onChange={(e) => setBusqueda(e.target.value)}
                 placeholder="Buscar por nombre, cédula o tipo"
-                className="w-full rounded-lg border border-white/12 bg-white/[0.06] py-2 pl-9 pr-3 text-sm text-white placeholder:text-white/35 focus:border-[#29b6e8]/60 focus:outline-none focus:ring-2 focus:ring-[#29b6e8]/25"
+                className="w-full rounded-lg border border-white/12 bg-white/[0.06] py-2 pl-9 pr-3 text-sm text-white placeholder:text-white/60 focus:border-[#29b6e8]/60 focus:outline-none focus:ring-2 focus:ring-[#29b6e8]/25"
               />
             </div>
           )}
@@ -275,7 +275,7 @@ export default function DashboardAutorizaciones() {
         <div className="bg-black/15 p-6 sm:p-8">
           {filtradas.length === 0 ? (
             <div className="py-12 text-center">
-              <p className="font-medium text-white/55">
+              <p className="font-medium text-white/80">
                 {conteos.todas === 0
                   ? "✓ No hay solicitudes pendientes de autorización"
                   : "Ninguna solicitud coincide con el filtro"}
@@ -357,16 +357,16 @@ function TarjetaSolicitud({
               {estilo.etiqueta}
             </span>
             <h3 className="truncate font-semibold text-white">{nombre}</h3>
-            {cedula && <span className="text-xs text-white/40">CC {cedula}</span>}
+            {cedula && <span className="text-xs text-white/65">CC {cedula}</span>}
           </div>
 
-          {cargo && <p className="mt-1 text-xs text-white/40">{cargo}</p>}
+          {cargo && <p className="mt-1 text-xs text-white/65">{cargo}</p>}
 
           {/* Datos de la solicitud */}
           <dl className="mt-3 grid grid-cols-2 gap-x-6 gap-y-2 text-sm sm:grid-cols-3 lg:grid-cols-4">
             {datosSolicitud(categoria, solicitud).map(({ etiqueta, valor }) => (
               <div key={etiqueta} className="min-w-0">
-                <dt className="text-[11px] uppercase tracking-wide text-white/35">{etiqueta}</dt>
+                <dt className="text-[11px] uppercase tracking-wide text-white/60">{etiqueta}</dt>
                 <dd className="truncate font-medium text-white/90" title={valor}>
                   {valor}
                 </dd>
@@ -377,10 +377,10 @@ function TarjetaSolicitud({
           {/* Motivo / descripción */}
           {motivo(categoria, solicitud) && (
             <div className="mt-3 rounded-lg border border-white/10 bg-black/25 px-3 py-2">
-              <p className="text-[11px] font-medium uppercase tracking-wide text-white/40">
+              <p className="text-[11px] font-medium uppercase tracking-wide text-white/65">
                 Motivo
               </p>
-              <p className="mt-0.5 whitespace-pre-line text-sm text-white/75">
+              <p className="mt-0.5 whitespace-pre-line text-sm text-white/90">
                 {motivo(categoria, solicitud)}
               </p>
             </div>

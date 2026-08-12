@@ -157,7 +157,7 @@ export function FirmaCanvas({
           type="button"
           onClick={limpiar}
           disabled={!hayFirma}
-          className="flex-1 rounded-xl border border-white/12 bg-white/[0.06] px-4 py-2.5 text-sm font-medium text-white/75 transition-colors hover:bg-white/12 hover:text-white disabled:cursor-not-allowed disabled:opacity-30"
+          className="flex-1 rounded-xl border border-white/12 bg-white/[0.06] px-4 py-2.5 text-sm font-medium text-white/90 transition-colors hover:bg-white/12 hover:text-white disabled:cursor-not-allowed disabled:opacity-30"
         >
           Limpiar
         </button>
@@ -173,7 +173,7 @@ export function FirmaCanvas({
         </button>
       </div>
 
-      <p className="text-center text-xs text-white/35">
+      <p className="text-center text-xs text-white/60">
         Dibuja tu firma con el mouse o con el dedo en dispositivos táctiles
       </p>
     </div>

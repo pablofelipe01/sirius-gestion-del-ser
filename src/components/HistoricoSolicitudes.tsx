@@ -100,7 +100,7 @@ const CLASES: Record<string, { etiqueta: string; chip: string; icono: string }> 
   },
   heredado: {
     etiqueta: "Sistema anterior",
-    chip: "bg-white/[0.08] text-white/60 border-white/15",
+    chip: "bg-white/[0.08] text-white/80 border-white/15",
     icono:
       "M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z",
   },
@@ -139,13 +139,13 @@ function iso(valor: unknown): string {
 /** Estilo del badge de estado — mismos colores que el resto del dashboard. */
 function estiloEstado(estado: string): string {
   const e = estado.toLowerCase();
-  if (!e) return "bg-white/[0.08] text-white/60";
+  if (!e) return "bg-white/[0.08] text-white/80";
   if (e === "pendiente") return "bg-yellow-100 text-yellow-800";
   if (["concedido", "aprobado", "autorizado", "resuelto"].includes(e))
     return "bg-green-500/18 text-green-300";
   if (["rechazado", "no autorizado"].includes(e)) return "bg-rose-500/18 text-rose-300";
   if (e === "revisado") return "bg-[#1a51a8]/30 text-[#9cc4ff]";
-  return "bg-white/[0.08] text-white/60";
+  return "bg-white/[0.08] text-white/80";
 }
 
 function normalizar(categoria: Categoria, r: Registro): Fila {
@@ -469,7 +469,7 @@ export default function HistoricoSolicitudes() {
             <h2 className="text-xl font-semibold tracking-tight text-white sm:text-2xl">
               Histórico de solicitudes
             </h2>
-            <p className="mt-1 text-sm text-white/50">
+            <p className="mt-1 text-sm text-white/75">
               {datos?.alcance === "propio"
                 ? "Todas sus solicitudes de permiso, vacaciones y novedades de nómina"
                 : datos?.alcance === "areas"
@@ -477,7 +477,7 @@ export default function HistoricoSolicitudes() {
                   : "Solicitudes de todos los colaboradores"}
             </p>
             {tab === "documentos" && (
-              <p className="mt-1 text-xs text-white/40">
+              <p className="mt-1 text-xs text-white/65">
                 Todos los archivos asociados: documentos de autorización, firmas, adjuntos
                 y documentos del sistema anterior
               </p>
@@ -490,7 +490,7 @@ export default function HistoricoSolicitudes() {
               disabled={
                 tab === "documentos" ? documentosFiltrados.length === 0 : filtradas.length === 0
               }
-              className="inline-flex items-center gap-2 rounded-lg border border-white/12 bg-white/[0.06] px-3 py-2 text-sm font-medium text-white/70 transition-colors hover:bg-white/12 hover:text-white disabled:opacity-30"
+              className="inline-flex items-center gap-2 rounded-lg border border-white/12 bg-white/[0.06] px-3 py-2 text-sm font-medium text-white/85 transition-colors hover:bg-white/12 hover:text-white disabled:opacity-30"
             >
               <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
@@ -504,7 +504,7 @@ export default function HistoricoSolicitudes() {
             </button>
             <button
               onClick={cargar}
-              className="inline-flex items-center gap-2 rounded-lg border border-white/12 bg-white/[0.06] px-3 py-2 text-sm font-medium text-white/70 transition-colors hover:bg-white/12 hover:text-white"
+              className="inline-flex items-center gap-2 rounded-lg border border-white/12 bg-white/[0.06] px-3 py-2 text-sm font-medium text-white/85 transition-colors hover:bg-white/12 hover:text-white"
             >
               <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
@@ -569,7 +569,7 @@ export default function HistoricoSolicitudes() {
               key={t}
               onClick={() => setTab(t)}
               className={`whitespace-nowrap border-b-2 px-1 py-4 text-sm font-medium transition-colors ${
-                activo ? estiloActivo : "border-transparent text-white/45 hover:text-white/80"
+                activo ? estiloActivo : "border-transparent text-white/70 hover:text-white/80"
               }`}
             >
               {etiqueta} ({conteos[t]})
@@ -585,18 +585,18 @@ export default function HistoricoSolicitudes() {
       {/* Filtros */}
       <div className="flex flex-wrap items-end gap-3 border-b border-white/10 bg-black/25 px-6 py-4 sm:px-8">
         <div className="min-w-[200px] flex-1">
-          <label className="mb-1 block text-xs text-white/45">Buscar</label>
+          <label className="mb-1 block text-xs text-white/70">Buscar</label>
           <input
             type="search"
             value={busqueda}
             onChange={(e) => setBusqueda(e.target.value)}
             placeholder="Nombre, cédula, tipo, motivo…"
-            className="campo-oscuro w-full rounded-lg border border-white/12 bg-white/[0.06] px-3 py-2 text-sm text-white placeholder:text-white/35 focus:border-[#29b6e8]/60 focus:ring-2 focus:ring-[#29b6e8]/25 focus:outline-none"
+            className="campo-oscuro w-full rounded-lg border border-white/12 bg-white/[0.06] px-3 py-2 text-sm text-white placeholder:text-white/60 focus:border-[#29b6e8]/60 focus:ring-2 focus:ring-[#29b6e8]/25 focus:outline-none"
           />
         </div>
         {tab === "documentos" ? (
           <div>
-            <label className="mb-1 block text-xs text-white/45">Clase de documento</label>
+            <label className="mb-1 block text-xs text-white/70">Clase de documento</label>
             <select
               value={clase}
               onChange={(e) => setClase(e.target.value)}
@@ -612,7 +612,7 @@ export default function HistoricoSolicitudes() {
           </div>
         ) : (
           <div>
-            <label className="mb-1 block text-xs text-white/45">Estado</label>
+            <label className="mb-1 block text-xs text-white/70">Estado</label>
             <select
               value={estado}
               onChange={(e) => setEstado(e.target.value)}
@@ -629,7 +629,7 @@ export default function HistoricoSolicitudes() {
           </div>
         )}
         <div>
-          <label className="mb-1 block text-xs text-white/45">Desde</label>
+          <label className="mb-1 block text-xs text-white/70">Desde</label>
           <input
             type="date"
             value={desde}
@@ -638,7 +638,7 @@ export default function HistoricoSolicitudes() {
           />
         </div>
         <div>
-          <label className="mb-1 block text-xs text-white/45">Hasta</label>
+          <label className="mb-1 block text-xs text-white/70">Hasta</label>
           <input
             type="date"
             value={hasta}
@@ -649,7 +649,7 @@ export default function HistoricoSolicitudes() {
         {hayFiltros && (
           <button
             onClick={limpiarFiltros}
-            className="rounded-lg px-3 py-2 text-sm font-medium text-white/50 transition-colors hover:bg-white/10 hover:text-white"
+            className="rounded-lg px-3 py-2 text-sm font-medium text-white/75 transition-colors hover:bg-white/10 hover:text-white"
           >
             Limpiar
           </button>
@@ -660,7 +660,7 @@ export default function HistoricoSolicitudes() {
       {tab === "documentos" ? (
         documentosFiltrados.length === 0 ? (
           <div className="px-8 py-16 text-center">
-            <p className="font-medium text-white/55">
+            <p className="font-medium text-white/80">
               {documentos.length === 0
                 ? "Todavía no hay documentos registrados"
                 : "Ningún documento coincide con los filtros"}
@@ -671,7 +671,7 @@ export default function HistoricoSolicitudes() {
             <div className="overflow-x-auto">
               <table className="w-full min-w-[760px] text-sm">
                 <thead>
-                  <tr className="border-b border-white/10 text-left text-[10px] uppercase tracking-[0.14em] text-white/40">
+                  <tr className="border-b border-white/10 text-left text-[10px] uppercase tracking-[0.14em] text-white/65">
                     <th className="px-6 py-3 font-medium sm:px-8">Documento</th>
                     <th className="px-3 py-3 font-medium">Clase</th>
                     <th className="px-3 py-3 font-medium">Solicitud</th>
@@ -704,7 +704,7 @@ export default function HistoricoSolicitudes() {
       ) : /* Tabla de solicitudes */
       filtradas.length === 0 ? (
         <div className="px-8 py-16 text-center">
-          <p className="font-medium text-white/55">
+          <p className="font-medium text-white/80">
             {filas.length === 0
               ? "Todavía no hay solicitudes registradas"
               : "Ninguna solicitud coincide con los filtros"}
@@ -715,7 +715,7 @@ export default function HistoricoSolicitudes() {
           <div className="overflow-x-auto">
             <table className="w-full min-w-[860px] text-sm">
               <thead>
-                <tr className="border-b border-white/10 text-left text-[10px] uppercase tracking-[0.14em] text-white/40">
+                <tr className="border-b border-white/10 text-left text-[10px] uppercase tracking-[0.14em] text-white/65">
                   <th className="px-6 py-3 font-medium sm:px-8">Tipo</th>
                   <th className="px-3 py-3 font-medium">Colaborador</th>
                   <th className="px-3 py-3 font-medium">Detalle</th>
@@ -760,7 +760,7 @@ export default function HistoricoSolicitudes() {
 }
 
 const TONOS: Record<string, string> = {
-  slate: "border-white/15 bg-white/[0.08] text-white/70",
+  slate: "border-white/15 bg-white/[0.08] text-white/85",
   amber: "border-amber-400/40 bg-amber-500/15 text-amber-200",
   emerald: "border-emerald-400/40 bg-emerald-500/15 text-emerald-200",
   rose: "border-rose-400/40 bg-rose-500/15 text-rose-200",
@@ -777,7 +777,7 @@ function FilaDocumento({ documento: d }: { documento: Documento }) {
       <td className="max-w-[280px] px-6 py-3 sm:px-8">
         <div className="flex items-center gap-2.5">
           <svg
-            className="h-4 w-4 flex-shrink-0 text-white/40"
+            className="h-4 w-4 flex-shrink-0 text-white/65"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -805,10 +805,10 @@ function FilaDocumento({ documento: d }: { documento: Documento }) {
       </td>
       <td className="max-w-[190px] px-3 py-3">
         <p className="truncate text-white/85">{d.nombre}</p>
-        {d.cedula && <p className="text-xs text-white/40">CC {d.cedula}</p>}
+        {d.cedula && <p className="text-xs text-white/65">CC {d.cedula}</p>}
       </td>
-      <td className="whitespace-nowrap px-3 py-3 text-white/60">{fmtFecha(d.fecha)}</td>
-      <td className="whitespace-nowrap px-3 py-3 text-white/40">{fmtTamano(d.tamano)}</td>
+      <td className="whitespace-nowrap px-3 py-3 text-white/80">{fmtFecha(d.fecha)}</td>
+      <td className="whitespace-nowrap px-3 py-3 text-white/65">{fmtTamano(d.tamano)}</td>
       <td className="px-3 py-3 pr-6 sm:pr-8">
         <a
           href={d.url}
@@ -866,14 +866,14 @@ function FilaHistorico({
         </td>
         <td className="max-w-[200px] px-3 py-3">
           <p className="truncate font-medium text-white/90">{fila.nombre}</p>
-          {fila.cedula && <p className="text-xs text-white/40">CC {fila.cedula}</p>}
+          {fila.cedula && <p className="text-xs text-white/65">CC {fila.cedula}</p>}
         </td>
         <td className="max-w-[200px] px-3 py-3">
           <p className="truncate text-white/85" title={fila.detalle}>
             {fila.detalle || "—"}
           </p>
         </td>
-        <td className="whitespace-nowrap px-3 py-3 text-white/60">
+        <td className="whitespace-nowrap px-3 py-3 text-white/80">
           {fmtFecha(fila.fechaRadicado)}
         </td>
         <td className="px-3 py-3">
@@ -887,10 +887,10 @@ function FilaHistorico({
           {fila.autorizadoPor ? (
             <>
               <p className="truncate text-white/85">{fila.autorizadoPor}</p>
-              <p className="text-xs text-white/40">{fmtFecha(fila.fechaAutorizacion)}</p>
+              <p className="text-xs text-white/65">{fmtFecha(fila.fechaAutorizacion)}</p>
             </>
           ) : (
-            <span className="text-white/25">—</span>
+            <span className="text-white/45">—</span>
           )}
         </td>
         <td className="px-3 py-3 pr-6 sm:pr-8">
@@ -913,7 +913,7 @@ function FilaHistorico({
               PDF
             </a>
           ) : (
-            <span className="text-white/25">—</span>
+            <span className="text-white/45">—</span>
           )}
         </td>
       </tr>
@@ -925,19 +925,19 @@ function FilaHistorico({
               <dl className="grid grid-cols-2 gap-x-6 gap-y-3 lg:col-span-2">
                 {fila.cargo && (
                   <div>
-                    <dt className="text-xs text-white/40">Cargo</dt>
+                    <dt className="text-xs text-white/65">Cargo</dt>
                     <dd className="text-sm font-medium text-white/90">{fila.cargo}</dd>
                   </div>
                 )}
                 {fila.idCore && (
                   <div>
-                    <dt className="text-xs text-white/40">ID empleado</dt>
+                    <dt className="text-xs text-white/65">ID empleado</dt>
                     <dd className="text-sm font-medium text-white/90">{fila.idCore}</dd>
                   </div>
                 )}
                 {fila.extras.map((e) => (
                   <div key={e.etiqueta}>
-                    <dt className="text-xs text-white/40">{e.etiqueta}</dt>
+                    <dt className="text-xs text-white/65">{e.etiqueta}</dt>
                     <dd className="text-sm font-medium text-white/90">{e.valor}</dd>
                   </div>
                 ))}
@@ -946,7 +946,7 @@ function FilaHistorico({
               <div className="space-y-3">
                 {fila.motivo && (
                   <div className="rounded-lg border border-white/10 bg-white/[0.05] p-3">
-                    <p className="text-xs text-white/40">
+                    <p className="text-xs text-white/65">
                       {fila.categoria === "novedades" ? "Descripción" : "Motivo"}
                     </p>
                     <p className="mt-1 text-sm whitespace-pre-wrap text-white/80">{fila.motivo}</p>

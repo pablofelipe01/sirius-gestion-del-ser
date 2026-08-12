@@ -4,7 +4,7 @@ import { FondoNocturno } from "@/components/FondoNocturno";
 
 export default function HomePage() {
   return (
-    <main className="relative flex min-h-screen items-center justify-center overflow-hidden">
+    <main className="superficie-noche relative flex min-h-screen items-center justify-center overflow-hidden">
       {/*
         La landing usa el mismo cielo que el login y el dashboard. Antes traía
         otra foto (21032025-DSCF8676.jpg) y el salto se notaba al pasar a
@@ -26,7 +26,7 @@ export default function HomePage() {
           Gestión del Ser
         </h1>
         <p
-          className="anim-entrada mb-12 max-w-md text-base leading-relaxed text-white/60 md:text-lg"
+          className="anim-entrada mb-12 max-w-md text-base leading-relaxed text-white/80 md:text-lg"
           style={{ animationDelay: "220ms" }}
         >
           Plataforma integral de talento humano, contratos y cumplimiento laboral
