@@ -7,7 +7,7 @@ import { verifyJWT } from "@/lib/auth";
 const MODULES = [
   {
     label: "Asistencia",
-    desc: "Marca tu entrada y tu salida, y consulta tus horas del mes.",
+    desc: "Reporte del biométrico: jornadas por colaborador y carga de la lista.",
     href: "/dashboard/asistencia",
     color: "#1a51a8",
     icon: (

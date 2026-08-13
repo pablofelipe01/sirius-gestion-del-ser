@@ -10,6 +10,9 @@ export default defineConfig({
   test: {
     globals: true,
     environment: "jsdom",
+    // Inyecta la firma sintética de Gestión del Ser: el trazo real vive en una
+    // variable de entorno y no está en el repositorio.
+    setupFiles: ["./src/test/setup.ts"],
     include: [
       "src/**/*.test.ts",
       "src/**/*.test.tsx",

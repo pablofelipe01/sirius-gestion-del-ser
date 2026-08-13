@@ -24,14 +24,14 @@ const {
   resolverRecurso,
 } = await import("@/lib/acceso-documentos");
 
-const DUEÑO = "SIRIUS-PER-0002";
-const RECORD_ID = "recyB8dqJxvrKNxW2";
+const DUEÑO = "SIRIUS-PER-9001";
+const RECORD_ID = "recTEST0000000001";
 
 function sesion(over: Partial<Record<string, string>> = {}) {
   return {
     sub: "recPersonalDelUser",
-    idCore: "SIRIUS-PER-0099",
-    cedula: "1006774686",
+    idCore: "SIRIUS-PER-9099",
+    cedula: "1111111111",
     nombre: "Ajeno",
     rol: "Estándar",
     iat: 0,
@@ -115,7 +115,7 @@ describe("autorizarAccesoSolicitud", () => {
     // campo equivocado dejaría entrar a cualquiera cuyo idCore coincida por azar.
     vi.stubGlobal(
       "fetch",
-      mockSolicitud({ "ID Personal Core": DUEÑO, Autorizado_Por_ID: "SIRIUS-PER-0099" }),
+      mockSolicitud({ "ID Personal Core": DUEÑO, Autorizado_Por_ID: "SIRIUS-PER-9099" }),
     );
 
     const r = await autorizarAccesoSolicitud(sesion(), "permiso", RECORD_ID);
@@ -137,7 +137,7 @@ describe("autorizarAccesoSolicitud", () => {
     const fetchMock = mockSolicitud({});
     vi.stubGlobal("fetch", fetchMock);
 
-    for (const malo of ["", "rec123", "../../Personal/recAbc", "recyB8dqJxvrKNxW2extra"]) {
+    for (const malo of ["", "rec123", "../../Personal/recAbc", "recTEST0000000001extra"]) {
       expect(await autorizarAccesoSolicitud(sesion(), "permiso", malo)).toEqual({
         permitido: false,
         status: 404,
@@ -178,8 +178,8 @@ describe("esClaseRecurso", () => {
 });
 
 describe("recursoCoincide", () => {
-  const FIRMA_DUEÑO = `firmas/permisos/${DUEÑO}/1785877968404_1006774686.png`;
-  const PDF = "autorizaciones/permiso/2026/08/SIRIUS-PER-0002_recyB8dqJxvrKNxW2_1785877971866.pdf";
+  const FIRMA_DUEÑO = `firmas/permisos/${DUEÑO}/1785877968404_1111111111.png`;
+  const PDF = "autorizaciones/permiso/2026/08/SIRIUS-PER-9001_recTEST0000000001_1785877971866.pdf";
 
   it("acepta la firma del trabajador bajo su propio idCore", () => {
     expect(recursoCoincide("firma-trabajador", FIRMA_DUEÑO, DUEÑO)).toBe(true);
@@ -188,7 +188,7 @@ describe("recursoCoincide", () => {
   it("rechaza la firma de OTRO empleado aunque el formato sea válido", () => {
     // Este es el ataque que cubre: editar Firma_S3_Key a mano en Airtable para
     // que un endpoint autorizado sirva la firma de un tercero.
-    const ajena = "firmas/permisos/SIRIUS-PER-0004/1785877968404_1123561461.png";
+    const ajena = "firmas/permisos/SIRIUS-PER-9004/1785877968404_4444444444.png";
     expect(recursoCoincide("firma-trabajador", ajena, DUEÑO)).toBe(false);
   });
 
@@ -202,7 +202,7 @@ describe("recursoCoincide", () => {
     expect(
       recursoCoincide(
         "documento",
-        "permisos/dias-sirianos/2026/08/SIRIUS-PER-0002_1006774686_2026-08-04_1785877971866.pdf",
+        "permisos/dias-sirianos/2026/08/SIRIUS-PER-9001_1111111111_2026-08-04_1785877971866.pdf",
         DUEÑO,
       ),
     ).toBe(true);
@@ -212,7 +212,7 @@ describe("recursoCoincide", () => {
     expect(
       recursoCoincide(
         "documento",
-        "permisos/dias-pacto/2026/08/SIRIUS-PER-0002_1006774686_2026-08-04_1785877971866.pdf",
+        "permisos/dias-pacto/2026/08/SIRIUS-PER-9001_1111111111_2026-08-04_1785877971866.pdf",
         DUEÑO,
       ),
     ).toBe(true);
@@ -220,7 +220,7 @@ describe("recursoCoincide", () => {
 
   it("acepta la firma del autorizador solo bajo el prefijo de autorizaciones", () => {
     expect(
-      recursoCoincide("firma-autorizador", `firmas/autorizaciones/SIRIUS-PER-0007/1_2.png`, DUEÑO),
+      recursoCoincide("firma-autorizador", `firmas/autorizaciones/SIRIUS-PER-9007/1_2.png`, DUEÑO),
     ).toBe(true);
     // La firma del autorizador no está bajo el idCore del dueño.
     expect(recursoCoincide("firma-autorizador", FIRMA_DUEÑO, DUEÑO)).toBe(false);
@@ -228,7 +228,7 @@ describe("recursoCoincide", () => {
 });
 
 describe("resolverRecurso", () => {
-  const FIRMA = `firmas/permisos/${DUEÑO}/1785877968404_1006774686.png`;
+  const FIRMA = `firmas/permisos/${DUEÑO}/1785877968404_1111111111.png`;
 
   it("devuelve la key y un nombre de descarga limpio", () => {
     const r = resolverRecurso("permiso", "firma-trabajador", {
@@ -247,7 +247,7 @@ describe("resolverRecurso", () => {
   it("responde 404 si la key del campo no corresponde al dueño", () => {
     const r = resolverRecurso("permiso", "firma-trabajador", {
       "ID Personal Core": DUEÑO,
-      Firma_S3_Key: "firmas/permisos/SIRIUS-PER-0004/1_2.png",
+      Firma_S3_Key: "firmas/permisos/SIRIUS-PER-9004/1_2.png",
     });
 
     expect(r).toMatchObject({ ok: false, status: 404 });

@@ -8,6 +8,12 @@ export {
 } from "./permiso-siriano";
 
 export {
+  firmaGestionSerBase64,
+  firmaGestionSerPng,
+  FIRMANTE_GESTION_SER,
+} from "./firma-gestion-ser";
+
+export {
   generarPdfAutorizacion,
   formatearFechaLarga,
   type AutorizacionPdfParams,

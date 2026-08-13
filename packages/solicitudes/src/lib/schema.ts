@@ -37,6 +37,17 @@ export const FIELDS = {
     FIRMA_TRAB_TEXTO:     "Firma_Trabajador",
     FIRMA_AUTORIZADOR_S3: "Firma_Autorizador_S3_Key",
     FECHA_FIRMA_AUTORIZADOR: "Fecha_Firma_Autorizador",
+    // Gemelos de la firma de quien aprueba, los mismos que llena
+    // /api/solicitudes/autorizar. FIRMA_GESTION y FIRMA_APROBADOR son adjuntos;
+    // sus fechas son dateTime (aceptan ISO con hora), a diferencia de
+    // FECHA_FIRMA_AUTORIZADOR, que es date.
+    FIRMA_GESTION:          "Firma_Gestion_Ser",
+    FECHA_FIRMA_GESTION:    "Fecha_Firma_Gestion",
+    FIRMA_APROBADOR:        "Firma_Aprobador",
+    FECHA_FIRMA_APROBADOR:  "Fecha_Firma_Aprobador",
+    FIRMANTE_APROB_NOMBRE:  "Firmante_Aprobador_Nombre",
+    FIRMANTE_APROB_CEDULA:  "Firmante_Aprobador_Cedula",
+    FIRMANTE_APROB_CARGO:   "Firmante_Aprobador_Cargo",
     AUTORIZADO_POR_ID:    "Autorizado_Por_ID",
     AUTORIZADO_POR_NOM:   "Autorizado_Por_Nombre",
     FECHA_AUTORIZACION:   "Fecha_Autorizacion",

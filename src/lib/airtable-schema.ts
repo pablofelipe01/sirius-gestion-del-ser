@@ -53,6 +53,8 @@ export const FIELDS = {
     FECHA_COMP:      "Fecha de compensatorio",
     ESTADO:          "Estado_Permiso",
     REVISADO:        "Revisado",
+    /** Relación con el saldo del periodo — solo en permisos de Día Siriano. */
+    DIAS_SIRIANOS_LINK: "Dias_Sirianos",
     // Firma del trabajador
     FIRMA_S3_KEY:      "Firma_S3_Key",
     FECHA_FIRMA_TRAB:  "Fecha_Firma_Trabajador",

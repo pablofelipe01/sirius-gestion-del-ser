@@ -11,16 +11,17 @@ import {
   type MarcacionReporte,
 } from "./reporte-asistencia";
 
+// Nombre y documentos ficticios: los tests no llevan datos de personas reales.
 function marca(
   hora: string,
   evento: string,
   fecha = "2026-07-30",
-  documento = "1077859500",
+  documento = "2222222222",
 ): MarcacionReporte {
   return {
     id: `rec_${documento}_${fecha}_${hora}`,
     documento,
-    nombre: "MARIA ALEJANDRA POLANIA PERDOMO",
+    nombre: "LUCIA MARCELA ARBELAEZ TOVAR",
     turno: "TURNO ADMINISTRATIVO",
     punto: "CONTROL 1",
     fecha,
@@ -105,8 +106,8 @@ describe("consolidarJornadas", () => {
       marca("07:08:40", EVENTOS.ENTRA, "2026-07-30"),
       marca("16:18:44", EVENTOS.SALE, "2026-07-30"),
       marca("07:22:43", EVENTOS.ENTRA, "2026-07-31"),
-      marca("09:21:52", EVENTOS.ENTRA, "2026-07-30", "1122626068"),
-      marca("17:07:33", EVENTOS.SALE, "2026-07-30", "1122626068"),
+      marca("09:21:52", EVENTOS.ENTRA, "2026-07-30", "3333333333"),
+      marca("17:07:33", EVENTOS.SALE, "2026-07-30", "3333333333"),
     ]);
 
     expect(jornadas).toHaveLength(3);
@@ -128,7 +129,7 @@ describe("consolidarJornadas", () => {
 describe("cruzarConSolicitudes", () => {
   const jornadas = consolidarJornadas([marca("07:22:43", EVENTOS.ENTRA, "2026-07-31")]);
   const cobertura = {
-    cedula: "1077859500",
+    cedula: "2222222222",
     desde: "2026-07-30",
     hasta: "2026-08-01",
     justificacion: { tipo: "permiso" as const, detalle: "Médico / Cita médica", estado: "Concedido" },
@@ -166,11 +167,11 @@ describe("resumirReporte", () => {
         marca("07:08:40", EVENTOS.ENTRA, "2026-07-30"),
         marca("16:18:44", EVENTOS.SALE, "2026-07-30"),
         marca("07:22:43", EVENTOS.ENTRA, "2026-07-31"),
-        marca("17:00:00", EVENTOS.SALE, "2026-08-03", "1122626068"),
+        marca("17:00:00", EVENTOS.SALE, "2026-08-03", "3333333333"),
       ]),
       [
         {
-          cedula: "1077859500",
+          cedula: "2222222222",
           desde: "2026-07-31",
           hasta: "2026-07-31",
           justificacion: { tipo: "vacaciones", detalle: "Vacaciones", estado: "Aprobado" },

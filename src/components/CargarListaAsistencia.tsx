@@ -3,8 +3,9 @@
 /**
  * Carga de la lista de asistencia del biométrico para que n8n la procese.
  *
- * Se monta en la pestaña de novedades del histórico y solo para quien tiene
- * alcance sobre toda la empresa: la lista trae los datos de todos.
+ * Se monta en /dashboard/asistencia y en la pestaña de novedades del histórico,
+ * solo para quien tiene alcance sobre toda la empresa: la lista trae los datos
+ * de todos.
  */
 
 import { useRef, useState } from "react";
@@ -37,7 +38,8 @@ function resumirRespuesta(respuesta: unknown): string | undefined {
   }
 }
 
-export default function CargarListaAsistencia() {
+/** `enlaceReporte`: en /dashboard/asistencia el reporte ya está abajo, sobra el botón. */
+export default function CargarListaAsistencia({ enlaceReporte = true }: { enlaceReporte?: boolean }) {
   const [archivo, setArchivo] = useState<File | null>(null);
   const [estado, setEstado] = useState<Estado>({ fase: "inactivo" });
   const [arrastrando, setArrastrando] = useState(false);
@@ -99,19 +101,21 @@ export default function CargarListaAsistencia() {
             procesar. Quedará registrado quién lo subió.
           </p>
         </div>
-        <Link
-          href="/dashboard/asistencia/reporte"
-          className="inline-flex items-center gap-1.5 rounded-lg border border-white/12 bg-white/[0.06] px-3 py-2 text-sm font-medium text-white/90 transition-colors hover:bg-white/12 hover:text-white"
-        >
-          <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M3.75 3v11.25A2.25 2.25 0 006 16.5h12M7.5 12l3-3 2.25 2.25L18 6"
-            />
-          </svg>
-          Ver reporte de asistencia
-        </Link>
+        {enlaceReporte && (
+          <Link
+            href="/dashboard/asistencia"
+            className="inline-flex items-center gap-1.5 rounded-lg border border-white/12 bg-white/[0.06] px-3 py-2 text-sm font-medium text-white/90 transition-colors hover:bg-white/12 hover:text-white"
+          >
+            <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M3.75 3v11.25A2.25 2.25 0 006 16.5h12M7.5 12l3-3 2.25 2.25L18 6"
+              />
+            </svg>
+            Ver reporte de asistencia
+          </Link>
+        )}
       </div>
 
       {/* Zona de carga */}

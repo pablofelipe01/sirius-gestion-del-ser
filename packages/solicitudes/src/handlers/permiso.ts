@@ -11,11 +11,16 @@ import {
 import { TIPO_DIA_SIRIANO } from "../lib/constants";
 import type { ResolvePayload } from "../types";
 import { uploadFirmaTrabajador, uploadPdfPermisoSiriano } from "@/lib/s3";
-import { generarPdfPermisoSiriano } from "@/lib/pdf";
+import {
+  generarPdfPermisoSiriano,
+  firmaGestionSerBase64,
+  FIRMANTE_GESTION_SER,
+} from "@/lib/pdf";
 import { subirAdjuntoAirtable } from "@/lib/airtable-attachments";
+import { fechaHoyBogota } from "@/lib/fecha-bogota";
 
 /** Texto que queda como autorizador en los permisos de día siriano. */
-const AUTORIZACION_AUTOMATICA = "Autorización automática — Día Siriano";
+const AUTORIZACION_AUTOMATICA = "Gestión del Ser — autorización automática (Día Siriano)";
 
 const base = () => process.env.AIRTABLE_BASE_ID_NOVEDADES_NOMINA!;
 const key  = () => process.env.AIRTABLE_API_KEY_NOVEDADES_NOMINA!;
@@ -141,7 +146,13 @@ export function createPermisoHandlers(resolvePayload: ResolvePayload) {
       fields[FIELDS.PERMISO.FECHA_AUTORIZACION] = today;
       fields[FIELDS.PERMISO.AUTORIZADO_POR_NOM] = AUTORIZACION_AUTOMATICA;
       fields[FIELDS.PERMISO.COMENTARIO_AUTORIZACION] =
-        "Día siriano: beneficio ya concedido, no requiere autorización de jefatura.";
+        "Día siriano: beneficio ya concedido, no requiere autorización de jefatura. " +
+        "Firmado con la firma institucional de Gestión del Ser.";
+      fields[FIELDS.PERMISO.FIRMANTE_APROB_NOMBRE] = FIRMANTE_GESTION_SER.nombre;
+      fields[FIELDS.PERMISO.FIRMANTE_APROB_CARGO] = FIRMANTE_GESTION_SER.cargo;
+      // AUTORIZADO_POR_ID se queda vacío a propósito: no hay una persona que
+      // haya decidido este permiso, y ese campo es el que abre el documento a
+      // quien autorizó (ver autorizarAccesoSolicitud).
     }
 
     // Un día siriano por solicitud: nunca lleva rango inicio–fin.
@@ -180,6 +191,36 @@ export function createPermisoHandlers(resolvePayload: ResolvePayload) {
       }
     }
 
+    // Firma institucional de Gestión del Ser. El día siriano nace autorizado, y
+    // el registro debe quedar con la misma huella que deja /api/solicitudes/autorizar:
+    // firma archivada en S3 y datos del firmante. Un fallo aquí no invalida el
+    // permiso — la firma que certifica el documento va empotrada en el PDF.
+    if (esDiaSiriano) {
+      try {
+        const firmaGestion = await uploadFirmaTrabajador({
+          base64: firmaGestionSerBase64(),
+          cedula: payload.cedula,
+          idCore: payload.idCore,
+          tipo: "autorizacion-permiso",
+          metadata: {
+            tipoPermiso: body.tipo,
+            fechaSolicitud: today,
+            firmante: FIRMANTE_GESTION_SER.nombre,
+            automatica: "dia-siriano",
+          },
+        });
+
+        fields[FIELDS.PERMISO.FIRMA_AUTORIZADOR_S3] = firmaGestion.s3Key;
+        // Fecha_Firma_Autorizador es `date` en Airtable: rechaza un ISO con hora.
+        fields[FIELDS.PERMISO.FECHA_FIRMA_AUTORIZADOR] = fechaHoyBogota();
+        // Estos dos sí son dateTime y aceptan el instante completo.
+        fields[FIELDS.PERMISO.FECHA_FIRMA_GESTION] = firmaGestion.uploadedAt;
+        fields[FIELDS.PERMISO.FECHA_FIRMA_APROBADOR] = firmaGestion.uploadedAt;
+      } catch (error) {
+        console.error("[permiso POST - firma Gestión del Ser]", error);
+      }
+    }
+
     const res = await fetch(
       `https://api.airtable.com/v0/${base()}/${encodeURIComponent(TABLES.PERMISO)}`,
       {
@@ -210,6 +251,31 @@ export function createPermisoHandlers(resolvePayload: ResolvePayload) {
         filename: `firma_trabajador_${payload.idCore}.png`,
         contentType: "image/png",
       });
+    }
+
+    // Gemelos adjuntos de la firma de Gestión del Ser: la tabla arrastra los dos
+    // campos desde el sistema anterior y /api/solicitudes/autorizar llena ambos.
+    // Son comodidad de consulta dentro de Airtable: la referencia canónica es la
+    // S3 key, y el documento que certifica el permiso es el PDF. Por eso un fallo
+    // aquí —incluido que falte FIRMA_GESTION_SER_BASE64— se registra y sigue, en
+    // vez de tumbar un permiso que ya quedó creado.
+    if (esDiaSiriano) {
+      try {
+        const png = Buffer.from(firmaGestionSerBase64(), "base64");
+        for (const campo of [FIELDS.PERMISO.FIRMA_GESTION, FIELDS.PERMISO.FIRMA_APROBADOR]) {
+          await subirAdjuntoAirtable({
+            baseId: base(),
+            apiKey: key(),
+            recordId: permisoCreado.id,
+            campo,
+            contenido: png,
+            filename: `firma_gestion_ser_${permisoCreado.id}.png`,
+            contentType: "image/png",
+          });
+        }
+      } catch (error) {
+        console.error("[permiso POST - adjuntos firma Gestión del Ser]", error);
+      }
     }
 
     // Si es día siriano, actualizar saldo en Dias_Sirianos

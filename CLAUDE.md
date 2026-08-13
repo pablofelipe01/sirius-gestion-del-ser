@@ -71,26 +71,29 @@ que es una vista de consulta.
 
 ## Módulo de Asistencia
 
-`/dashboard/asistencia` tiene **un solo botón**. El colaborador no elige si marca
-entrada o salida: `siguienteTipo()` lo deduce de su última marcación del día
-(entrada → sigue salida; cualquier otro caso → entrada). Quitar esa decisión es lo
-que hace el módulo usable sin explicación previa, y de paso impide registrar dos
-entradas seguidas por equivocación.
+`/dashboard/asistencia` **es el reporte del biométrico**, no la marcación
+personal: la carga de la lista arriba y las jornadas consolidadas por colaborador
+y día debajo (`CargarListaAsistencia` + `ReporteAsistencia`). La fuente de verdad
+de la asistencia es el biométrico, así que pedirle además al colaborador que
+marque en la app duplicaría el registro y las dos versiones no coincidirían.
+
+Por eso el módulo **exige ámbito "Todos"** —el mismo criterio de
+`/api/asistencia/reporte` y `/api/asistencia/lista`, porque el archivo trae los
+datos de toda la empresa—. Quien no lo tiene ve un aviso en vez de una pantalla
+que igual respondería 403. `/dashboard/asistencia/reporte` quedó como redirección
+para los enlaces ya repartidos.
 
 | Pieza | Archivo |
 |-------|---------|
-| Lógica pura (fechas Bogotá, emparejar entrada/salida, totales) | `src/lib/asistencia.ts` + tests |
-| Endpoint `GET`/`POST` | `src/app/api/asistencia/route.ts` |
-| UI | `src/components/MarcacionAsistencia.tsx` |
+| Consolidación de jornadas + cruce con solicitudes | `src/lib/reporte-asistencia.ts` + tests |
+| Endpoint del reporte | `src/app/api/asistencia/reporte/route.ts` |
+| UI | `src/components/ReporteAsistencia.tsx` · `src/components/CargarListaAsistencia.tsx` |
 | Tabla Airtable | `Asistencia Personal` (`tblHxTE3XOlfAo0KA`), base Novedades Nómina |
 
-- `GET /api/asistencia?mes=YYYY-MM` → estado de hoy + días del mes con horas.
-- `POST /api/asistencia` → registra la marcación que toca. Ignora una segunda
-  pulsación dentro de **60 segundos** (409): un doble clic no debe abrir y cerrar
-  la jornada en el mismo minuto.
-- Las horas se calculan emparejando entradas con salidas. Una entrada repetida no
-  reinicia el conteo y una salida suelta se ignora: **nadie pierde horas por haber
-  pulsado dos veces**.
+⚠️ `src/lib/asistencia.ts` y `GET`/`POST /api/asistencia` son lo que queda de la
+marcación personal: **ya no tienen UI**. Se conservan porque siguen leyendo y
+escribiendo la tabla `Asistencia Personal`; si nadie va a marcar desde la app,
+el `POST` se puede retirar.
 
 ⚠️ **El campo primario de la tabla se llama `﻿Empleado_RecordID`**, con un BOM
 (U+FEFF) que dejó la importación por CSV. Sin ese carácter Airtable responde
@@ -106,7 +109,8 @@ guarda el instante en ISO UTC y `Fecha` / `Hora` el día y la hora locales.
 
 `POST /api/asistencia/lista` recibe el Excel del biométrico y lo reenvía al flujo
 de n8n de `N8N_WEBHOOK_ASISTENCIA`. La UI es `CargarListaAsistencia`, montada en
-la **pestaña Novedades del histórico**.
+**`/dashboard/asistencia`** (con `enlaceReporte={false}`: ahí el reporte ya está
+debajo) y en la **pestaña Novedades del histórico**.
 
 **El archivo pasa por el servidor, nunca del navegador al webhook.** Si el
 navegador llamara directo, la URL del flujo quedaría en el bundle del cliente y
@@ -588,6 +592,78 @@ Al aprobar o rechazar, `/api/solicitudes/autorizar`:
    `PDF_Autorizacion_S3_Key`, `Hash_Documento` y los datos del firmante aprobador
 5. Adjunta el PDF y la firma a los campos Attachment vía `subirAdjuntoAirtable()`
 
+### Maqueta de los PDF — `src/lib/pdf/maqueta.ts`
+
+Reproduce el formato institucional que ya circulaba en HTML: encabezado
+**logo · título centrado · QR**, píldora de estado, rejilla de datos a dos
+columnas, bloques con filete lateral, tarjetas de firma y pie corporativo. Las
+medidas del HTML van en píxeles CSS y en el PDF en puntos: **1 px = 0.75 pt**,
+la misma conversión que aplicaba `@page` al imprimir.
+
+**Hay dos documentos y los dos usan esta maqueta**, porque un permiso puede
+llegar por dos caminos y el trabajador no debería recibir dos papeles con
+distinta cara según cuál fue:
+
+| Documento | Archivo | Cuándo se emite |
+|-----------|---------|-----------------|
+| Autorización (permiso / vacaciones) | `pdf/autorizacion.ts` | Al resolver la solicitud en `/api/solicitudes/autorizar` |
+| Día siriano | `pdf/permiso-siriano.ts` | **Al radicarlo**, en `POST /api/solicitudes/permiso` — nace autorizado |
+
+⚠️ El de día siriano **cabe en una sola página** y hay tests que lo comprueban:
+por eso su motivo se recorta a `MAX_LINEAS_MOTIVO`. La firma y la nota legal no
+pueden irse a una segunda hoja donde nadie las buscaría.
+
+El logo y el QR viajan empotrados en base64 (`pdf/logo.ts`, `pdf/qr.ts`) —
+leerlos de `public/`, de S3 o de una CDN haría que el documento saliera sin marca
+según dónde esté desplegada la app o si la red falla. La firma institucional
+sigue el mismo criterio de no depender de la red, pero **no va en el código**:
+viene de `FIRMA_GESTION_SER_BASE64` (ver abajo).
+
+⚠️ **Las firmas se incrustan con `new Uint8Array(png)`, no con el `Buffer` tal
+cual.** `pdf-lib` comprueba el tipo con `instanceof` y un `Buffer` de Node no lo
+pasa cuando el código corre en otro realm (jsdom, en los tests). El `catch` de
+`tarjetaFirma()` se tragaba el error y el documento salía sin firma sin decir nada.
+
+### Firma institucional del día siriano
+
+El permiso por día siriano **nace autorizado**, así que su PDF lleva las dos
+firmas: la del trabajador, que dibuja al radicar, y la de Gestión del Ser, que es
+una imagen fija (el mismo trazo de los permisos en HTML del sistema anterior).
+Sin ella, el único papel del trámite no acreditaría la autorización que el propio
+documento declara.
+
+⚠️ **El PNG vive en la variable de entorno `FIRMA_GESTION_SER_BASE64`, no en el
+repositorio.** Estuvo empotrado en `pdf/firma-gestion-ser.ts` hasta la auditoría
+del 2026-08-13: una firma manuscrita es un instrumento de autenticación, y ahí
+quedaba legible para cualquiera con acceso al código, a un fork o al historial
+—del que no se puede retirar—. En una variable se rota y su alcance se limita a
+quien despliega.
+
+- `firmaGestionSerBase64()` y `firmaGestionSerPng()` la sirven validada, y
+  **lanzan si la variable falta o no trae un PNG**. No devuelven vacío a
+  propósito: un documento sin firma no acredita nada y el fallo es invisible en
+  el PDF resultante. Quien emite ya trata el error como «documento no emitido,
+  permiso igual registrado».
+- Los tests **no llevan la firma real**: `src/test/setup.ts` inyecta el trazo
+  sintético de `src/test/firma-fixture.ts`, del mismo tamaño (264 × 152 px), que
+  es lo único que miran las aserciones.
+
+Bajo el trazo no va un nombre propio: la firma acredita a la dependencia, no a
+alguien que hubiera estudiado el caso. `FIRMANTE_GESTION_SER` la identifica como
+«Gestión del Ser · Firma Aprobador», sin cédula.
+
+🚫 **Un permiso normal nunca usa esta imagen.** Ahí la firma la dibuja quien
+autoriza en `ModalAutorizarSolicitud` y acredita una decisión concreta; una
+imagen fija la convertiría en un sello sin decisión detrás.
+
+Al radicarse, el registro queda con la misma huella que deja
+`/api/solicitudes/autorizar`: `Firma_Autorizador_S3_Key` (la imagen archivada en
+`firmas/autorizaciones/`), `Fecha_Firma_Autorizador` (date), `Fecha_Firma_Gestion`
+y `Fecha_Firma_Aprobador` (dateTime), `Firmante_Aprobador_Nombre` / `_Cargo`, y
+los adjuntos `Firma_Gestion_Ser` y `Firma_Aprobador`. **`Autorizado_Por_ID` se
+deja vacío a propósito**: no hay una persona que haya decidido, y ese campo es el
+que abre el documento a quien autorizó (`autorizarAccesoSolicitud()`).
+
 **Nunca guardar una URL firmada de S3 en Airtable**: expiran en 5 minutos. El enlace
 almacenado apunta a `/api/documentos/...`, que exige sesión y genera una URL nueva
 en cada visita.
@@ -674,6 +750,10 @@ AWS_ACCESS_KEY_ID=...
 AWS_SECRET_ACCESS_KEY=...
 S3_BUCKET_FIRMAS=sirius-firmas-empleados
 
+# Firma institucional de Gestión del Ser — PNG en base64, sin prefijo "data:"
+# y en una sola línea. Va en el PDF del permiso por Día Siriano.
+FIRMA_GESTION_SER_BASE64=
+
 # Pendientes
 ANTHROPIC_API_KEY=
 ```
@@ -705,3 +785,8 @@ npx tsc --noEmit         # Type-check (ignorar errores de .next/types — caché
 7. **Minimal changes** — no refactorizar lo que funciona sin pedido explícito
 8. **proxy.ts** — Next.js 16: `export async function proxy()` en `src/proxy.ts`
 9. **Sin hardcoding de Airtable** — nombres de tabla en `src/lib/airtable-schema.ts` (TABLES), campos en FIELDS, enums en `src/lib/constants.ts`. Nunca strings literales de tabla/campo en routes o componentes.
+10. **Nada sensible en el código fuente** — ni firmas manuscritas, ni cédulas,
+    nombres o record IDs de personas reales, ni siquiera en tests, comentarios o
+    ejemplos. Lo primero va en variable de entorno; lo segundo, inventado
+    (`1111111111`, `SIRIUS-PER-9001`). El repositorio se clona, se bifurca y
+    guarda historial: lo que entra una vez no se saca.

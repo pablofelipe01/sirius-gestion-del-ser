@@ -40,7 +40,7 @@ export interface UploadFirmaResult {
  * Naming convention de S3 keys:
  * firmas/{tipo}/{idCore}/{timestamp}_{cedula}.png
  *
- * Ejemplo: firmas/permisos/SIRIUS-PER-0002/1720353600000_1006774686.png
+ * Ejemplo: firmas/permisos/SIRIUS-PER-9001/1720353600000_1111111111.png
  *
  * @param params - Parámetros de la firma a subir
  * @returns Información del archivo subido (key, bucket, fecha)
@@ -239,7 +239,7 @@ export interface UploadPdfResult extends UploadFirmaResult {
  * Archiva en S3 el PDF de un permiso de día siriano ya autorizado.
  *
  * Estructura: permisos/dias-sirianos/{año}/{mes}/{idCore}_{cedula}_{fecha}_{timestamp}.pdf
- * Ejemplo:    permisos/dias-sirianos/2026/07/SIRIUS-PER-0002_1006774686_2026-07-31_1785442156866.pdf
+ * Ejemplo:    permisos/dias-sirianos/2026/07/SIRIUS-PER-9001_1111111111_2026-07-31_1785442156866.pdf
  */
 export async function uploadPdfPermisoSiriano(
   params: UploadPdfPermisoSirianoParams
